@@ -1,0 +1,484 @@
+                                /* normalisers*/
+body, h1, h2, h3, h4, p, li, a, ul, figure {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    text-decoration: none;
+    box-sizing: border-box;
+    padding: 0;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-family: montserrat;
+    text-transform: uppercase;
+    color: #343434;
+    font-weight: 400;
+    
+}
+
+body, ul {
+    margin: 0;
+    webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+}
+.admin {
+   font-family: montserrat;
+   color: black;
+   text-transform: uppercase;
+   width: 100%;
+    
+    
+}
+.header {
+    background-color: #343434;
+    height: 6rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header h1 {
+     margin: auto;
+     padding: 0px 0px;
+     color: white;
+     font-size: 2rem;
+     font-weight: 500;
+}
+.header h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.header h1:first-child {
+    justify-content: flex-start;
+    margin: auto 2rem;
+}
+
+.header h2:last-child {
+    color: white;
+    margin: auto 2rem;
+}
+.header p {
+    font-size: 1rem;
+    margin-right: 2rem;
+    color: orange;
+    font-weight: lighter;
+}
+.menu {
+    min-height: 50rem;
+    width: 20%;
+    display: inline-flex;
+    background-color: #343434;
+    color: white;
+    justify-content: center;
+    
+}
+
+.menu ul {
+    
+    list-style: none;
+    text-decoration: none;
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+}
+.menu ul li {
+    display: flex;
+    min-height: 4rem;
+    align-items: center;
+    
+    
+    
+}
+.menu ul li a {
+    text-decoration: none;
+    color: white;
+    
+}
+
+.menu li a:hover {
+    color: orange;
+   
+}
+
+.desktop {
+    width: 80%;
+    display: inline-flex;
+    margin-top: 0;
+    height: 50rem;
+    vertical-align: top;
+   
+}
+
+.desktop img {
+    width: 50%;
+    margin: 0px;
+    margin: auto;
+   
+}
+
+
+
+/* normalize to fieldset */
+
+fieldset {
+    border: 0;
+    padding: 0.01px 0 0 0;
+    margin: 0;
+    min-width: 0;
+    display: table-cell;
+}
+@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
+}
+
+/* style for logout */
+.logout {
+    padding: 1em;
+    margin-bottom: 1em;
+    border: 1px solid #eee;               
+    background-color: #f7f7f7;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    font-family: montserrat;
+    width: fit-content;
+    
+}
+.logout button {
+    
+}
+/* CSS for the adduser form*/
+.flex-wrapper {
+    display: inline-flex;
+    width: 100%;
+}
+.fieldset-wrapper {
+    padding: 1em;
+    margin-bottom: 1em;
+    border: 1px solid #eee;               
+    background-color: #f7f7f7;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+    font-family: montserrat;
+    width: fit-content;
+}
+/* older browsers dosent understand :root one so border goes away only in new ones leaving it with box shadow*/
+:root .fieldset-wrapper {   
+    border: 0;
+}
+
+legend {
+    padding: 0 0 .5em 0;
+    font-weight: bold;
+    color: #777;
+    display: table;
+    text-transform: uppercase;
+}
+
+input {
+    font: inherit;
+}
+.field-text {
+    max-width: 20em;
+}
+
+.field-text label {
+    cursor: pointer;
+}
+.field-text label,
+.field-text input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-text input {
+    padding: .372em .3125em .3125em;
+    border: 1px solid #ccc;
+    border-radius: .25em;
+    -webkit-appearance: none;
+}
+
+.field-text input:focus {
+    box-shadow: 0 0 .5em rgba(93, 162, 248, 0.5);
+    border-color: #5da2f8;
+    outline: 0;
+}
+
+.logout button, button  {
+    cursor: pointer;
+    border: 0;
+    padding: .5em 1em;
+    color: #fff;
+    border-radius: .25em;
+    font-size: 1em;
+    background-color: #173b6d;
+   // background-image: linear-gradient( to bottom, #1a4a8e, #173b6d);
+  //box-shadow: 0 .25em 0 rgba(23, 59, 109, 0.3), inset 0 1px 0 rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    font-family: montserrat;
+}
+
+.logout button, button:focus {
+    background-color: #2158a9;
+    background-image: linear-gradient( to bottom, #2063c0, #1d4d90);
+    box-shadow: 0 .25em 0 rgba(23, 59, 109, 0.3),
+        inset 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+.admin_products {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+}
+.admin_products a {
+    height: 30%;
+    width: 30%;
+    border: 1px solid black;
+    font-size: 2rem;
+    text-transform: uppercase;
+    display: flex;
+    text-decoration: none;
+    color: black;
+    justify-content: space-around;
+    align-items: center;
+    
+    
+    
+}
+
+.admin_products a:hover {
+    color: orange;
+}
+
+.fieldset-wrapper2 {
+    font-weight: lighter;
+    width: 80%;
+    
+  
+}
+
+.fieldset-wrapper2 form {
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+    
+
+.fieldset-wrapper2 fieldset {
+    width: 30%;
+    min-height: 50;
+    height: 20rem;
+    margin: 1%;
+    box-sizing: border-box;
+    border: 1px solid black;
+    display: inline-flex;
+   
+}
+
+.fieldset-wrapper2 fieldset p {
+    margin-left: 1rem;
+}
+
+.fieldset-wrapper2 fieldset label {
+    display: block;
+}
+
+.fieldset-wrapper2 fieldset textarea {
+    width: 400px;
+    height: 188px;
+    width: 90%;
+    height: 30%;
+    resize: vertically;
+}
+
+.fieldset-wrapper2 .checkbox {
+    border: none;
+    display: inline;
+}
+.fieldset-wrapper2 .checkbox label {
+    display: inline-block;
+    color: black;
+}
+
+.fieldset-wrapper2 .checkbox-header {
+    text-align: left;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    margin-left: 1.2rem;
+    font-weight: ;
+    color:#777;
+}
+
+.fieldset-wrapper2 fieldset label {
+    color: #777;
+    font-weight: ;
+    
+    
+}
+
+
+
+                                 /*general classes*/
+img {
+    max-width: 100%;
+    width: auto;
+}
+
+.wrapper {
+    width: 80%;
+    margin: 1rem auto;
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+    
+}
+.font {
+    color: #343434;
+    font-weight: 400;
+}
+
+
+  .showroom {
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+    width: 58%;
+    background-color: #F7F7F7;
+    height: 100%;
+    position: relative;
+    max-height: 55rem;
+   
+  } 
+  
+  .showroom img {
+      border: 2px solid black;
+      box-sizing: border-box;
+      display: flex;
+      margin: 0 auto;
+      
+  }
+  
+  
+  .product-info {
+      background-color: #F7F7F7;
+      height: 100%;
+      width: 38%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      max-height: 55rem;
+  }
+  
+  .priceButton {
+      display: block;
+      width: 80%;
+      
+  }
+  
+  .pricebutton button{
+      width: 100%;
+      margin-bottom: 1rem;
+      background-color: green;
+  }
+  
+  .pricebutton button:last-child {
+      background-color: red;
+  }
+  
+  .pricebutton h2 {
+      width: 100%;
+      font-size: 1.5rem;
+      text-align: left;
+      font-weight: 500;
+      margin-bottom: 1rem;
+  }
+  .pricebutton h2:before {
+      content: "25€";
+      text-align: left;
+      color: grey;
+      margin-right: 2rem;
+      text-decoration: line-through;
+      
+  }
+  .product-info h1 {
+      width: 80%;
+      font-size: 1.5rem;
+      text-align: left;
+      font-weight: 500;
+      margin-bottom: 2rem;
+     
+  }
+  
+  .product-info p {
+      width: 80%;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: lighter;
+     
+  }
+  
+  
+ 
+  
+  .arrowbutton {
+      position: absolute;
+      bottom: 1rem;
+      left: auto;
+      right: auto;
+  }
+  .gradient {
+        background-image: linear-gradient(to bottom,rgba(0,0,0,0) 20%,rgba(0,0,0,.7) 20%,rgba(0,0,0,.8));
+        width: 100%;
+        bottom: 0;
+        right: 0;
+        height: 80%;
+        position: absolute;
+    }
+    
+.gradient h2, p, h3, a {
+    color: white;
+    text-align: left;
+    margin-left: 2rem;
+    font-weight: lighter;
+    
+    }
+    
+.gradient h2 {
+    font-size: 1.2rem;
+    margin-top: 20%;
+    margin-bottom: 5%;
+    }
+
+.gradient p {
+    margin-bottom: 2.5%;
+    font-size: 0.8rem;
+    }
+
+.gradient h3 {
+    font-size: 1rem;
+    float: left;
+    }
+    
+.button {
+    text-align: center;
+    border: 2px solid #FF7000;
+    border-radius: 1em;
+    width: 50%;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    
+    
+    }

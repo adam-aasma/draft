@@ -1,0 +1,356 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Nov 17, 2017, 12:37:55 AM
+    Author     : adam
+*/
+
+
+                                /* normalisers*/
+body, h1, h2, h3, h4, p, li, a, ul, figure {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    text-decoration: none;
+    box-sizing: border-box;
+    padding: 0;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-family: montserrat;
+    text-transform: uppercase;
+    color: #343434;
+    font-weight: 400;
+    
+}
+                                 /*general classes*/
+img {
+    max-width: 100%;
+    width: auto;
+}
+
+.wrapper {
+    max-width: 69em;
+    margin: 0px auto;
+    
+}
+.font {
+    font-family: montserrat;
+    text-transform: uppercase;
+    color: #343434;
+    font-weight: 400;
+}
+
+.container {
+        width: 98%;
+        margin: 0px auto;
+        overflow: auto;
+    }
+ 
+@media only screen and (min-width: 40em ){
+    .container {
+        width: 93.75%;
+        margin: 0px auto;
+        overflow: auto;
+    }
+}
+
+@media only screen and (min-width: 58em ){
+    .container {
+        width: 93.75%;
+        margin: 0px 32px;
+        overflow: auto;
+    }
+}
+.row {
+    padding: 0;
+    
+}
+
+.row:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    
+}                                       /*grid colums*/
+.col {
+    box-sizing: border-box;
+    float: left;
+    width: 100%;
+}
+.col duo >* {
+    width: 50%
+}
+
+@media only screen and (min-width: 58em ){
+    
+    .quartet {
+        width: 25%;
+    }
+
+    .two-quintets {
+        width: 39%
+    }
+    
+    .three-quintets {
+        width: 58.5%;
+    }
+    
+     .right {
+    float: right;
+    }
+    
+    .left {
+        float: left;
+    }
+    
+    
+}
+
+                                            /*show or no show depends on screen size*/
+.display2 {
+        display: none !important;
+
+}
+@media only screen and (min-width: 40em ){
+
+    .display2 {
+        display: inline-block !important;
+    }
+}
+.display {
+        display: none !important;
+
+}
+@media only screen and (min-width: 58em ){
+
+    .display {
+        display: inline-block !important;
+    }
+}
+
+                                            /*navbar rules*/
+.navbar-md, .navbar-lg {
+    display: none;
+}
+
+#hamburger {
+    width: 3em;
+    height: 3em;
+    display: block;
+    box-sizing: border-box;
+    border: 1px solid black;
+    position: absolute;
+    top: 1.5em;
+    }
+    
+@media only screen and (min-width: 40em ){
+    
+    #hamburger {
+        display: none;
+    }  
+    
+    .navbar-md {
+        width: 100%;
+        display: block;
+        margin-top: 0.5em;
+    } 
+    
+    .navbar-md ul {
+        font-size: 0px;
+        display: inline-block;
+        margin: 0px auto;
+        padding: 0px;
+        width: 100%;
+    }
+    
+    .navbar-md li {
+        display: inline-block;
+        font-size: 1rem;
+        list-style: none;
+        margin: 0 auto;
+        width: 25%;
+        box-sizing: border-box;
+        padding: 0px;
+
+    }
+    .navbar-md li a {
+        text-decoration: none;
+        text-transform: uppercase;
+        display: block;
+        color: #343434;
+        text-align: center;
+        font-weight: 400;
+    }
+
+}
+
+
+@media only screen and (min-width: 58em ){
+    
+    .navbar-lg {
+        width: 70%;
+        display: block;
+        float: right;
+    }
+    
+    .navbar-lg li a {
+        text-align: right;
+    }
+    
+    
+}
+
+                                        /* objects in header rules*/
+#logotype {
+    height: 4em;
+    margin: 0.5em auto;
+    position: relative;
+}
+
+#shoppingcart {
+    display: none;
+}
+#amount {
+    display: none;
+}
+
+#delivery {
+    display: none;
+}
+
+@media only screen and (min-width: 58em) {
+  
+    #logotype {
+    padding-right: 34.0579%;
+    }
+    
+    #shoppingcart {
+    display: block;
+    width: 2em;
+    height: 2em;
+    margin-top: 0.5em;
+    }
+    
+    #amount {
+        display: block;
+        margin: 1.4em 1em 1em 0px;
+        /*margin-right: 1em;
+        margin-bottom: 1em;
+        margin-top: 1.4em;*/
+    }
+    #delivery {
+        display: block;
+        font-size: 0.8em;
+        text-transform: lowercase;
+        font-weight: ;
+        text-align: right;
+        margin-top: 0.5em;
+
+    }
+    #flag {
+        outline: 1px solid black;
+        height: 0.5em;
+        width: 1em;
+        background-color: blue;
+    }
+}
+                                               /* discountbar*/
+#discountbar {
+    background-color: #343434;
+    color: white;
+    line-height: 2.5rem;
+    text-align: center;
+    width: 100%;
+    display: block;
+    font-weight: lighter;
+    
+}
+
+.display {
+    display: none;
+}
+
+  @media only screen and (min-width: 43rem)  {   
+   .display {
+       display: inline-block !important;
+   } 
+  }
+  
+  
+  .showroom {
+    display: ;
+    text-align: center;
+    width: 100%;
+    background-color: #F7F7F7;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+   
+  } 
+  
+  .showroom img {
+      border: 2px solid black;
+      box-sizing: border-box;
+      display: inline-block;
+      
+      margin: 0 auto;
+      display: none;
+      
+      
+  }
+  
+  .product-info {
+      background-color: #F7F7F7;
+      margin-top: 1rem;
+      
+      width: 100%;
+     
+      
+  }
+  .product-info h1, h2, span {
+      text-align: center;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+  }
+  
+  .product-info p {
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: lighter;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      
+      
+  }
+  .product-info h2 {
+      display: inline-block;
+      width: 50%;
+  }
+  .product-info span {
+      border: 2px solid #FF7000;
+      display: inline-block;
+      width: 45%;
+      font-size: 0.8rem;
+      box-sizing: border-box;
+      margin-right: 2.5%;
+      margin-left: 2.5%;
+      color: #FF7000;
+      border-radius: 5px;
+  }
+  .font-zero {
+      font-size: 0px;
+      line-height: 2rem;
+  }
+  /*.showroom:hoover {
+      display: none;
+  }
