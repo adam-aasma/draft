@@ -331,19 +331,28 @@ input {
 
 
                                  /*general classes*/
-img {
-    max-width: 100%;
-    width: auto;
-}
+
 
 .wrapper {
     width: 80%;
     margin: 1rem auto;
-    display: inline-flex;
+    display: flex;
     justify-content: space-around;
     align-items: center;
     
 }
+.wrapper figure {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.wrapper figure img{
+    width: 100%;
+}
+
 .font {
     color: #343434;
     font-weight: 400;
@@ -430,22 +439,25 @@ img {
      
   }
   
-  
- 
-  
   .arrowbutton {
       position: absolute;
       bottom: 1rem;
       left: auto;
       right: auto;
   }
+  
   .gradient {
-        background-image: linear-gradient(to bottom,rgba(0,0,0,0) 20%,rgba(0,0,0,.7) 20%,rgba(0,0,0,.8));
-        width: 100%;
+        background-image: linear-gradient(to bottom, rgba(0,0,0,.7) 20%,rgba(0,0,0,.8));
+        width: 40%;
         bottom: 0;
         right: 0;
-        height: 80%;
+        height: 100%;
         position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
     }
     
 .gradient h2, p, h3, a {
@@ -469,7 +481,7 @@ img {
 
 .gradient h3 {
     font-size: 1rem;
-    float: left;
+   
     }
     
 .button {
