@@ -8,36 +8,13 @@ class ProductDescription {
     private $descriptionText;
     private $product;
     private $language;
+    private $country;
     
-    public function getId() {
-        return $this->id;
+    public function __get($name) {
+        return $this->$name;
     }
     
-    public function getDescriptionText() {
-        return $this->descriptionText;
-    }
-    
-    public function getLanguage() {
-        return $this->language;
-    }
-    
-    public function getProduct() {
-        return $this->product;
-    }
-    
-    public function setId($id) {
-        $this->id = $id;
-    }
-    
-    public function setDescriptionText($text) {
-        $this->descriptionText = $text;
-    }
-    
-    public function setLanguage($language) {
-        $this->language = $language;
-    }
-    
-    public function setProduct($product) {
-        $this->product = $product;
+    public function __set($name, $value) {
+        $this->$name = $value;
     }
 }

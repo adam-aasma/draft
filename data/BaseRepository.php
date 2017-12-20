@@ -18,7 +18,7 @@ class BaseRepository {
     /** Called automatically when object created through new ImageRepository() */
     function __construct() {
         $servername = "127.0.0.1";
-        $username = "root";
+        $username = "adam";
         $password = "Oskar.#4837";
         $dbname = "WT_Test"; 
         $this->conn = new mysqli($servername, $username, $password, $dbname);

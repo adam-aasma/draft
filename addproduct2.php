@@ -33,11 +33,12 @@ if (isset($_POST["submit"])) {
                 $productrep->addProductImage($product->id, $imageId);
             }
             $productDescription = new ProductDescription();
-            $productDescription->setProduct($product);
-            $productDescription->setDescriptionText($description);
+            $productDescription->product = $product;
+            $productDescription->descriptionText = $description;
             $language = new Language();
-            $language->id = 1;
-            $productDescription->setLanguage($language);
+            $language->id = $language_id;
+            $productDescription->language = $language;
+            $productDescription->country = Country::create($countryindexes[0], '');
             $productrep->addProductDescriptionToProduct($productDescription);
             foreach ($countryindexes as $countryindex){
                 $country = Country::create($countryindex, '');
@@ -121,14 +122,10 @@ $content = $homepage -> content = '
             <form action="addproduct2.php" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>product images</legend>
-                    <p class="">
-                        <label for="adding-picture1">Select image to upload:</label>
-                        <input type="file" name="productimage" id="adding-picture1" />
-                    </p>
-                    <p class="">
-                        <label for="adding-picture2">Select extra images to upload ( or tag in existing picture):</label>
-                        <input type="file" name="interiorimage" id="adding-picture2" />
-                    </p>
+                    <label for="adding-picture1">Select image to upload:</label>
+                    <input type="file" name="productimage" id="adding-picture1" />
+                    <label for="adding-picture2">Select interior pic to upload:</label>
+                    <input type="file" name="interiorimage" id="adding-picture2" />
                 </fieldset>
                 <fieldset>
                     <legend>product details</legend>

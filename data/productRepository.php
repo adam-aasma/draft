@@ -45,10 +45,10 @@ class ProductRepository extends BaseRepository {
     
     public function addProductDescriptionToProduct($productDescription) {
         $stmt = $this->conn->prepare("INSERT INTO product_descriptions(products_id, language_id, country_id, description) VALUES(?,?,?,?)");
-        $productId = $productDescription->getProduct()->getId();
-        $languageId = $productDescription->getLanguage()->id;
-        $countryId =  1;
-        $description = $productDescription->getDescriptionText();
+        $productId = $productDescription->product->getId();
+        $languageId = $productDescription->language->id;
+        $countryId =  $productDescription->country->id;
+        $description = $productDescription->descriptionText;
         
         $stmt->bind_param("iiis", $productId, $languageId, $countryId, $description);
         
@@ -57,7 +57,7 @@ class ProductRepository extends BaseRepository {
             $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
             $row = $lastIdRes->fetch_row();                                       
             $lastId = $row[0];   
-            $productDescription->setId($lastId);      
+            $productDescription->id = $lastId;      
             return $productDescription;
         }
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
@@ -107,9 +107,9 @@ class ProductRepository extends BaseRepository {
                 $language->setLanguageName($language);
                 
                 $productDescription = new ProductDescription();
-                $productDescription->setId($id);
-                $productDescription->setDescriptionText($description);
-                $productDescription->setLanguage($language);
+                $productDescription->id = $id;
+                $productDescription->descriptionText = $description;
+                $productDescription->language = $language;
                 return $productDescription;                                                              
             }
         } 
