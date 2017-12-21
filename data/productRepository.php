@@ -221,24 +221,7 @@ public function getFormat() {
             return $subcategories;                                       
         
     } 
-    public function getLanguages() {                                                              
-        $sql = ("SELECT * FROM languages");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $languages = [];
-          
-            while ($row = $result->fetch_object('Language')){
-                $languages[] = $row;
-            }
-            if (empty($languages)) {
-                throw new Exception('failed');
-            }
-            return $languages;                                       
-        
-    }
-    
+
     public function addProductCategorySubCategory($productId, $productCategoryId, $productSubCategoryId){
          $stmt = $this->conn->prepare("INSERT INTO products_categories_subcategories(product_id, category_id, subcategory_id) VALUES(?, ?, ?)");
          $stmt->bind_param("iii", $product_id, $category_id, $sub_category_id);
