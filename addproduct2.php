@@ -3,7 +3,7 @@
 require_once 'checkauth.php';
 require_once 'views/admintemplate.php';
 require_once 'library/security.php';
-
+require_once 'library/FormUtilities.php';
 require_once 'data/RepositoryFactory.php';
 require_once 'data/ImageRepository.php';
 require_once 'library/Images.php';
@@ -12,7 +12,13 @@ require_once 'service/ProductService.php';
 $homepage = new adminTemplate();
 $repositoryFactory = new RepositoryFactory();
 $productrep = $repositoryFactory->productRepository;
-$languageRepo = $repositoryFactory->languageRepository;
+$languagerep = $repositoryFactory->languageRepository;
+$formatrep = $repositoryFactory->productFormatRepository;
+$sizerep = $repositoryFactory->productSizeRepository;
+$materialrep = $repositoryFactory->productMaterialRepository;
+$techniquerep = $repositoryFactory->productPrintTechniqueRepository;
+$categoriesrep = $repositoryFactory->productCategoryRepository;
+$subcategoriesrep = $repositoryFactory->productSubCategoryRepository;
 
 if (isset($_POST["submit"])) {
     $imagerepo = new ImageRepository;
@@ -28,7 +34,7 @@ if (isset($_POST["submit"])) {
                 $_POST['category'],
                 $_POST['subcategory'],
                 $_POST['language'],
-                $_POST['size'],
+                $_POST['sizes'],
                 $_POST['material'],
                 $_POST['technique'],
                 $_POST['countries'],
@@ -40,68 +46,24 @@ if (isset($_POST["submit"])) {
     }
 } 
 
-$titel = $homepage -> title = 'addproduct';
-$formats = $productrep->getFormat();
-$sizes = $productrep->getSize();
-$materials = $productrep->getMaterial();
-$techniques = $productrep->getTechnique();
-$categories = $productrep->getProductCategory();
-$subcategories = $productrep->getProductSubCategory();
-$languages = $languageRepo->getAllLanguages();
-$formatOptions = '';
-$sizeOptions = '';
-$materialOptions = '';
-$techniqueOptions = '';
-$subcategoryOptions = '';
-$categoryOptions = '';
-$languageOptions = '';
-$countriesOptions = '';
-foreach($formats as $format) {
-    $val = $format->id;
-    $text = $format->format;
-    $formatOptions .= "<option value='" . $val . "' name='format'>" . $text . "</option>";
-}
-foreach($sizes as $size) {
-    $val = $size->id;
-    $text = $size->sizes;
-    $name = $size->name;
-    $sizeOptions .= '<input type="checkbox" value="' . $val . '" name="size[]"><label>' . $text . '</label>';
-}
-foreach($materials as $material) {
-    $val = $material->id;
-    $text = $material->material;
-    $materialOptions .= '<input type="checkbox" value="' . $val . '" name="material[]"><label>' . $text . '</label>';
-}
-foreach($techniques as $technique) {
-    $val = $technique->id;
-    $text = $technique->technique;
-    $techniqueOptions .= '<input type="checkbox" value="' . $val . '" name="technique[]"><label>' . $text . '</label>';
-                        
-}
-foreach($categories as $category) {
-    $val = $category->id;
-    $text = $category->name;
-    $categoryOptions .= '<option value="' . $val. ' ">' . $text . '</option>';
-                        
-}
-foreach($subcategories as $subcategory) {
-    $val = $subcategory->id;
-    $text = $subcategory->category;
-    $subcategoryOptions .= '<option value="' . $val . '">' . $text . '</option>';
-                        
-}
-foreach($languages as $language) {
-    $val = $language->id;
-    $text = $language->language;
-    $languageOptions .= '<option value="' . $val . '">' . $text . '</option>';
-                        
-}
-foreach($homepage->user->countries as $country) {
-    $val = $country->id;
-    $text = $country->country;
-    $countriesOptions .= '<option value="' . $val . ' ">' . $text . '</option>';
-                        
-}
+$titel = $homepage ->title = 'addproduct';
+$formats = $formatrep->getAllFormats();
+$sizes = $sizerep->getAllSizes();
+$materials = $materialrep->getAllMaterials();
+$techniques = $techniquerep->getAllProductPrintTechniques();
+$categories = $categoriesrep->getAllProductCategories();
+$subcategories = $subcategoriesrep->getAllProductSubCategories();
+$languages = $languagerep->getAllLanguages();
+$countries = $repositoryFactory->countryRepository->getAllCountries();
+
+$formatOptions = FormUtilities::getAllOptions($formats, 'format');
+$sizeOptions = FormUtilities::getAllCheckBoxes($sizes, 'sizes', 'sizes');
+$materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material');
+$techniqueOptions = FormUtilities::getAllCheckBoxes($techniques, 'technique', 'technique');
+$countryOptions = FormUtilities::getAllOptions($countries, 'country');
+$categoryOptions = FormUtilities::getAllOptions($categories, 'name');
+$subcategoryOptions = FormUtilities::getAllOptions($subcategories, 'category');
+$languageOptions = FormUtilities::getAllOptions($languages, 'language');
 
 $content = $homepage -> content = '
             <div class="fieldset-wrapper2">
@@ -118,7 +80,7 @@ $content = $homepage -> content = '
                     <p>
                     <label>countries:</label>
                             <select multiple  name="countries[]">
-                                ' . $countriesOptions . '
+                                ' . $countryOptions . '
                             </select>
                     </p>
                     <label for="adding-language">language:</label>

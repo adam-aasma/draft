@@ -14,14 +14,4 @@ class ProductCategory {
 }
 
 
-class ProductSubCategory {
-    private $id;
-    private $subcategory;
-    private $description;
-    
-   
-    
-    public function __get($name){
-        return $this->$name;
-    }
-}
+

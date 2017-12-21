@@ -41,4 +41,26 @@ class FormUtilities {
             return false;
         }
     }
+    
+    public static function getAllOptions($objcollection, $name){
+        $optionsHtml = '';
+        foreach ($objcollection as $obj){
+            $val = $obj->id;
+            $text = $obj->$name;
+            $optionsHtml .= "<option value='" . $val . "'>" . $text . "</option>";
+        }
+        return $optionsHtml;
+            
+    }
+    
+     public static function getAllCheckBoxes($objcollection, $propname, $inputname){
+        $html = '';
+        foreach ($objcollection as $obj){
+            $label = $obj->$propname;
+            $html .= "<input type='checkbox' value='true' name='$inputname" . "[$obj->id]' /><label>$label</label>";
+        }
+        return $html;
+            
+    }
 }
+

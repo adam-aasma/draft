@@ -1,12 +1,10 @@
 <?php
 
 
-class PrintTechnique {
+class ProductPrintTechnique {
     private $id;
     private $technique;
     private $description;
-    
-    
     
     public function __set($name, $value){
         $this->$name = $value;

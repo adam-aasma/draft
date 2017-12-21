@@ -18,8 +18,6 @@ class Privileges {
         $this->$name = $value;
     }
     
-     public function setPrivileges()   {
-         
-     }
+     
 
 }

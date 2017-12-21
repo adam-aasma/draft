@@ -96,47 +96,9 @@ class UserRepository extends BaseRepository {
                 
     }
     
-    public function GetPrivileges() {
-            $sql = ("SELECT id, privileges, description FROM privileges");
-            $result = $this->conn->query($sql);
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $priv = [];
-            while ($row = $result->fetch_object('Privileges')){
-                $priv[] = $row;
-            }
-            if (empty($priv)) {
-                throw new Exception('failed');
-            }
-            return $priv;
-    }
+   
     
-     public function GetCountries() {
-            $sql = ("SELECT id, country FROM countries");
-            $result = $this->conn->query($sql);
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $countries = [];
-            while ($row = $result->fetch_object('Country')){
-                $countries[] = $row;
-            }
-            if (empty($countries)) {
-                throw new Exception('failed');
-            }
-            return $countries;
-    }
     
-  /*  public function GetUserPrivileges($username) {
-        $sql = ("SELECT privileges FROM users WHERE username='$username->username'");
-        $result = $this->conn->query($sql);
-        if ($result === FALSE) {
-            throw new Exception($this->conn->error);
-        }
-        $row = $result->fetch_assoc();
-        $userprivileges = $row['privileges'];
-        return $userprivileges;
-            
-    }*/
+    
+  
 } 

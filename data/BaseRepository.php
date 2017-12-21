@@ -1,16 +1,6 @@
 <?php
 require_once 'Exceptions.php';
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of BaseRepository
- *
- * @author adam
- */
 abstract class BaseRepository {
     protected $conn;
     private $tableName;

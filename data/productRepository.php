@@ -6,11 +6,11 @@ require_once 'model/ProductDescription.php';
 require_once 'model/Language.php';
 require_once 'model/User.php';
 require_once 'model/Country.php';
-require_once 'model/Format.php';
+require_once 'model/ProductFormat.php';
 require_once 'model/ProductSize.php';
 require_once 'model/ProductMaterial.php';
 require_once 'model/ProductCategory.php';
-require_once 'model/PrintTechnique.php';
+require_once 'model/ProductPrintTechnique.php';
 require_once 'viewmodel/ShowRoomProduct.php';
 require_once 'model/Slider.php';
 
@@ -116,112 +116,6 @@ class ProductRepository extends BaseRepository {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }                                                                                                    
 
-
-
-public function getFormat() {                                                              
-        $sql = ("SELECT * FROM formats");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $formats = [];
-          
-            while ($row = $result->fetch_object('Format')){
-                $formats[] = $row;
-            }
-            if (empty($formats)) {
-                throw new Exception('failed');
-            }
-            return $formats;                                       
-            
-    } 
-    
-    public function getSize() {                                                              
-        $sql = ("SELECT * FROM sizes");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $sizes = [];
-          
-            while ($row = $result->fetch_object('Size')){
-                $sizes[] = $row;
-            }
-            if (empty($sizes)) {
-                throw new Exception('failed');
-            }
-            return $sizes;                                       
-            
-    } 
-    public function getTechnique() {                                                              
-        $sql = ("SELECT * FROM print_techniques");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $techniques = [];
-          
-            while ($row = $result->fetch_object('PrintTechnique')){
-                $techniques[] = $row;
-            }
-            if (empty($techniques)) {
-                throw new Exception('failed');
-            }
-            return $techniques;                                       
-           
-    } 
-    public function getMaterial() {                                                              
-        $sql = ("SELECT * FROM materials");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $materials = [];
-          
-            while ($row = $result->fetch_object('ProductMaterial')){
-                $materials[] = $row;
-            }
-            if (empty($materials)) {
-                throw new Exception('failed');
-            }
-            return $materials;                                       
-          
-    } 
-    public function getProductCategory() {                                                              
-        $sql = ("SELECT * FROM products_categories");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $categories = [];
-          
-            while ($row = $result->fetch_object('ProductCategory')){
-                $categories[] = $row;
-            }
-            if (empty($categories)) {
-                throw new Exception('failed');
-            }
-            return $categories;                                       
-        
-    } 
-    public function getProductSubCategory() {                                                              
-        $sql = ("SELECT * FROM products_subcategories");         
-        $result = $this->conn->query($sql);                                                                        
-            if ($result === FALSE) {
-                throw new Exception($this->conn->error);
-            }
-            $subcategories = [];
-          
-            while ($row = $result->fetch_object('ProductSubCategory')){
-                $subcategories[] = $row;
-            }
-            if (empty($subcategories)) {
-                throw new Exception('failed');
-            }
-            return $subcategories;                                       
-        
-    } 
-
     public function addProductCategorySubCategory($productId, $productCategoryId, $productSubCategoryId){
          $stmt = $this->conn->prepare("INSERT INTO products_categories_subcategories(product_id, category_id, subcategory_id) VALUES(?, ?, ?)");
          $stmt->bind_param("iii", $product_id, $category_id, $sub_category_id);
@@ -236,16 +130,16 @@ public function getFormat() {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
          
     }
-   public function addItem($productId, $sizeIds, $materialIds, $printTechniqueIds){
+   public function addItem($productId, $sizes, $materials, $printTechniques){
         $stmt = $this->conn->prepare("INSERT INTO items(product_id, size_id, material_id, print_technique_id) VALUES(?, ?, ?, ?)");
         $stmt->bind_param("iiii", $product_id, $size_id, $material_id, $print_technique_id);
-        foreach($sizeIds as $sizeId) {
-            foreach($materialIds as $materialId) {
-                foreach($printTechniqueIds as $printTechniqueId){
-                    $size_id = $sizeId;
+        foreach($sizes as $sizeKey => $size) {
+            foreach($materials as $materialKey => $material) {
+                foreach($printTechniques as $printTechniqueKey => $printTechnique){
+                    $size_id = $sizeKey;
                     $product_id = $productId;
-                    $material_id = $materialId;
-                    $print_technique_id = $printTechniqueId;
+                    $material_id = $materialKey;
+                    $print_technique_id = $printTechniqueKey;
                     $res = $stmt->execute();
                     if (!$res) {
                         throw new Exception($stmt->error);

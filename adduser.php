@@ -2,6 +2,8 @@
 require_once 'data/UserRepository.php';
 require_once 'library/security.php';
 require_once 'checkauth.php';
+require_once 'data/RepositoryFactory.php';
+require_once 'library/FormUtilities.php';
 
 
 
@@ -32,21 +34,12 @@ if (count($_POST) && (!Security::filled_out($_POST)) || (isset($_POST['password'
     
     }
 
-    
-$privileges = $userrepo->GetPrivileges();
-$privOptions = '';
-foreach($privileges as $priv) {
-    $val = $priv->id;
-    $text = $priv->privileges;
-    $privOptions .= "<option value='" . $val . "'>" . $text . "</option>";
-}     
-$countryOptions = '';
-$countries = $userrepo->GetCountries();
-foreach($countries as $country) {
-    $val = $country->id;
-    $text = $country->country;
-    $countryOptions .= "<option value='" . $val . "'>" . $text . "</option>";
-}
+$repositoryFactory = new RepositoryFactory();
+$privileges = $repositoryFactory->privilegeRepository->getAllPrivileges();
+$countries = $repositoryFactory->countryRepository->getAllCountries();
+$privOptions = FormUtilities::getAllOptions($privileges, 'privileges');
+$countryOptions = FormUtilities::getAllOptions($countries, 'country');
+
 
 require_once 'views/admintemplate.php';
 $homepage = new adminTemplate();

@@ -6,8 +6,6 @@ class ProductMaterial {
     private $material;
     private $description;
     
-    
-    
     public function __set($name, $value){
         $this->$name = $value;
     }

@@ -1,12 +1,10 @@
 <?php
 
 
-class Size {
+class ProductSize {
     private $id;
     private $sizes;
     private $name;
-    
-    
     
     public function __set($name, $value){
         $this->$name = $value;
