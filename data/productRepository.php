@@ -17,18 +17,17 @@ require_once 'model/Slider.php';
 class ProductRepository extends BaseRepository {
     // adding product to database
     public function addProduct(Product $product) {
-        $stmt = $this->conn->prepare("INSERT INTO products(name, added_by_user_id) VALUES(?, ?)");
-        $pro_name = $product->getProductName();
+        $stmt = $this->conn->prepare("INSERT INTO products(formats_id, added_by_user_id) VALUES(?, ?)");
         $userid = $product->userid;
-        
-        $stmt->bind_param("si", $pro_name, $userid);
+        $formatid =$product->formatid;
+        $stmt->bind_param("ii", $formatid, $userid);
         
         $res = $stmt->execute();
         if ($res) {
             $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
             $row = $lastIdRes->fetch_row();                                       
             $lastId = $row[0];                                                       
-            return new Product($lastId, $pro_name,'',$userid);
+            return new Product($lastId, $formatid ,$userid);
         }
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
@@ -43,27 +42,26 @@ class ProductRepository extends BaseRepository {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
     
-    public function addProductDescriptionToProduct($productDescription) {
-        $stmt = $this->conn->prepare("INSERT INTO product_descriptions(products_id, language_id, country_id, description) VALUES(?,?,?,?)");
-        $productId = $productDescription->product->getId();
-        $languageId = $productDescription->language->id;
-        $countryId =  $productDescription->country->id;
-        $description = $productDescription->descriptionText;
-        
-        $stmt->bind_param("iiis", $productId, $languageId, $countryId, $description);
-        
-        $res = $stmt->execute();
-        if ($res) {
-            $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
-            $row = $lastIdRes->fetch_row();                                       
-            $lastId = $row[0];   
-            $productDescription->id = $lastId;      
-            return $productDescription;
-        }
-        throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
-        
-    }
-                                                                                            
+    public function addProductDescriptionToProduct($productInfos, $productId) {
+            foreach ( $productInfos as $countryId => $countryinfos ){
+                foreach ($countryinfos as $languageId => $languageinfo){
+                    if (empty($languageinfo['description']) || empty($languageinfo['name'])){
+                        continue;
+                    }
+                    $description = $languageinfo['description'];
+                    $name = $languageinfo['name'];
+                    $stmt = $this->conn->prepare("INSERT INTO product_descriptions(products_id, language_id, country_id, description, name) VALUES(?,?,?,?, ?)");
+                    $stmt->bind_param("iiiss", $productId, $languageId, $countryId, $description, $name);
+                    $res = $stmt->execute();
+                    if (!$res){
+                       throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error); 
+                }
+            }
+        }     
+        return true;
+            
+    } 
+    
     public function getProduct($productid) {                                                              
         $stmt = $this->conn->prepare("SELECT id, name FROM products where id=?");         
         $stmt->bind_param("i",$productid);                                                              
@@ -79,7 +77,7 @@ class ProductRepository extends BaseRepository {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }  
 
-    public function addCountryForProduct ($country,$product )  {
+    public function addCountryForProduct ($country, $product )  {
          $stmt = $this->conn->prepare("INSERT INTO countries_products(countries_id, product_id) VALUES(?, ?)");
          $stmt->bind_param("ii", $country_id, $product_id);
          $country_id = $country->id;
@@ -150,7 +148,7 @@ class ProductRepository extends BaseRepository {
    }
    
    public function getCompleteProduct($productid){
-        $sql = "SELECT p.name, pd.id as description_id, pd.description, im.id as image_id 
+        $sql = "SELECT pd.id as description_id, pd.description, pd.name, im.id as image_id 
            FROM products p
            INNER JOIN product_descriptions pd ON pd.products_id = p.id
            INNER JOIN products_images pi ON pi.product_id = p.id

@@ -25,12 +25,15 @@ if (count($_POST) && (!Security::filled_out($_POST)) || (isset($_POST['password'
     $username = $_POST['username'];
     $password = $_POST['password'];
     $privilege = $_POST['privileges'];
-    $countryid = $_POST['country'];
-    $country = new Country();
-    $country->id = $countryid;
-    $user = new User(0, $name, $lastname,$username, $privilege, $country);
+    $countries = $_POST['countries'];
+    foreach ($countries as $country){
+        $countriesid[] = $country;
+    }
+    
+    $user = new User(0, $name, $lastname,$username, $privilege, $countries);
     $user->password = $password;
     $user = $userrepo->AddUser($user);
+    die();
     
     }
 
@@ -43,46 +46,47 @@ $countryOptions = FormUtilities::getAllOptions($countries, 'country');
 
 require_once 'views/admintemplate.php';
 $homepage = new adminTemplate();
-$content = $homepage -> content = '<form method="post" action="adduser.php">
-            <div class="fieldset-wrapper">
-                    <fieldset>
-                        <legend>add user</legend>
-                        <p class="field field-text">
-                            <label for="adding-name">Name:</label>
-                            <input type="text" name="name" id="adding-name">
-                        </p>
-                        <p class="field field-text">
-                            <label for="adding-lastname">Lastname:</label>
-                            <input type="text" name="lastname" id="adding-lastname">
-                        </p>
-                        <p class="field field-text">
-                            <label for="username" >Username:</label>
-                            <input type="text" name="username" id="username">
-                        </p>
-                        <p class="field field-text">
-                            <label for="adding-password">Password:</label>
-                            <input type="password" name="password" id="addingpassword">
-                        </p>
-                        <p class="field field-text">
-                            <label for="control-password">Repeat password:</label>
-                            <input type="password" name="contpassword" id="control-password">
-                        </p>
-                        <p class="field field-text>
-                            <label for="set-country">Country</label>
-                            <select name="country">
-                            ' . $countryOptions . '
-                            </select>
-                        </p>
-                        <p class="field field-text>
-                            <label for="set-privileges">Privileges</label>
-                            <select name="privileges">
-                            ' . $privOptions . '
-                            </select>
-                        </p>
-                        <button type="submit" name="submit" value="#">submit</button>
-                        <br>
-                    </fieldset>
-                </div>
+$content = $homepage -> content = '<div class="desktop">
+                                        <form method="post" action="adduser.php">
+
+                                        <fieldset class="adduser">
+                                            <legend>add user</legend>
+                                            <p class="field-text">
+                                                <label for="adding-name">Name:</label>
+                                                <input type="text" name="name" id="adding-name">
+                                            </p>
+                                            <p class="field-text">
+                                                <label for="adding-lastname">Lastname:</label>
+                                                <input type="text" name="lastname" id="adding-lastname">
+                                            </p>
+                                            <p class="field-text">
+                                                <label for="username" >Username:</label>
+                                                <input type="text" name="username" id="username">
+                                            </p>
+                                            <p class="field-text">
+                                                <label for="adding-password">Password:</label>
+                                                <input type="password" name="password" id="addingpassword">
+                                            </p>
+                                            <p class="field-text">
+                                                <label for="control-password">Repeat password:</label>
+                                                <input type="password" name="contpassword" id="control-password">
+                                            </p>
+                                            <p class="field-text>
+                                                <label for="set-country">Country</label>
+                                                <select multiple name="countries[] id="set-country">
+                                                ' . $countryOptions . '
+                                                </select>
+                                            </p>
+                                            <p class="field field-text>
+                                                <label for="set-privileges">Privileges</label>
+                                                <select name="privileges" id="set-privileges">
+                                                ' . $privOptions . '
+                                                </select>
+                                            </p>
+                                            <button type="submit" name="submit" value="#">submit</button>
+                                            <br>
+                                        </fieldset>
+                                    </div>
         </form>';
 $homepage -> Display();
  ?>      

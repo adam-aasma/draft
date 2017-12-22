@@ -1,29 +1,19 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of product
- *
- * @author adam
- */
 class Product {
     private $id;
-    private $name;
     private $descriptions;
     private $userid;
+    private $formatid;
     
     function __construct($id, 
-        $name, $userid) {
+        $format, $userid) {
         
         $this->id = $id;
-        $this->name = $name;
         $this->descriptions = [];
         $this->userid = $userid;
+        $this->formatid = $format;
     }
     
     public function getId() {
@@ -33,10 +23,7 @@ class Product {
         return $this->$name;
     }
     
-    public function getProductName(){
-        return $this->name;
-    }
-    
+   
     public function getProductDescriptions(){
         return $this->descriptions;
     }

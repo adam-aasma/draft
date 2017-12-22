@@ -1,8 +1,6 @@
                                 /* normalisers*/
 body, h1, h2, h3, h4, p, li, a, ul, figure {
     margin: 0px;
-    font-size: 16px;
-    font-weight: 400;
     text-decoration: none;
     box-sizing: border-box;
     padding: 0;
@@ -10,120 +8,89 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     -webkit-margin-after: 0em;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
-    font-family: montserrat;
-    text-transform: uppercase;
-    color: #343434;
-    font-weight: 400;
-    
 }
 
-body, ul {
-    margin: 0;
-    webkit-margin-before: 0;
-    -webkit-margin-after: 0;
-    -webkit-margin-start: 0;
-    -webkit-margin-end: 0;
-    -webkit-padding-start: 0;
+.hover a:hover {
+    color: #FF7000;
 }
+
 .admin {
-   font-family: montserrat;
-   color: black;
+   font-family: montserrat, sans-serif;
+   color: #343434;
    text-transform: uppercase;
    width: 100%;
-    
-    
+   font-weight: 400;
+   height: 100%;
 }
+
 .header {
     background-color: #343434;
-    height: 6rem;
+    min-height: 5rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
-}
-
-.header h1 {
-     margin: auto;
-     padding: 0px 0px;
-     color: white;
-     font-size: 2rem;
-     font-weight: 500;
-}
-.header h2 {
-    font-size: 1.5rem;
-    font-weight: 500;
-}
-
-.header h1:first-child {
-    justify-content: flex-start;
-    margin: auto 2rem;
-}
-
-.header h2:last-child {
     color: white;
-    margin: auto 2rem;
+    font-weight: 500;
+    height: 10%;
 }
+
+.header h1{
+    text-align: center;
+    margin: auto 0;
+    font-size: 2rem;
+    min-width: 15rem;
+    width: 20%
+}
+
+.header h2 {
+    color: white;
+    margin: auto 0px;
+    min-width: 20%;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
 .header p {
     font-size: 1rem;
-    margin-right: 2rem;
-    color: orange;
-    font-weight: lighter;
+    margin: auto 0;
+    
 }
+
 .menu {
-    min-height: 50rem;
+    min-width: 15rem;
     width: 20%;
-    display: inline-flex;
+    display: flex;
     background-color: #343434;
     color: white;
     justify-content: center;
-    
+    align-items: center;
+    height: 100%;
 }
 
 .menu ul {
-    
     list-style: none;
     text-decoration: none;
-   
+    height: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: space-around;
-    
-}
-.menu ul li {
-    display: flex;
-    min-height: 4rem;
-    align-items: center;
-    
-    
-    
-}
-.menu ul li a {
-    text-decoration: none;
-    color: white;
-    
+    flex-direction: column;
 }
 
-.menu li a:hover {
-    color: orange;
-   
+.menu li a{
+    color: white;
 }
 
 .desktop {
     width: 80%;
     display: inline-flex;
     margin-top: 0;
-    height: 50rem;
-    vertical-align: top;
-   
+    justify-content: center;
+    height: 100%;
 }
 
 .desktop img {
     width: 50%;
-    margin: 0px;
-    margin: auto;
-   
 }
-
-
 
 /* normalize to fieldset */
 
@@ -141,6 +108,7 @@ fieldset {
 }
 
 /* style for logout */
+
 .logout {
     padding: 1em;
     margin-bottom: 1em;
@@ -149,28 +117,23 @@ fieldset {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
     font-family: montserrat;
     width: fit-content;
-    
 }
-.logout button {
-    
-}
+
 /* CSS for the adduser form*/
+
 .flex-wrapper {
     display: inline-flex;
+    min-height: 35rem;
     width: 100%;
+    height: 90%;
 }
-.fieldset-wrapper {
-    padding: 1em;
-    margin-bottom: 1em;
-    border: 1px solid #eee;               
-    background-color: #f7f7f7;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
-    font-family: montserrat;
-    width: fit-content;
-}
-/* older browsers dosent understand :root one so border goes away only in new ones leaving it with box shadow*/
-:root .fieldset-wrapper {   
-    border: 0;
+.desktop form .adduser{
+    display: flex;
+    width: 35%;
+    height: 90%;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 legend {
@@ -184,87 +147,48 @@ legend {
 input {
     font: inherit;
 }
-.field-text {
-    max-width: 20em;
-}
 
-.field-text label {
-    cursor: pointer;
-}
-.field-text label,
-.field-text input {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.field-text input {
-    padding: .372em .3125em .3125em;
-    border: 1px solid #ccc;
-    border-radius: .25em;
-    -webkit-appearance: none;
-}
-
-.field-text input:focus {
+ input:focus {
     box-shadow: 0 0 .5em rgba(93, 162, 248, 0.5);
-    border-color: #5da2f8;
+    border-color: #FF7000;
     outline: 0;
 }
 
 .logout button, button  {
     cursor: pointer;
-    border: 0;
+    border: 1px solid #FF7000;
     padding: .5em 1em;
-    color: #fff;
+    color: #343434;
     border-radius: .25em;
     font-size: 1em;
-    background-color: #173b6d;
-   // background-image: linear-gradient( to bottom, #1a4a8e, #173b6d);
-  //box-shadow: 0 .25em 0 rgba(23, 59, 109, 0.3), inset 0 1px 0 rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-    font-family: montserrat;
+    background-color: white;
+    
 }
 
 .logout button, button:focus {
-    background-color: #2158a9;
-    background-image: linear-gradient( to bottom, #2063c0, #1d4d90);
+    background-color: #FF7000;
+    color: white;
+    /*background-image: linear-gradient( to bottom, #2063c0, #1d4d90);*/
     box-shadow: 0 .25em 0 rgba(23, 59, 109, 0.3),
         inset 0 1px 0 rgba(0, 0, 0, 0.3);
 }
-.admin_products {
-    width: 100%;
-    display: flex;
+.products {
     justify-content: space-around;
     align-items: center;
     
 }
-.admin_products a {
-    height: 30%;
+.products a {
+    height: 40%;
     width: 30%;
     border: 1px solid black;
     font-size: 2rem;
-    text-transform: uppercase;
     display: flex;
-    text-decoration: none;
     color: black;
     justify-content: space-around;
     align-items: center;
-    
-    
-    
 }
 
-.admin_products a:hover {
-    color: orange;
-}
-
-.fieldset-wrapper2 {
-    font-weight: lighter;
-    width: 80%;
-    
-  
-}
-
-.fieldset-wrapper2 form {
+.desktop form {
     width: 100%;
     margin: 0;
     height: 100%;
@@ -274,90 +198,56 @@ input {
     flex-wrap: wrap;
 }
 
-    
-
-.fieldset-wrapper2 fieldset {
+.desktop fieldset {
     width: 30%;
-    min-height: 50;
-    height: 20rem;
     margin: 1%;
     box-sizing: border-box;
     border: 1px solid black;
     display: inline-flex;
-   
+    height: 40%;
 }
 
-.fieldset-wrapper2 fieldset p {
-    margin-left: 1rem;
-}
-
-.fieldset-wrapper2 fieldset label {
+.desktop fieldset label {
     display: block;
 }
 
-.fieldset-wrapper2 fieldset textarea {
-    width: 400px;
-    height: 188px;
+.desktop fieldset label, .desktop fieldset,
+.desktop fieldset textarea, .desktop.checkbox, .desktop input, .desktop select {
+    margin: 2% 0;
+    padding: 0 1rem;
+}
+
+.desktop fieldset textarea {
+    min-width: 200px;
+    min-height: 100px;
+    padding: 0;
     width: 90%;
     height: 30%;
     resize: vertically;
 }
 
-.fieldset-wrapper2 .checkbox {
+textarea:active {
+    border: #FF7000;
+}
+
+.desktop .checkbox {
     border: none;
     display: inline;
 }
-.fieldset-wrapper2 .checkbox label {
+
+.desktop .checkbox label {
     display: inline-block;
     color: black;
 }
 
-.fieldset-wrapper2 .checkbox-header {
+.desktop .checkbox-header {
     text-align: left;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
-    margin-left: 1.2rem;
-    
     color:#777;
 }
 
-.fieldset-wrapper2 fieldset label {
+.desktop fieldset label {
     color: #777;
-    
-    
-    
 }
-
-
-
-                                 /*general classes*/
-
-
-.wrapper {
-    width: 80%;
-    margin: 1rem auto;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    
-}
-.wrapper figure {
-    width: 80%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.wrapper figure img{
-    width: 100%;
-}
-
-.font {
-    color: #343434;
-    font-weight: 400;
-}
-
 
   .showroom {
     display: flex ;
@@ -365,24 +255,22 @@ input {
     align-items: center;
     width: 58%;
     background-color: #F7F7F7;
-    height: 100%;
+    height: 96%;
     position: relative;
     max-height: 55rem;
-   
   } 
   
   .showroom img {
+      min-width: 80%;
       border: 2px solid black;
       box-sizing: border-box;
-      display: flex;
+      display: block;
       margin: 0 auto;
-      
   }
-  
   
   .product-info {
       background-color: #F7F7F7;
-      height: 100%;
+      height: 96%;
       width: 38%;
       display: flex;
       justify-content: center;
@@ -394,13 +282,13 @@ input {
   .priceButton {
       display: block;
       width: 80%;
-      
   }
   
   .pricebutton button{
       width: 100%;
       margin-bottom: 1rem;
       background-color: green;
+      border: none;
   }
   
   .pricebutton button:last-child {
@@ -414,6 +302,7 @@ input {
       font-weight: 500;
       margin-bottom: 1rem;
   }
+  
   .pricebutton h2:before {
       content: "25€";
       text-align: left;
@@ -422,6 +311,7 @@ input {
       text-decoration: line-through;
       
   }
+  
   .product-info h1 {
       width: 80%;
       font-size: 1.5rem;
@@ -460,7 +350,7 @@ input {
         flex-wrap: wrap;
     }
     
-.gradient h2, p, h3, a {
+.gradient h2, .gradient p, .gradient h3, .gradient a {
     color: white;
     text-align: left;
     margin-left: 2rem;
@@ -494,3 +384,5 @@ input {
     
     
     }
+    
+    

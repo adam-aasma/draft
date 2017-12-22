@@ -38,7 +38,9 @@ class adminTemplate {
    }
    
    private function setWelcome(){
-       $this->welcome = 'happy workday Dear' . $this->user->name . '!';
+       $this->setUser();
+       $this->welcome = 'happy workday Dear ' . $this->user->name . '!';
+       return $this->welcome;
    }
    
    public function DisplayTitel(){
@@ -52,7 +54,7 @@ class adminTemplate {
    public function DisplayStyles(){
        ?>
        <link href="/css/admin.css" type="text/css" rel="stylesheet">
-      <!-- <script type="text/javascript" src="js/admin.js"></script> -->
+     
        <?php
    }
    
@@ -60,18 +62,16 @@ class adminTemplate {
        ?>
        <!-- page header -->
        <div class="admin">
-           <header>
-                <div class="header">
+           <header class="header">
                     <h1>Admin Panel</h1>
-                    <p><?=$this->setWelcome()?></p>
+                    <p><?= $this->setWelcome() ?></p>
                     <h2>user profile</h2>
-                </div>
             </header>
        <?php
    }
    
    public function DisplayMenu($menu){
-       echo "<nav class='menu'>\n<ul>";
+       echo "<nav class='menu hover'>\n<ul>";
        
        foreach($menu as $key => $value) {
            $this -> DisplayLink($key, $value,
@@ -118,7 +118,8 @@ class adminTemplate {
        $this -> DisplayTitel();
        $this -> DisplayKeywords();
        $this -> DisplayStyles();
-       echo "</head>\n<body>\n";
+       echo "<script>var initFunctionTable = [];</script>";
+       echo "</head>\n<body onload='initPage()'>\n";
        $this -> DisplayHeader();
        echo '<div class="flex-wrapper">';
        $this -> DisplayMenu($this -> menu);

@@ -13,12 +13,13 @@
  */
 class Country {
     private $id;
-    private $name;
+    //private $name;
+    private $country;
     
-    public static function create($id, $name){
+    public static function create($id, $country){
         $country = new Country();
         $country->id = $id;
-        $country->name = $name;
+        $country->country = $country;
         return $country;
     }
     public function __set($name, $value){

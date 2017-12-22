@@ -47,7 +47,7 @@ class UserRepository extends BaseRepository {
         $lastname = $user->lastname;
         $username = $user->username;
         $privileges = $user ->privileges;
-        $country = $user -> country;
+        $countriesIds = $user -> countries;
         list($password, $salt) =$this->PasswordCryp($user->password);
         $sql = ("INSERT INTO users(name,lastname,username,password, passwordsalt, privileges) VALUES(?, ?, ?, ?, ?, ?)");
         $stmt = $this->conn->prepare($sql);
@@ -60,21 +60,21 @@ class UserRepository extends BaseRepository {
             $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
             $row = $lastIdRes->fetch_row();                                       
             $userid = $row[0];
-            $this->AddUserCountry($userid, $country->id);
+            $this->AddUserCountry($userid, $countriesIds);
             $user->id = $userid;
             return $user;
         }
         throw new Exception($stmt->error);
     }
     
-    private function AddUserCountry($userid, $countryid) {
+    private function AddUserCountry($userid, $countriesIds) {
+        foreach ($countriesIds as $countryId){
         $sql = ("INSERT INTO user_country(user_id,country_id) VALUES(?, ?)");
         $stmt = $this->conn->prepare($sql);
-        $bindresult = $stmt->bind_param("ii", $userid, $countryid);
-        if (!$bindresult ) {
-            throw Exception('fail to bind');
+        $bindresult = $stmt->bind_param("ii", $userid, $countryId);
+        $stmt->execute();
         }
-        return $stmt->execute();
+        
         
     }
     private function getCountriesForUser($user) {

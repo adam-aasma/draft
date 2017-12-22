@@ -28,19 +28,17 @@ if (isset($_POST["submit"])) {
     try{ 
         $productId = $productService->addProduct(
                 $imagedatas,
-                $_POST['product_name'],
-                $_POST['product_description'],
+                $_POST['product_info'],
                 $_POST['format'],
                 $_POST['category'],
                 $_POST['subcategory'],
-                $_POST['language'],
                 $_POST['sizes'],
                 $_POST['material'],
                 $_POST['technique'],
-                $_POST['countries'],
                 $homepage->user->id
                 );
         header("location: productshowroom.php?productid= $productId");
+        die();
     } catch (Exception $e) {
         $message = $e->getMessage();
     }
@@ -53,9 +51,13 @@ $materials = $materialrep->getAllMaterials();
 $techniques = $techniquerep->getAllProductPrintTechniques();
 $categories = $categoriesrep->getAllProductCategories();
 $subcategories = $subcategoriesrep->getAllProductSubCategories();
-$languages = $languagerep->getAllLanguages();
-$countries = $repositoryFactory->countryRepository->getAllCountries();
-
+$countries = $homepage->user->countries;
+$countriesIds = [];
+foreach ($countries as $country){
+    $countryId = $country->id;
+    $countriesIds[] = $countryId;
+}
+$languages = $languagerep->getUserLanguages($countriesIds);
 $formatOptions = FormUtilities::getAllOptions($formats, 'format');
 $sizeOptions = FormUtilities::getAllCheckBoxes($sizes, 'sizes', 'sizes');
 $materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material');
@@ -64,9 +66,28 @@ $countryOptions = FormUtilities::getAllOptions($countries, 'country');
 $categoryOptions = FormUtilities::getAllOptions($categories, 'name');
 $subcategoryOptions = FormUtilities::getAllOptions($subcategories, 'category');
 $languageOptions = FormUtilities::getAllOptions($languages, 'language');
+$infoHtml = '';
+foreach ($countries as $country){
+    foreach ($languages as $language){
+        $infoHtml .= '<fieldset class="productinfo" id="productinfo_' . $country->id . '_' . $language->id . '">
+                    <legend>' . $country->country . '_' . $language->language .  '</legend>
+                    <p>
+                        <label>name:</label>
+                        <input type="text" name="product_info[' . $country->id .'][' . $language->id . '][name]">
+                    </p>
+                    <p>
+                        <label>product description:</label>
+                        <textarea type="text" name="product_info[' . $country->id .'][' . $language->id . '][description]">
+                        
+                        </textarea>
+                    </p>
+                 </fieldset>';
+        
+    }
+}
 
 $content = $homepage -> content = '
-            <div class="fieldset-wrapper2">
+            <div class="desktop">
             <form action="addproduct2.php" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>product images</legend>
@@ -74,32 +95,16 @@ $content = $homepage -> content = '
                     <input type="file" name="productimage" id="adding-picture1" />
                     <label for="adding-picture2">Select interior pic to upload:</label>
                     <input type="file" name="interiorimage" id="adding-picture2" />
-                </fieldset>
-                <fieldset>
-                    <legend>product details</legend>
-                    <p>
                     <label>countries:</label>
-                            <select multiple  name="countries[]">
+                            <select id="countries" onchange="selectCountryLanguage()">
                                 ' . $countryOptions . '
                             </select>
-                    </p>
                     <label for="adding-language">language:</label>
-                            <select  name="language">
+                            <select id="languages" onchange="selectCountryLanguage()">
                                 ' . $languageOptions . '
                             </select>
-                    </p>
-                    <p>
-                        <label for="adding-name">name:</label>
-                        <input type="text" name="product_name" value="name" id="adding-name">
-                    </p>
-                    <p>
-                        <label for="adding-description">product description:</label>
-                        <textarea type="text" name="product_description" value="$description" id="adding-description">
-                        
-                        </textarea>
-                    </p>
-                    
                 </fieldset>
+                    ' . $infoHtml . '
                 <fieldset>
                     <legend>price details</legend>
                     <label for="select-size" class="checkbox-header">sizes:</label>
@@ -117,33 +122,22 @@ $content = $homepage -> content = '
                 </fieldset>
                 <fieldset>
                     <legend>search details</legend>
-                    <p>
                         <label for="adding-format">format:</label>
                             <select name="format">
                                 ' . $formatOptions . '
                             </select>
-                    </p>
-                    <p>
                         <label for="chossing-category">category:</label>
                         <select name="category">
                             ' . $categoryOptions . '
                         </select>
-                    </p>
-                    <p>
                         <label>subcategory:</label>
                         <select name="subcategory">
                             ' . $subcategoryOptions . '
                         </select>
-                    </p>
-                  <!--  <p>
                         <label>color:</label>
                         <input type="text" name="color">
-                    </p>-->
-                    
-                 <!--   <p>
                         <label for="descriping-motive">motive:</label>
                         <input type="text" name="motive" id="descipting-motive">
-                    </p> -->
                 </fieldset>
                 <fieldset>
                     <legend>submit</legend>
@@ -154,7 +148,8 @@ $content = $homepage -> content = '
                     <legend>notes</legend>
                 </fieldset>
             </div>
-      </form>';
+      </form>
+      <script>initFunctionTable.push(function() { selectCountryLanguage(); })</script>';
 
 
 

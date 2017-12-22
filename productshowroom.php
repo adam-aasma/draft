@@ -18,7 +18,7 @@ if (!empty($product)) {
 }
 $homepage = new adminTemplate();
 $titel = $homepage -> title = 'wally';
-$content = $homepage -> content = '<div class="wrapper font">
+$content = $homepage -> content = '<div class="desktop">
             <div class="slideshow showroom">' . $imagesHtml . '
                 <div class="arrowbutton">
                 <button onclick="plusDivs(-1)">&#10094;</button>

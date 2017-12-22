@@ -9,6 +9,7 @@ class ProductDescription {
     private $product;
     private $language;
     private $country;
+    private $productName;
     
     public function __get($name) {
         return $this->$name;
