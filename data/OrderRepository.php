@@ -3,6 +3,14 @@ require_once 'BaseRepository.php';
 require_once 'model/Customer.php';
 
 class OrderRepository extends BaseRepository { 
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     public function insertCustomer($customer) {
         $stmt = $this->conn->prepare("INSERT INTO customers(firstname,lastname,address,zipcode,city,country,email,phonenumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
         $bindresult = $stmt->bind_param("ssssssss", $fn, $ln, $a, $z, $c, $co, $e, $t);

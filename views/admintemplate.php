@@ -103,7 +103,7 @@ class adminTemplate {
    
    public function DisplayFooter(){
        ?>
-      <script type="text/javascript" src="js/admin.js"></script>
+    <!--  <script type="text/javascript" src="js/admin.js"></script> -->
        <!-- page footer -->
       <!-- <footer>
            <p>copyrights walltwisters</p>

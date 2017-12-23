@@ -37,4 +37,41 @@ abstract class BaseRepository {
         }
         return $collection;                                       
     }
+    
+    abstract function getColumnNamesForInsert();
+    abstract function getColumnValuesForBind($aggregate);
+    
+    public function save($aggregate, bool $getId = false) {
+        $colNames = $this->getColumnNamesForInsert();
+        $colList = join(',', $colNames);
+        $colVals = join(',', array_map(function ($n) { return '?'; }, $colNames));
+        $bindTypesAndValues = $this->getColumnValuesForBind($aggregate);
+        $bindTypes = join('', array_map(function($bv) { return $bv[0]; }, $bindTypesAndValues));
+        function &getVal(&$bv) {
+            return $bv[1];
+        }
+
+        $bindValues = array_map("getVal", $bindTypesAndValues);
+        $bindp = [];
+        $bindp[] = &$bindTypes;
+        for ($i = 0; $i < count($bindValues); $i++) {
+            $bindp[] = &$bindValues[$i];
+        }
+
+        $stmt = $this->conn->prepare("INSERT INTO $this->tableName ($colList) VALUES($colVals)");
+        call_user_func_array(array($stmt, "bind_param"), $bindp);
+        $res = $stmt->execute();
+        if (!$res) {
+            throw new Exception($stmt->error);
+        }   
+
+        if ($getId) {
+            $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
+            $row = $lastIdRes->fetch_row();                                       
+            $lastId = $row[0];
+            $aggregate->id = $lastId;
+        }
+        
+        return $aggregate;
+    }
 }

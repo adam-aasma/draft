@@ -8,6 +8,14 @@ class ProductSubCategoryRepository extends BaseRepository {
         parent::__construct("products_subcategories", "ProductSubCategory");
     }
     
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     public function getAllProductSubCategories() {
         return $this->getAllObjects();
     }

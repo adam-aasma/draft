@@ -1,0 +1,86 @@
+
+.producttable {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    max-width: 60rem;
+    font-family: "Lucia-Grande", Verdana, Arial, sans-serif;
+    text-align: center;
+}
+
+.producttable caption {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    line-height: 2;
+    font-size: 1,5rem;
+}
+.col-id {
+    background-color: #fef0f0;
+    background-color: rgba(255, 0, 0, 0.05);
+}
+
+.producttable th,
+.producttable td {
+    line-height: 3;
+    padding: 0;
+    width: 100%;
+}
+.producttable td {
+    border: 1px solid #6d6d6d;
+}
+
+.producttable thead {
+    border-bottom: 3px solid #666;
+}
+
+.producttable a {
+    display: block;
+    text-decoration: none;
+    color: #2f273c;
+}
+
+.producttable a:hover,
+.producttable a:focus {
+    background-color: #cde7ca;
+    background-color: rgba(167, 240, 210, 0.3);
+}
+
+.productmenu {
+    display: inline-flex;
+    width: 100%;
+    justify-content: flex-end;
+    
+}
+
+.productmenu li {
+   width: 25%; 
+   border: 1px solid grey;
+}
+
+ul {
+    list-style-type: none;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 0;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    bottom: 0px;
+    
+}
+
+#anchor {
+    position: relative;
+}
+
+.show {
+    position: absolute;
+    z-index: 1;
+    bottom: 0px;
+    display: block;
+}

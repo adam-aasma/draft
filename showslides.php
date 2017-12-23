@@ -11,7 +11,7 @@ $imagesHtml = "<img class='slider' src='getimage.php?id=$imageId'>\n";
 
 $homepage = new adminTemplate();
 $titel = $homepage -> title = 'wally';
-$content = $homepage -> content = '<section class="wrapper">
+$content = $homepage -> content = '<section class="desktop">
                 ' . $imagesHtml . '
                 <div class="gradient">
                     <h2>' . $titel . '</h2>

@@ -10,6 +10,7 @@ require_once 'ProductDescriptionRepository.php';
 require_once 'ProductMaterialRepository.php';
 require_once 'ProductSizeRepository.php';
 require_once 'ProductSubCategoryRepository.php';
+require_once 'ItemRepository.php';
 
 class RepositoryFactory {            
     private $productRepository;
@@ -23,7 +24,7 @@ class RepositoryFactory {
     private $productMaterialRepository;
     private $productSizeRepository;
     private $productSubCategoryRepository;
-    
+    private $itemRepository;
     
 
     public function __get($name) {
@@ -62,8 +63,9 @@ class RepositoryFactory {
                 case 'productSubCategoryRepository':
                     $this->productSubCategoryRepository = new ProductSubCategoryRepository();
                     break;
-                
-                
+                case 'itemRepository':
+                    $this->itemRepository = new ItemRepository();
+                    break;
             }
         }
         return $this->$name;

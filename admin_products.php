@@ -9,7 +9,7 @@ $titel = $homepage -> title = 'wally';
 $content = $homepage -> content = '<div class=" desktop products hover">
             <a href="addproduct2.php">add product</a>
             <a>delete product</a>
-            <a>list products</a>
+            <a href="listproducts.php">list products</a>
         </div>';
  
 

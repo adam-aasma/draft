@@ -6,6 +6,14 @@ require_once 'model/Country.php';
 require_once 'model/Privileges.php';
 
 class UserRepository extends BaseRepository { 
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     public function LoginUser($userName, $password) {
          $sql = "SELECT * FROM users WHERE username = '$userName'";
         $result = $this->conn->query($sql);

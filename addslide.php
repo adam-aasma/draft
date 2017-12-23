@@ -7,7 +7,16 @@ require_once 'data/productRepository.php';
 require_once 'data/ImageRepository.php';
 require_once 'library/FormUtilities.php';
 
+$user = unserialize($_SESSION['user']);
+$countries = $user->countries;
 $productrep = new productRepository();
+$productlist = $productrep->getProductList($countries);
+$productOptions ='';
+foreach ($productlist as $product){
+    $val = $product['id'];
+    $name = $product['name'];
+    $productOptions .= '<option value="' . $val . '">' . $name . '</option>';
+}
 if (isset($_POST['submit'])){
     try {
     $imagerepo = new ImageRepository();
@@ -15,13 +24,9 @@ if (isset($_POST['submit'])){
     $titel = $_POST['name'];
     $salesmessage = $_POST['text'];
     $productid = $_POST['product'];
-    $languageid = 1;
-    $countryid = 1;
-    $user = unserialize($_SESSION['user']);
-    $userid = $user->id;
     $image = new Image($imagedata[0]['filepath'], $imagedata[0]['size'], $imagedata[0]['mime'], $titel, 'slider');
     $imageId = $imagerepo->addImage($image);
-    $slider = new Slider($imageId, $productid, $languageid, $countryid, $salesmessage, $titel, $userid);
+    $slider = new Slider($imageId, $productid, $salesmessage, $titel, $user->id);
     $sliderId = $productrep->addSlider($slider);
     header("location: showslides.php?slider=$sliderId");
     }
@@ -29,16 +34,9 @@ if (isset($_POST['submit'])){
         $message = $e->getMessage();
     }
 }
-$productlist = $productrep->getProductList();
-$productOptions ='';
-foreach ($productlist as $product){
-    $val = $product['id'];
-    $name = $product['name'];
-    $productOptions .= '<option value="' . $val . '">' . $name . '</option>';
-}
 $homepage = new adminTemplate();
 $content = $homepage -> content = '
-            <div class="fieldset-wrapper2">
+            <div class="desktop">
             <form action="addslide.php" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <legend>slider</legend>

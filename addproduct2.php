@@ -22,7 +22,11 @@ $subcategoriesrep = $repositoryFactory->productSubCategoryRepository;
 
 if (isset($_POST["submit"])) {
     $imagerepo = new ImageRepository;
-    $productService = new ProductService($repositoryFactory->productRepository, $repositoryFactory->languageRepository, $imagerepo);
+    $productService = new ProductService(
+            $repositoryFactory->productRepository, 
+            $repositoryFactory->itemRepository,
+            $repositoryFactory->languageRepository, 
+            $imagerepo);
 
     $imagedatas = Images::getImageData($_FILES);
     try{ 

@@ -7,6 +7,14 @@ class ProductCategoryRepository extends BaseRepository {
         parent::__construct("products_categories", "ProductCategory");
     }
     
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     public function getAllProductCategories() {
         return $this->getAllObjects();
     }

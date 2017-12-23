@@ -15,6 +15,14 @@ require_once 'viewmodel/ShowRoomProduct.php';
 require_once 'model/Slider.php';
 
 class ProductRepository extends BaseRepository {
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     // adding product to database
     public function addProduct(Product $product) {
         $stmt = $this->conn->prepare("INSERT INTO products(formats_id, added_by_user_id) VALUES(?, ?)");
@@ -180,17 +188,27 @@ class ProductRepository extends BaseRepository {
         return $showRoomProduct;   
     }
     
-    public function getProductList(){
-        $sql = "SELECT id, name FROM products";
+    public function getProductList($countries){
+        $countryids = [];
+        foreach ($countries as $country){
+            $countryids[] = $country->id;
+        }
+        $strCountry = join(',', $countryids);
+        $sql = "SELECT product_descriptions.name, product_descriptions.description, product_descriptions.language_id, product_descriptions.country_id, products.id
+                FROM  product_descriptions
+                INNER JOIN products ON product_descriptions.products_id = products.id WHERE product_descriptions.country_id IN ($strCountry)";
         $result = $this->conn->query($sql);
         if ($result === FALSE) {
             throw new Exception($this->conn->error);
         }
-        $product = ['id' => 0, 'name' => ''];
+        $product = ['id' => 0,'languageid' => 0, 'countryid' => 0, 'name' => '', 'description' => ''];
         $productlist = [];
         while ($row =$result->fetch_assoc()){
         $product['id'] = $row['id'];
         $product['name'] = $row['name'];
+        $product['countryid'] = $row['country_id'];
+        $product['languageid'] = $row['language_id'];
+        $product['description'] = $row['description'];
         $productlist[] = $product;
         }
         if ($productlist){
@@ -202,13 +220,12 @@ class ProductRepository extends BaseRepository {
         }
         
         public function addSlider($slider){
-        $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id, language_id, country_id,
-                                          sales_message, titel, added_by_user_id) VALUES(?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("iiiissi", $image_id, $product_id, $language_id, $country_id, $salesmessage, $titel, $added_by_user);
+        $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id,
+                                          sales_message, titel, added_by_user_id)
+                                          VALUES(?, ?, ?, ?, ?)");
+            $stmt->bind_param("iissi", $image_id, $product_id, $salesmessage, $titel, $added_by_user);
             $product_id = $slider->productid;
             $image_id = $slider->imageid;
-            $country_id = $slider->countryid;
-            $language_id = $slider->languageid;
             $salesmessage = $slider->salesmessage;
             $titel = $slider->titel;
             $added_by_user = $slider->userid;

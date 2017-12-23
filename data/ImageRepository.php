@@ -15,6 +15,14 @@ require_once 'model/Image.php';
  */
 class ImageRepository extends BaseRepository {
     
+    function getColumnNamesForInsert() {
+        throw new Exception("Not implemented");
+    }
+    
+    function getColumnValuesForBind($aggregate) {
+        throw new Exception("Not implemented");
+    }
+    
     public function getCategories() {
         
         $sql = "SELECT id, name FROM categories";

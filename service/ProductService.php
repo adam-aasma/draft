@@ -4,13 +4,16 @@ class ProductService {
     private $productRepository;
     private $languageRepository;
     private $imageRepository;
+    private $itemRepository;
     
     public function __construct(
             $productRepository,
+            $itemRepository,
             $languageRepository,
             $imageRepository) {
         
         $this->productRepository = $productRepository;
+        $this->itemRepository = $itemRepository;
         $this->languageRepository = $languageRepository;
         $this->imageRepository = $imageRepository;
     }
@@ -34,8 +37,24 @@ class ProductService {
         }
         $this->productRepository->addProductDescriptionToProduct($productinfos, $product->id);
         $this->productRepository->addProductCategorySubCategory($product->getId(), $category, $subcategory);
-        $this->productRepository->addItem($product->getId(), $size, $material, $technique);
+        
+        $items = $this->getItemsToSave($product->getId(), $size, $material, $technique);
+        foreach($items as $item) {
+            $this->itemRepository->save($item);
+        }
         
         return $product->id;
+    }
+    
+    private function getItemsToSave($productId, $sizes, $materials, $printTechniques) {
+        $items = [];
+        foreach($sizes as $sizeKey => $size) {
+            foreach($materials as $materialKey => $material) {
+                foreach($printTechniques as $printTechniqueKey => $printTechnique){
+                    $items[] = Item::create($productId, $sizeKey, $materialKey, $printTechniqueKey);
+               }
+           }
+       }
+       return $items;
     }
 }
