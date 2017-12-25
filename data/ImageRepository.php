@@ -2,24 +2,15 @@
 
 require_once 'BaseRepository.php';
 require_once 'model/Image.php';
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of ImageRepository
- *
- * @author adam
- */
+
 class ImageRepository extends BaseRepository {
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
@@ -41,7 +32,7 @@ class ImageRepository extends BaseRepository {
     
     public function getAllImageIds() {
         $sql = "SELECT id FROM images";
-        $result = $this->conn->query($sql);  // om det går fel false annars ett objekt som hette mysql result
+        $result = $this->conn->query($sql);  
         if ($result === FALSE) {
             throw new DatabaseException($this->conn->error);
         }

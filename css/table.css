@@ -54,7 +54,25 @@
 
 .productmenu li {
    width: 25%; 
-   border: 1px solid grey;
+   outline: 1px solid grey;
+   text-align: center;
+   color: white;
+}
+
+.productmenu li:first-child {
+    background-color: green;
+}
+
+.productmenu li:nth-child(2) {
+    background-color: red;
+}
+
+.productmenu li:nth-child(3) {
+    background-color: blue;
+}
+
+.productmenu li:nth-child(4) {
+    background-color: green;
 }
 
 ul {
@@ -74,7 +92,7 @@ ul {
     
 }
 
-#anchor {
+.anchor {
     position: relative;
 }
 
@@ -82,5 +100,6 @@ ul {
     position: absolute;
     z-index: 1;
     bottom: 0px;
+    left: 0px;
     display: block;
 }

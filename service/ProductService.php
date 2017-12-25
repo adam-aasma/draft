@@ -5,45 +5,71 @@ class ProductService {
     private $languageRepository;
     private $imageRepository;
     private $itemRepository;
+    private $productImageRepository;
+    private $productSectionRepository;
+    private $productDescriptionRepository;
     
     public function __construct(
             $productRepository,
             $itemRepository,
             $languageRepository,
-            $imageRepository) {
+            $imageRepository,
+            $productImageRepository,
+            $productDescriptionRepository,
+            $productSectionRepository) {
         
         $this->productRepository = $productRepository;
         $this->itemRepository = $itemRepository;
         $this->languageRepository = $languageRepository;
         $this->imageRepository = $imageRepository;
+        $this->productImageRepository = $productImageRepository;
+        $this->productSectionRepository = $productSectionRepository;
+        $this->productDescriptionRepository = $productDescriptionRepository;
     }
     
     public function addProduct(
             $imageDatas,
             $productinfos,
-            $format,
-            $category,
-            $subcategory,
+            $formatId,
+            $sectionId,
             $size,
             $material,
             $technique,
             $userId) {
-        $product = new Product(0, $format, $userId);
-        $product = $this->productRepository->addProduct($product);
+        $getId = true;
+        $product = $this->productRepository->save(Product::create(0, null, $userId, $formatId), $getId);
         foreach ($imageDatas as $key => $imagedata) {
             $image = new Image($imagedata['filepath'], $imagedata['size'], $imagedata['mime'], '', $key == 0 ? 'product' : 'productinterior');
             $imageId = $this->imageRepository->addImage($image);
-            $this->productRepository->addProductImage($product->id, $imageId);
+            $this->productImageRepository->save(ProductImage::create($product->id, $imageId));
         }
-        $this->productRepository->addProductDescriptionToProduct($productinfos, $product->id);
-        $this->productRepository->addProductCategorySubCategory($product->getId(), $category, $subcategory);
+        $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
+        foreach ($productdescriptions as $productdescription){
+            $this->productDescriptionRepository->save($productdescription);
+        }
+        $this->productSectionRepository->save(ProductSection::create($product->id, $sectionId));
         
-        $items = $this->getItemsToSave($product->getId(), $size, $material, $technique);
+        $items = $this->getItemsToSave($product->id, $size, $material, $technique);
         foreach($items as $item) {
             $this->itemRepository->save($item);
         }
         
         return $product->id;
+    }
+    
+    private function getDescriptionsToSave($productInfos, $productId){
+        $productDescriptions = [];
+        foreach ( $productInfos as $countryId => $countryinfos ){
+            foreach ($countryinfos as $languageId => $languageinfo){
+                if (empty($languageinfo['description']) || empty($languageinfo['name'])){
+                    continue;
+                }
+                $description = $languageinfo['description'];
+                $name = $languageinfo['name'];
+                $productDescriptions[] = ProductDescription::create($productId, $languageId, $description, $countryId, $name);
+            }
+        }
+        return $productDescriptions;
     }
     
     private function getItemsToSave($productId, $sizes, $materials, $printTechniques) {

@@ -6,11 +6,11 @@ require_once 'model/Country.php';
 require_once 'model/Privileges.php';
 
 class UserRepository extends BaseRepository { 
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     

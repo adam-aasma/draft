@@ -24,7 +24,10 @@ abstract class BaseRepository {
         $this->conn->close();
     }
     
-    protected function getAllObjects() {
+    abstract protected function getColumnNamesForInsert();
+    abstract protected function getColumnValuesForBind($aggregate);
+    
+    public function getAll() {
         $sql = ("SELECT * FROM $this->tableName");         
         $result = $this->conn->query($sql);                                                                        
         if ($result === FALSE) {
@@ -38,27 +41,28 @@ abstract class BaseRepository {
         return $collection;                                       
     }
     
-    abstract function getColumnNamesForInsert();
-    abstract function getColumnValuesForBind($aggregate);
-    
     public function save($aggregate, bool $getId = false) {
         $colNames = $this->getColumnNamesForInsert();
         $colList = join(',', $colNames);
         $colVals = join(',', array_map(function ($n) { return '?'; }, $colNames));
         $bindTypesAndValues = $this->getColumnValuesForBind($aggregate);
         $bindTypes = join('', array_map(function($bv) { return $bv[0]; }, $bindTypesAndValues));
-        function &getVal(&$bv) {
-            return $bv[1];
-        }
+        //function &getVal(&$bv) {
+        //    return $bv[1];
+        //}
 
-        $bindValues = array_map("getVal", $bindTypesAndValues);
+        $bindValues = array_map(function($bv) {return $bv[1];}, $bindTypesAndValues);
         $bindp = [];
         $bindp[] = &$bindTypes;
         for ($i = 0; $i < count($bindValues); $i++) {
             $bindp[] = &$bindValues[$i];
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO $this->tableName ($colList) VALUES($colVals)");
+        $sql = "INSERT INTO $this->tableName ($colList) VALUES($colVals)";
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new Exception("SQL syntax: " . $sql);
+        }
         call_user_func_array(array($stmt, "bind_param"), $bindp);
         $res = $stmt->execute();
         if (!$res) {
@@ -74,4 +78,57 @@ abstract class BaseRepository {
         
         return $aggregate;
     }
+
+/*    
+    protected function getColumnNamesForSelect() {}
+    protected function getTableForInnerJoinOn() {}
+    protected function getWhereCondition() {}
+    
+    public function getRowsWhereCondition() {
+        $colNames = $this->getColumNamesForSelect();
+        $joinTable = $this->getTableForInnerJoinOn();
+        $condition = $this-getWhereCondition();
+        $colVals = join(',', array_map(function ($n) { return '?'; }, $colNames));
+        $integers = array_map(function ($i) { return 'i';}, $colNames);
+        $colList = join(',', $colNames);
+        if (strpos($condition[0] , 'IN')< 0 ){
+            $colVals .= ')';
+        }
+        
+        $bindVariables = join('', array_map(function($bv) { return $bv[0]; }, $condition[1]));
+        function &getVar(&$bv) {
+            return $bv[1];
+        }
+        $bindValues = array_map("getVar", $bindVariables);
+        $bindp = [];
+        $bindp[] = &$bindTypes;
+        for ($i = 0; $i < count($bindValues); $i++) {
+            $bindp[] = &$bindValues[$i];
+        $stmt = $this->conn->prepare("SELECT $colList 
+                FROM $this->tablename INNER JOIN $joinTable[0] ON $joinTable[1] WHERE $condition[0] $colVals");        
+        $stmt->bind_param($integers, $bindp);                                                              
+        $res = $stmt->execute();
+        
+        if ($res) {
+            $stmt->bind_result($id, $description, $lang_id, $language);
+            $okfetch = $stmt->fetch();
+            if ($okfetch) {  
+                $language = new Language();
+                $language->setId($lang_id);
+                $language->setLanguageName($language);
+                
+                $productDescription = new ProductDescription();
+                $productDescription->id = $id;
+                $productDescription->descriptionText = $description;
+                $productDescription->language = $language;
+                return $productDescription;                                                              
+            }
+        } 
+        throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+        }                          
+    }
+ * 
+ */
+
+    
 }

@@ -3,11 +3,11 @@ require_once 'BaseRepository.php';
 require_once 'model/Customer.php';
 
 class OrderRepository extends BaseRepository { 
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     

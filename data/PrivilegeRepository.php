@@ -3,11 +3,11 @@
 
 class PrivilegeRepository extends BaseRepository {
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
@@ -16,6 +16,6 @@ class PrivilegeRepository extends BaseRepository {
     }
     
     public function getAllPrivileges() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
 }

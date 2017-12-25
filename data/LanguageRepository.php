@@ -9,16 +9,16 @@ class LanguageRepository extends BaseRepository implements ILanguageRepository {
         parent::__construct("languages", "Language");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
     public function getAllLanguages() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
     
     public function getUserLanguages($countriesIds){

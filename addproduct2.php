@@ -17,8 +17,7 @@ $formatrep = $repositoryFactory->productFormatRepository;
 $sizerep = $repositoryFactory->productSizeRepository;
 $materialrep = $repositoryFactory->productMaterialRepository;
 $techniquerep = $repositoryFactory->productPrintTechniqueRepository;
-$categoriesrep = $repositoryFactory->productCategoryRepository;
-$subcategoriesrep = $repositoryFactory->productSubCategoryRepository;
+$sectionRepo = $repositoryFactory->sectionRepository;
 
 if (isset($_POST["submit"])) {
     $imagerepo = new ImageRepository;
@@ -26,7 +25,10 @@ if (isset($_POST["submit"])) {
             $repositoryFactory->productRepository, 
             $repositoryFactory->itemRepository,
             $repositoryFactory->languageRepository, 
-            $imagerepo);
+            $imagerepo,
+            $repositoryFactory->productImageRepository,
+            $repositoryFactory->productDescriptionRepository,
+            $repositoryFactory->productSectionRepository);
 
     $imagedatas = Images::getImageData($_FILES);
     try{ 
@@ -35,7 +37,6 @@ if (isset($_POST["submit"])) {
                 $_POST['product_info'],
                 $_POST['format'],
                 $_POST['category'],
-                $_POST['subcategory'],
                 $_POST['sizes'],
                 $_POST['material'],
                 $_POST['technique'],
@@ -49,12 +50,11 @@ if (isset($_POST["submit"])) {
 } 
 
 $titel = $homepage ->title = 'addproduct';
-$formats = $formatrep->getAllFormats();
-$sizes = $sizerep->getAllSizes();
-$materials = $materialrep->getAllMaterials();
-$techniques = $techniquerep->getAllProductPrintTechniques();
-$categories = $categoriesrep->getAllProductCategories();
-$subcategories = $subcategoriesrep->getAllProductSubCategories();
+$formats = $formatrep->getAll();
+$sizes = $sizerep->getAll();
+$materials = $materialrep->getAll();
+$techniques = $techniquerep->getAll();
+$categories = $sectionRepo->getAll();
 $countries = $homepage->user->countries;
 $countriesIds = [];
 foreach ($countries as $country){
@@ -68,7 +68,6 @@ $materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'mate
 $techniqueOptions = FormUtilities::getAllCheckBoxes($techniques, 'technique', 'technique');
 $countryOptions = FormUtilities::getAllOptions($countries, 'country');
 $categoryOptions = FormUtilities::getAllOptions($categories, 'name');
-$subcategoryOptions = FormUtilities::getAllOptions($subcategories, 'category');
 $languageOptions = FormUtilities::getAllOptions($languages, 'language');
 $infoHtml = '';
 foreach ($countries as $country){
@@ -133,10 +132,6 @@ $content = $homepage -> content = '
                         <label for="chossing-category">category:</label>
                         <select name="category">
                             ' . $categoryOptions . '
-                        </select>
-                        <label>subcategory:</label>
-                        <select name="subcategory">
-                            ' . $subcategoryOptions . '
                         </select>
                         <label>color:</label>
                         <input type="text" name="color">

@@ -5,11 +5,12 @@ require_once 'CountryRepository.php';
 require_once 'PrivilegeRepository.php';
 require_once 'ProductFormatRepository.php';
 require_once 'ProductPrintTechniqueRepository.php';
-require_once 'ProductCategoryRepository.php';
+require_once 'SectionRepository.php';
 require_once 'ProductDescriptionRepository.php';
+require_once 'ProductImageRepository.php';
+require_once 'ProductSectionRepository.php';
 require_once 'ProductMaterialRepository.php';
 require_once 'ProductSizeRepository.php';
-require_once 'ProductSubCategoryRepository.php';
 require_once 'ItemRepository.php';
 
 class RepositoryFactory {            
@@ -19,11 +20,12 @@ class RepositoryFactory {
     private $privilegeRepository;
     private $productFormatRepository;
     private $productPrintTechniqueRepository;
-    private $productCategoryRepository;
+    private $sectionRepository;
     private $productDescriptionRepository;
+    private $productImageRepository;
+    private $productSectionRepository;
     private $productMaterialRepository;
     private $productSizeRepository;
-    private $productSubCategoryRepository;
     private $itemRepository;
     
 
@@ -48,20 +50,23 @@ class RepositoryFactory {
                 case 'productPrintTechniqueRepository':
                     $this->productPrintTechniqueRepository = new ProductPrintTechniqueRepository();
                     break;
-                case 'productCategoryRepository':
-                    $this->productCategoryRepository = new ProductCategoryRepository();
+                case 'sectionRepository':
+                    $this->sectionRepository = new SectionRepository();
                     break;
                 case 'productDescriptionRepository':
                     $this->productDescriptionRepository = new ProductDescriptionRepository();
+                    break;
+                case 'productImageRepository':
+                    $this->productImageRepository = new ProductImageRepository();
+                    break;
+                case 'productSectionRepository':
+                    $this->productSectionRepository = new ProductSectionRepository();
                     break;
                 case 'productMaterialRepository':
                     $this->productMaterialRepository = new ProductMaterialRepository();
                     break;
                 case 'productSizeRepository':
                     $this->productSizeRepository = new ProductSizeRepository();
-                    break;
-                case 'productSubCategoryRepository':
-                    $this->productSubCategoryRepository = new ProductSubCategoryRepository();
                     break;
                 case 'itemRepository':
                     $this->itemRepository = new ItemRepository();

@@ -3,32 +3,28 @@
 
 class Product {
     private $id;
-    private $descriptions;
+    private $artistdesignerid;
     private $userid;
     private $formatid;
     
-    function __construct($id, 
-        $format, $userid) {
-        
-        $this->id = $id;
-        $this->descriptions = [];
-        $this->userid = $userid;
-        $this->formatid = $format;
+    public static function create(
+        $id, 
+        $artistDesignerId,
+        $userId, 
+        $formatId) {
+        $obj = new Product();
+        $obj->id = $id;
+        $obj->artistdesignerid = $artistDesignerId;
+        $obj->userid = $userId;
+        $obj->formatid = $formatId;
+        return $obj;
     }
     
-    public function getId() {
-        return $this->id;
-    }
     public function __get($name){
         return $this->$name;
     }
     
-   
-    public function getProductDescriptions(){
-        return $this->descriptions;
-    }
-    
-    public function addProductDescription($productDescription) {
-        $this->descriptions[] = $productDescription;
+    public function __set($name, $value) {
+        $this->$name = $value;
     }
 }

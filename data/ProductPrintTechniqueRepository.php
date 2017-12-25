@@ -8,16 +8,16 @@ class ProductPrintTechniqueRepository extends BaseRepository {
         parent::__construct("print_techniques", "ProductPrintTechnique");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
     public function getAllProductPrintTechniques() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
 
 }

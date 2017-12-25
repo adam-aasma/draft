@@ -1,11 +1,10 @@
 <?php
 
 require_once 'data/BaseRepository.php';
-require_once 'model/ProductMaterial.php';
-
-class ProductMaterialRepository extends BaseRepository {
+require_once 'model/Section.php';
+class SectionRepository extends BaseRepository {
     public function __construct() {
-        parent::__construct("materials", "ProductMaterial");
+        parent::__construct("sections", "Section");
     }
     
     protected function getColumnNamesForInsert() {
@@ -14,9 +13,5 @@ class ProductMaterialRepository extends BaseRepository {
     
     protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
-    }
-    
-    public function getAllMaterials() {
-        return $this->getAll();
     }
 }

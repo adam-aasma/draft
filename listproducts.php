@@ -27,6 +27,21 @@ $content = $homepage -> content = '<div class="desktop">
                                         <table class="producttable">
                                             <caption>
                                                 <strong>products</strong>
+                                            <nav>
+                                                <ul class="productmenu">
+                                                    <li><a>slider</a></li>
+                                                    <li class="anchor"><a onclick="openDropDown()"  class="dropzone">edit</a>
+                                                        <ul id="dropdown" class="dropdown-content">
+                                                            <li><a>edit productinfo</a></li>
+                                                            <li><a>add market</a></li>
+                                                            <li><a>add language</a></li>
+                                                            <li><a>add features</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><a>present</a></li>
+                                                    <li><a>delete</a></li>
+                                                </ul>
+                                            </nav>
                                             </caption>
                                             <colgroup>
                                                 <col class="col-id">

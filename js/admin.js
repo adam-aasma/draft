@@ -49,3 +49,24 @@ function showProductInfoForms(country, language){
     document.getElementById("productinfo_" + country + "_" + language).style.display = "flex";
 }
 
+// DROPDOWN MENU LIST PRODUCT //
+
+function openDropDown() {
+    var elem = document.getElementById("dropdown");
+    elem.classList.toggle("show");
+}
+
+
+window.onclick = function(event) {
+  if (!event.target.matches('.dropzone')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}

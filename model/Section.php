@@ -1,7 +1,7 @@
 <?php
 
 
-class ProductCategory {
+class Section {
     private $id;
     private $name;
     private $description;

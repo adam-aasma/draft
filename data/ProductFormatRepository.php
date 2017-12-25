@@ -9,16 +9,16 @@ class ProductFormatRepository extends BaseRepository {
         parent::__construct("formats", "format");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
     public function getAllFormats() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
     //put your code here
 }

@@ -9,15 +9,15 @@ class ProductSizeRepository extends Baserepository {
         parent::__construct("sizes", "ProductSize");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
     public function getAllSizes() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
 }

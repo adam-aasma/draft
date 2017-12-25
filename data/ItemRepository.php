@@ -8,11 +8,11 @@ class ItemRepository  extends BaseRepository {
         parent::__construct("items", "Item");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         return ['product_id', 'size_id', 'material_id', 'print_technique_id'];
     }
     
-    function getColumnValuesForBind($item) {
+    protected function getColumnValuesForBind($item) {
         $product_id = $item->productId;
         $size_id = $item->sizeId;
         $material_id = $item->materialId;

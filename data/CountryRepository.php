@@ -10,16 +10,16 @@ class CountryRepository extends BaseRepository implements ICountryRepository {
         parent::__construct("countries", "Country");
     }
     
-    function getColumnNamesForInsert() {
+    protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
     
-    function getColumnValuesForBind($aggregate) {
+    protected function getColumnValuesForBind($aggregate) {
         throw new Exception("Not implemented");
     }
     
     public function getAllCountries() {
-        return $this->getAllObjects();
+        return $this->getAll();
     }
 
 }
