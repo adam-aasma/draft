@@ -73,9 +73,9 @@ class ProductRepository extends BaseRepository {
     }                                                                                                    
    
    public function getCompleteProduct($productid){
-        $sql = "SELECT pd.id as description_id, pd.description, pd.name, im.id as image_id 
+        $sql = "SELECT pd.description, pd.name, im.id as image_id 
            FROM products p
-           INNER JOIN product_descriptions pd ON pd.products_id = p.id
+           INNER JOIN product_descriptions pd ON pd.product_id = p.id
            INNER JOIN products_images pi ON pi.product_id = p.id
            INNER JOIN images im ON im.id = pi.image_id
            WHERE p.id = $productid";
@@ -105,36 +105,7 @@ class ProductRepository extends BaseRepository {
         return $showRoomProduct;   
     }
     
-    public function getProductList($countries){
-        $countryids = [];
-        foreach ($countries as $country){
-            $countryids[] = $country->id;
-        }
-        $strCountry = join(',', $countryids);
-        $sql = "SELECT product_descriptions.name, product_descriptions.description, product_descriptions.language_id, product_descriptions.country_id, products.id
-                FROM  product_descriptions
-                INNER JOIN products ON product_descriptions.products_id = products.id WHERE product_descriptions.country_id IN ($strCountry)";
-        $result = $this->conn->query($sql);
-        if ($result === FALSE) {
-            throw new Exception($this->conn->error);
-        }
-        $product = ['id' => 0,'languageid' => 0, 'countryid' => 0, 'name' => '', 'description' => ''];
-        $productlist = [];
-        while ($row =$result->fetch_assoc()){
-        $product['id'] = $row['id'];
-        $product['name'] = $row['name'];
-        $product['countryid'] = $row['country_id'];
-        $product['languageid'] = $row['language_id'];
-        $product['description'] = $row['description'];
-        $productlist[] = $product;
-        }
-        if ($productlist){
-            return $productlist;
-        }
-        else {
-            return false;
-        }
-        }
+   
         
         public function addSlider($slider){
         $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id,

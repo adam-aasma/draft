@@ -1,32 +1,44 @@
 <?php
+require_once 'interfacesrepo/IRepositoryFactory.php';
 
 class ProductService {
-    private $productRepository;
-    private $languageRepository;
-    private $imageRepository;
-    private $itemRepository;
-    private $productImageRepository;
-    private $productSectionRepository;
-    private $productDescriptionRepository;
+    private $repositoryFactory;
     
-    public function __construct(
-            $productRepository,
-            $itemRepository,
-            $languageRepository,
-            $imageRepository,
-            $productImageRepository,
-            $productDescriptionRepository,
-            $productSectionRepository) {
-        
-        $this->productRepository = $productRepository;
-        $this->itemRepository = $itemRepository;
-        $this->languageRepository = $languageRepository;
-        $this->imageRepository = $imageRepository;
-        $this->productImageRepository = $productImageRepository;
-        $this->productSectionRepository = $productSectionRepository;
-        $this->productDescriptionRepository = $productDescriptionRepository;
+    public function __construct($repositoryFactory) {
+        $this->repositoryFactory = $repositoryFactory;
     }
     
+    public function getCountryLanguages($countries){
+        $languageRepository = $this->repositoryFactory->getRepository('languageRepository');
+        $countriesIds = [];
+        foreach ($countries as $country){
+            $countryId = $country->id;
+            $countriesIds[] = $countryId;
+        }
+        $languages = $languageRepository->getUserLanguages($countriesIds);
+        return $languages;
+    }
+    
+    public function getAllMaterials() {
+        return $this->repositoryFactory->getRepository('productMaterialRepository')->getAll();
+    }
+    
+    public function getAllSizes() {
+        return $this->repositoryFactory->getRepository('productSizeRepository')->getAll();
+    }
+    
+    public function getAllFormats() {
+        return $this->repositoryFactory->getRepository('productFormatRepository')->getAll();
+    }
+    
+    public function getAllPrintTechniques() {
+        return $this->repositoryFactory->getRepository('productPrintTechniqueRepository')->getAll();
+    }
+    
+    public function getAllSections() {
+        return $this->repositoryFactory->getRepository('sectionRepository')->getAll();
+    }
+
     public function addProduct(
             $imageDatas,
             $productinfos,
@@ -36,22 +48,29 @@ class ProductService {
             $material,
             $technique,
             $userId) {
+        $productRepository = $this->repositoryFactory->getRepository('productRepository');
+        $imageRepository = $this->repositoryFactory->getRepository('imageRepository');
+        $productImageRepository = $this->repositoryFactory->getRepository('productImageRepository');
+        $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
+        $productSectionRepository = $this->repositoryFactory->getRepository('productSectionRepository');
+        $itemRepository = $this->repositoryFactory->getRepository('itemRepository');
+        
         $getId = true;
-        $product = $this->productRepository->save(Product::create(0, null, $userId, $formatId), $getId);
+        $product = $productRepository->save(Product::create(0, null, $userId, $formatId), $getId);
         foreach ($imageDatas as $key => $imagedata) {
             $image = new Image($imagedata['filepath'], $imagedata['size'], $imagedata['mime'], '', $key == 0 ? 'product' : 'productinterior');
-            $imageId = $this->imageRepository->addImage($image);
-            $this->productImageRepository->save(ProductImage::create($product->id, $imageId));
+            $imageId = $imageRepository->addImage($image);
+            $productImageRepository->save(ProductImage::create($product->id, $imageId));
         }
         $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
         foreach ($productdescriptions as $productdescription){
-            $this->productDescriptionRepository->save($productdescription);
+            $productDescriptionRepository->save($productdescription);
         }
-        $this->productSectionRepository->save(ProductSection::create($product->id, $sectionId));
+        $productSectionRepository->save(ProductSection::create($product->id, $sectionId));
         
         $items = $this->getItemsToSave($product->id, $size, $material, $technique);
         foreach($items as $item) {
-            $this->itemRepository->save($item);
+            $itemRepository->save($item);
         }
         
         return $product->id;

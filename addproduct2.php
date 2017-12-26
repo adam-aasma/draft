@@ -10,25 +10,9 @@ require_once 'library/Images.php';
 require_once 'service/ProductService.php';
 
 $homepage = new adminTemplate();
-$repositoryFactory = new RepositoryFactory();
-$productrep = $repositoryFactory->productRepository;
-$languagerep = $repositoryFactory->languageRepository;
-$formatrep = $repositoryFactory->productFormatRepository;
-$sizerep = $repositoryFactory->productSizeRepository;
-$materialrep = $repositoryFactory->productMaterialRepository;
-$techniquerep = $repositoryFactory->productPrintTechniqueRepository;
-$sectionRepo = $repositoryFactory->sectionRepository;
+$productService = new ProductService(RepositoryFactory::getInstance());
 
 if (isset($_POST["submit"])) {
-    $imagerepo = new ImageRepository;
-    $productService = new ProductService(
-            $repositoryFactory->productRepository, 
-            $repositoryFactory->itemRepository,
-            $repositoryFactory->languageRepository, 
-            $imagerepo,
-            $repositoryFactory->productImageRepository,
-            $repositoryFactory->productDescriptionRepository,
-            $repositoryFactory->productSectionRepository);
 
     $imagedatas = Images::getImageData($_FILES);
     try{ 
@@ -45,29 +29,20 @@ if (isset($_POST["submit"])) {
         header("location: productshowroom.php?productid= $productId");
         die();
     } catch (Exception $e) {
+        http_response_code(500); 
         $message = $e->getMessage();
     }
 } 
 
 $titel = $homepage ->title = 'addproduct';
-$formats = $formatrep->getAll();
-$sizes = $sizerep->getAll();
-$materials = $materialrep->getAll();
-$techniques = $techniquerep->getAll();
-$categories = $sectionRepo->getAll();
 $countries = $homepage->user->countries;
-$countriesIds = [];
-foreach ($countries as $country){
-    $countryId = $country->id;
-    $countriesIds[] = $countryId;
-}
-$languages = $languagerep->getUserLanguages($countriesIds);
-$formatOptions = FormUtilities::getAllOptions($formats, 'format');
-$sizeOptions = FormUtilities::getAllCheckBoxes($sizes, 'sizes', 'sizes');
-$materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material');
-$techniqueOptions = FormUtilities::getAllCheckBoxes($techniques, 'technique', 'technique');
+$languages = $productService->getCountryLanguages($countries);
+$formatOptions = FormUtilities::getAllOptions($productService->getAllFormats(), 'format');
+$sizeOptions = FormUtilities::getAllCheckBoxes($productService->getAllSizes(), 'sizes', 'sizes');
+$materialOptions = FormUtilities::getAllCheckBoxes($productService->getAllMaterials(), 'material', 'material');
+$techniqueOptions = FormUtilities::getAllCheckBoxes($productService->getAllPrintTechniques(), 'technique', 'technique');
 $countryOptions = FormUtilities::getAllOptions($countries, 'country');
-$categoryOptions = FormUtilities::getAllOptions($categories, 'name');
+$categoryOptions = FormUtilities::getAllOptions($productService->getAllSections(), 'name');
 $languageOptions = FormUtilities::getAllOptions($languages, 'language');
 $infoHtml = '';
 foreach ($countries as $country){

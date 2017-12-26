@@ -1,4 +1,5 @@
 <?php
+require_once 'interfacesrepo/IRepositoryFactory.php';
 require_once 'productRepository.php';
 require_once 'LanguageRepository.php';
 require_once 'CountryRepository.php';
@@ -12,8 +13,9 @@ require_once 'ProductSectionRepository.php';
 require_once 'ProductMaterialRepository.php';
 require_once 'ProductSizeRepository.php';
 require_once 'ItemRepository.php';
+require_once 'ImageRepository.php';
 
-class RepositoryFactory {            
+class RepositoryFactory implements IRepositoryFactory {            
     private $productRepository;
     private $languageRepository;
     private $countryRepository;
@@ -27,8 +29,20 @@ class RepositoryFactory {
     private $productMaterialRepository;
     private $productSizeRepository;
     private $itemRepository;
+    private $imageRepository;
+    private static $repositoryFactory;
     
-
+    public static function getInstance() {
+        if (empty(self::$repositoryFactory)) {
+            self::$repositoryFactory = new RepositoryFactory();
+        }
+        return self::$repositoryFactory;
+    }
+    
+    public function getRepository($repositoryName) {
+        return $this->__get($repositoryName);
+    }
+    
     public function __get($name) {
         if (empty($this->$name)) {
             switch($name) {
@@ -70,6 +84,9 @@ class RepositoryFactory {
                     break;
                 case 'itemRepository':
                     $this->itemRepository = new ItemRepository();
+                    break;
+                case 'imageRepository':
+                    $this->imageRepository = new ImageRepository();
                     break;
             }
         }

@@ -1,11 +1,14 @@
 <?php
 require_once 'checkauth.php';
 require_once 'views/admintemplate.php';
+require_once 'data/ProductDescriptionRepository.php';
+require_once 'service/ProductListService.php';
+
 
 $user = unserialize($_SESSION['user']);
 $countries = $user->countries;
-$productrep = new productRepository();
-$productlist = $productrep->getProductList($countries);
+$productDescriptionRepo = new productDescriptionRepository();
+$productlist = $productDescriptionRepo->getProductList($countries);
 $Html = '';
 foreach ($productlist as $product){
     $id = $product['id'];
@@ -27,6 +30,9 @@ $content = $homepage -> content = '<div class="desktop">
                                         <table class="producttable">
                                             <caption>
                                                 <strong>products</strong>
+                                                <form>
+                                                <select>Country</select>
+                                                <select>Language</select>
                                             <nav>
                                                 <ul class="productmenu">
                                                     <li><a>slider</a></li>

@@ -25,16 +25,34 @@ class ProductDescriptionRepository extends BaseRepository {
         return $this->getAll();
     }
     
-    protected function getColumnNamesForSelect(){
-        return ['product_descriptions.name', 'product_descriptions.description',
-                'product_descriptions.language_id', 'product_descriptions.country_id, products.id'];
-    }
-    
-    protected function getTableForInnerJoinOn(){
-        return ['languages','product_descriptions.products_id = products.id'];
-    }
-
-    protected function getWhereCondition($Countries){
-        return ['product_descriptions.country_id IN (', $strCountry] ;
-    }
+     public function getProductList($countries){
+        $countryids = [];
+        foreach ($countries as $country){
+            $countryids[] = $country->id;
+        }
+        $strCountry = join(',', $countryids);
+        $sql = "SELECT pd.name, pd.description, pd.language_id, pd.country_id, products.id
+                FROM  product_descriptions as pd
+                INNER JOIN products ON pd.product_id = products.id WHERE pd.country_id IN ($strCountry)";
+        $result = $this->conn->query($sql);
+        if ($result === FALSE) {
+            throw new Exception($this->conn->error);
+        }
+        $product = ['id' => 0,'languageid' => 0, 'countryid' => 0, 'name' => '', 'description' => ''];
+        $productlist = [];
+        while ($row =$result->fetch_assoc()){
+        $product['id'] = $row['id'];
+        $product['name'] = $row['name'];
+        $product['countryid'] = $row['country_id'];
+        $product['languageid'] = $row['language_id'];
+        $product['description'] = $row['description'];
+        $productlist[] = $product;
+        }
+        if ($productlist){
+            return $productlist;
+        }
+        else {
+            return false;
+        }
+        }
 }
