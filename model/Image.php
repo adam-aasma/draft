@@ -1,38 +1,24 @@
 <?php
+require_once 'ImageBaseInfo.php';
 
-class Image {
-    private $filepath;
-    private $size;
-    private $mime;
-    private $name;
-    private $category;
+class Image extends ImageBaseInfo {
+    protected $filepath;
+    protected $size;
+    protected $mime;
+    protected $category;
     
-    function __construct($filepath, $size, $mime, $name, $category) {
-        $this->filepath = $filepath;
-        $this->size = $size;
-        $this->mime = $mime;
-        $this->name = $name;
-        $this->category = $category;
+    public static function create($filepath, $size, $mime, $name, $category) {
+        $obj = new Image();
+        $obj->filepath = $filepath;
+        $obj->size = $size;
+        $obj->mime = $mime;
+        $obj->name = $name;
+        $obj->category = $category;
+        return $obj;
     }
     
-    public function getFilepath() {
-        return $this->filepath;
-    }
-    
-    public function getSize() {
-        return $this->size;
-    }
-    
-    public function getMime() {
-        return $this->mime;
-    }
-    
-    public function getName() {
-        return $this->name;
-    }
-    
-    public function getCategory() {
-        return $this->category;
+    public function __get($name) {
+        return $this->$name;
     }
 }
 

@@ -2,6 +2,7 @@
 
 require_once 'BaseRepository.php';
 require_once 'model/Product.php';
+require_once 'model/LocalizedProduct.php';
 require_once 'model/ProductDescription.php';
 require_once 'model/Language.php';
 require_once 'model/User.php';
@@ -32,6 +33,70 @@ class ProductRepository extends BaseRepository {
         $format_id = $product->formatid;
         
         return [['i', &$format_id], ['i', &$artist_designer_id], ['i', &$user_id]];
+    }
+    
+    public function getLocalizedProductsByCountryAndLanguage($country, $language) {
+        $sql = "SELECT p.id as product_id
+        , pd.description
+        , pd.name 
+        , it.id as item_id
+        , sz.id as size_id
+        , sz.sizes
+        , ma.id as material_id
+        , ma.material
+        , pt.id as print_technique_id
+        , pt.technique
+        , im.id as image_id
+        , im.name as image_name
+        , im.size as image_size
+        FROM products p
+        LEFT JOIN product_descriptions pd ON pd.product_id = p.id
+        LEFT JOIN items it ON it.product_id = p.id
+        LEFT JOIN sizes sz ON sz.id = it.size_id
+        LEFT JOIN materials ma ON ma.id = it.material_id
+        LEFT JOIN print_techniques pt ON pt.id = it.print_technique_id
+        LEFT JOIN products_images pi ON pi.product_id = p.id
+        INNER JOIN images im ON im.id = pi.image_id
+        WHERE pd.country_id = ? AND pd.language_id = ?
+        ORDER BY p.id, it.id, im.id
+        ";
+        $stmt = $this->conn->prepare($sql);     
+        $countryId = $country->id;
+        $languageId = $language->id;
+        $stmt->bind_param("ii", $countryId, $languageId);                                                              
+        $res = $stmt->execute();                                                                        
+        if ($res) {
+            $stmt->bind_result($productId, $description, $name, $itemId, $sizeId, $size, $materialId, $material, $techniqueId, $technique, $imageId, $imageName, $imageSize);
+            $okfetch = $stmt->fetch();
+            $currentLocalizedProduct = null;
+            $currentItemId = null;
+            $currentImageId = null;
+            $localizedProducts = [];
+            while ($okfetch) {  
+                if (empty($currentLocalizedProduct) || $productId != $currentLocalizedProduct->id) {
+                    $currentLocalizedProduct = new LocalizedProduct();
+                    $currentLocalizedProduct->id = $productId;
+                    $currentItemId = null;
+                    $currentImageId = null;
+                    $currentLocalizedProduct->productDescription = ProductDescription::create($productId, $language->id, $description, $country->id, $name);
+                    $localizedProducts[] = $currentLocalizedProduct;
+                }
+                if ($itemId != $currentItemId) {
+                    $currentItemId = $itemId;
+                    $currentLocalizedProduct->addItem(Item::createExtended($itemId, $productId, $sizeId, $size, $materialId, $material, $techniqueId, $technique));
+                }
+                if ($imageId != $currentImageId) {
+                    $currentImageId = $imageId;
+                    if ($imageSize > 0) {
+                        $currentLocalizedProduct->addImageBaseInfo(ImageBaseInfo::createBaseInfo($imageId, $imageName));
+                    }
+                }
+                $okfetch = $stmt->fetch();
+            }
+            
+            return $localizedProducts;
+        } 
+        throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
     
     public function getProduct($productid) {                                                              

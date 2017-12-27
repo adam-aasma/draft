@@ -2,10 +2,10 @@
 
 
 class Product {
-    private $id;
-    private $artistdesignerid;
-    private $userid;
-    private $formatid;
+    protected $id;
+    protected $artistdesignerid;
+    protected $userid;
+    protected $formatid;
     
     public static function create(
         $id, 

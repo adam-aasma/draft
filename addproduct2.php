@@ -36,7 +36,7 @@ if (isset($_POST["submit"])) {
 
 $titel = $homepage ->title = 'addproduct';
 $countries = $homepage->user->countries;
-$languages = $productService->getCountryLanguages($countries);
+$languages = $productService->getCountryLanguages($countries)
 $formatOptions = FormUtilities::getAllOptions($productService->getAllFormats(), 'format');
 $sizeOptions = FormUtilities::getAllCheckBoxes($productService->getAllSizes(), 'sizes', 'sizes');
 $materialOptions = FormUtilities::getAllCheckBoxes($productService->getAllMaterials(), 'material', 'material');

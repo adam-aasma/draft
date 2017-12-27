@@ -63,7 +63,7 @@ class ImageRepository extends BaseRepository {
     public function addImage($image) {
         $categories = $this->getImagesCategories();
         
-        $data = file_get_contents($image->getFilepath());
+        $data = file_get_contents($image->filepath);
         $stmt = $this->conn->prepare("INSERT INTO images(data,name,mimetype,images_category_id,size) VALUES(?, ?, ?, ?, ?)");
         $null = NULL;
         try {
@@ -71,16 +71,16 @@ class ImageRepository extends BaseRepository {
         } catch(Exception $e) {
             var_dump($e);
         }
-        $imgname = $image->getName();
-        $mimetype = $image->getMime();
+        $imgname = $image->name;
+        $mimetype = $image->mime;
         $imgcategory_id = 1;  // TODO change this later added this table slider/product/productinterior
         foreach($categories as $id => $category) {
-            if ($image->getCategory() == $category) {
+            if ($image->category == $category) {
                 $imgcategory_id = $id;
                 break;
             }
         }
-        $imgsize = $image->getSize();
+        $imgsize = $image->size;
         $stmt->send_long_data(0, $data);
 
         $res = $stmt->execute();

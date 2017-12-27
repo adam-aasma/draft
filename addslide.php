@@ -24,7 +24,7 @@ if (isset($_POST['submit'])){
     $titel = $_POST['name'];
     $salesmessage = $_POST['text'];
     $productid = $_POST['product'];
-    $image = new Image($imagedata[0]['filepath'], $imagedata[0]['size'], $imagedata[0]['mime'], $titel, 'slider');
+    $image = Image::create($imagedata[0]['filepath'], $imagedata[0]['size'], $imagedata[0]['mime'], $titel, 'slider');
     $imageId = $imagerepo->addImage($image);
     $slider = new Slider($imageId, $productid, $salesmessage, $titel, $user->id);
     $sliderId = $productrep->addSlider($slider);

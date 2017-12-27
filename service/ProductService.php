@@ -1,5 +1,6 @@
 <?php
 require_once 'interfacesrepo/IRepositoryFactory.php';
+require_once 'viewmodel/ProductListRow.php';
 
 class ProductService {
     private $repositoryFactory;
@@ -58,7 +59,7 @@ class ProductService {
         $getId = true;
         $product = $productRepository->save(Product::create(0, null, $userId, $formatId), $getId);
         foreach ($imageDatas as $key => $imagedata) {
-            $image = new Image($imagedata['filepath'], $imagedata['size'], $imagedata['mime'], '', $key == 0 ? 'product' : 'productinterior');
+            $image = Image::create($imagedata['filepath'], $imagedata['size'], $imagedata['mime'], '', $key == 0 ? 'product' : 'productinterior');
             $imageId = $imageRepository->addImage($image);
             $productImageRepository->save(ProductImage::create($product->id, $imageId));
         }
@@ -101,5 +102,33 @@ class ProductService {
            }
        }
        return $items;
+    }
+    
+    public function getList($country, $language){
+        $repo = $this->repositoryFactory->getRepository('productRepository');
+        $products = $repo->getLocalizedProductsByCountryAndLanguage($country, $language);
+        $productListRows = [];
+        foreach($products as $product) {
+            $productListRow = new ProductListRow();
+            $productListRow->productId = $product->id;
+            $productListRow->name = $product->productDescription->name;
+            $productListRow->description = $product->productDescription->descriptionText;
+            foreach ($product->items as $item) {
+                $productListRow->addItemDetails($item->sizes, $item->material, $item->printTechnique);
+            }
+            foreach ($product->imageBaseInfos as $imageBaseInfo) {
+                $productListRow->addImage($imageBaseInfo->id, $imageBaseInfo->name);
+            }
+            
+            $productListRows[] = $productListRow;
+        }
+        
+        return $productListRows;
+    }
+    
+    private function getImages($productIds){
+        $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
+        $imageIds = $productImageRepo->getImageIdBy($productsIds);
+        
     }
 }
