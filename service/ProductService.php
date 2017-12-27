@@ -104,6 +104,12 @@ class ProductService {
        return $items;
     }
     
+    public function getProductById($id) {
+        $repo = $this->repositoryFactory->getRepository('productRepository');
+        $completeProduct = $repo->getCompleteProductById($id);
+        return $completeProduct;
+    }
+    
     public function getList($country, $language){
         $repo = $this->repositoryFactory->getRepository('productRepository');
         $products = $repo->getLocalizedProductsByCountryAndLanguage($country, $language);
@@ -126,9 +132,5 @@ class ProductService {
         return $productListRows;
     }
     
-    private function getImages($productIds){
-        $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
-        $imageIds = $productImageRepo->getImageIdBy($productsIds);
-        
-    }
+   
 }

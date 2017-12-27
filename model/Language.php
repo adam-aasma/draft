@@ -12,5 +12,11 @@ class Language {
         $this->$name = $value;
     }
     
+    public static function create($id, $name){
+        $obj = new Language;
+        $obj->id = $id;
+        $obj->language = $name;
+        return $obj;
+    }
     
 }

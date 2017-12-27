@@ -108,8 +108,6 @@ class adminTemplate {
       <!-- <footer>
            <p>copyrights walltwisters</p>
        </footer> -->
-       </div>
-       </div>
        <?php
    }
    
@@ -123,7 +121,8 @@ class adminTemplate {
        $this -> DisplayHeader();
        echo '<div class="flex-wrapper">';
        $this -> DisplayMenu($this -> menu);
-       echo $this -> content;
+       echo $this->content;
+       echo '</div>';
        $this -> DisplayFooter();
        echo "</body>\n</html>\n";
    }

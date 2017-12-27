@@ -7,7 +7,9 @@ class ProductDescription {
     private $descriptionText;
     private $productId;
     private $languageId;
+    private $languageName;
     private $countryId;
+    private $countryName;
     private $productName;
     
     public function __get($name) {
@@ -25,6 +27,13 @@ class ProductDescription {
         $obj->countryId = $countryId;
         $obj->descriptionText = $description;
         $obj->name = $name;
+        return $obj;
+    }
+    
+    public static function createExtended($productId, $languageId, $languageName, $description, $countryId, $countryName, $name) {
+        $obj = self::create($productId, $languageId, $description, $countryId, $name);
+        $obj->countryName = $countryName;
+        $obj->languageName = $languageName;
         return $obj;
     }
 }

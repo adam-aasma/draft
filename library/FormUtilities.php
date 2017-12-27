@@ -53,11 +53,12 @@ class FormUtilities {
             
     }
     
-     public static function getAllCheckBoxes($objcollection, $propname, $inputname){
+     public static function getAllCheckBoxes($objcollection, $propname, $inputname, $checkedIds = []){
         $html = '';
         foreach ($objcollection as $obj){
             $label = $obj->$propname;
-            $html .= "<input type='checkbox' value='true' name='$inputname" . "[$obj->id]' /><label>$label</label>";
+            $checked = in_array($obj->id, $checkedIds) ? 'checked' : '';
+            $html .= "<input type='checkbox' value='true' name='$inputname" . "[$obj->id]' $checked /><label>$label</label>";
         }
         return $html;
             

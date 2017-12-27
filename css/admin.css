@@ -24,6 +24,10 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
    height: 100%;
 }
 
+.inline-flex {
+    display: inline-flex;
+    width: 100%;
+}
 .header {
     background-color: #343434;
     min-height: 5rem;
@@ -405,10 +409,17 @@ textarea:active {
     border-bottom: 1px solid #ddd;
     line-height: 2;
     font-size: 1.5rem;
+    background-color: #f7f7f7;
 }
 .col-id {
     background-color: #fef0f0;
     background-color: rgba(255, 0, 0, 0.05);
+}
+.col-description{
+    overflow: hidden;
+    font-size: 0.5rem;
+    color: green;
+    max-height: 2rem;
 }
 
 .producttable th,
@@ -417,8 +428,22 @@ textarea:active {
     padding: 0;
     width: 100%;
 }
+
 .producttable td {
     border: 1px solid #6d6d6d;
+}
+
+.producttable form{
+    flex-wrap: nowrap;
+    width: 50%;
+    height: 10%;
+}
+
+.producttable input{
+    width: 50%;
+    height: 50%;
+    font-size: 1rem;
+    
 }
 
 .producttable thead {
@@ -440,11 +465,16 @@ textarea:active {
 
 /* styles for dropdown menu productlist */
 
+.inline-flex nav {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
 .productmenu {
     display: inline-flex;
-    width: 60%;
-    float: right;
-    
+    width: 80%;
+    justify-content: space-between;
 }
 
 .productmenu li {
