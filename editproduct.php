@@ -1,4 +1,5 @@
 <?php
+use Walltwisters\data\RepositoryFactory;
 
 require_once 'checkauth.php';
 require_once 'library/security.php';
@@ -23,37 +24,48 @@ $submitName = "Add Product";
 
 $validSize = true;
 if (isset($_POST["submit"])) {
-    if (!isset($_POST['sizes'])) {
-        $validSize = false;
+    try{$isUpdate = isset($_POST['productid']);
+        if ($isUpdate) {
+            $productId = $_POST['productid'];
+            // TODO updateProduct.... in case we coming from productList then id set..
+            
+            
+        } else {
+            //adding new product procedure
+            
+            $imageCategoryValues= [];
+            $inx = 0;
+            while ($_POST[$inx]){
+                $imageCategoryValues[] = $_POST[$inx];
+                $inx++;
+            }
+            $productId = $productService->addProduct(
+                    $imageCategoryValues,
+                    $_FILES,
+                    $_POST['product_info'],
+                    $_POST['format'],
+                    $_POST['category'],
+                    $_POST['sizes'],
+                    $user->id
+                    );
+            }
+            
+          // after new product is added redirect for preview in ShowRoom   
+        if (headers_sent()) {
+            die("Redirect failed");
+        } else{
+            exit(header("location: productshowroom.php?productid=$productId"));
+            die(); 
+          }
+          // if the add didn't succedd Exception trown
+     } catch (Exception $e) {
+        http_response_code(500); 
+        $message = $e->getMessage();
     }
-    
-    if ($validSize) {
-        $imagedatas = Images::getImageData($_FILES);
-        try{
-            $isUpdate = isset($_POST['productid']);
-            if ($isUpdate) {
-                $productId = $_POST['productid'];
-                // TODO updateProduct
-            } else {
-                $productId = $productService->addProduct(
-                        $imagedatas,
-                        $_POST['product_info'],
-                        $_POST['format'],
-                        $_POST['category'],
-                        $_POST['sizes'],
-                        $_POST['material'],
-                        $_POST['technique'],
-                        $user->id
-                        );
-                }
-            header("location: productshowroom.php?productid= $productId");
-            die();
-        } catch (Exception $e) {
-            http_response_code(500); 
-            $message = $e->getMessage();
-        }
-    }
-} else if (isset($_GET['id'])) {
+}
+
+// for editing product
+ else if (isset($_GET['id'])) {
     $productId = $_GET['id'];
     $submitName = "Edit Product";
     $editProduct = $productService->getProductById($productId);
@@ -65,13 +77,13 @@ if (isset($_POST["submit"])) {
 }
 
 $countries = $user->countries;
+$materials = $productService->getAllMaterials();
 $languages = $productService->getCountryLanguages($countries);
 $formatOptions = FormUtilities::getAllOptions($productService->getAllFormats(), 'format');
-$sizeOptions = FormUtilities::getAllCheckBoxes($productService->getAllSizes(), 'sizes', 'sizes', $checkedSizes);
-$materialOptions = FormUtilities::getAllCheckBoxes($productService->getAllMaterials(), 'material', 'material', $checkedMaterials);
-$techniqueOptions = FormUtilities::getAllCheckBoxes($productService->getAllPrintTechniques(), 'technique', 'technique', $checkedTechniques);
+$materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material', $checkedMaterials);
+$imageCategoryOptions = FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', '0');
 $countryOptions = FormUtilities::getAllOptions($countries, 'country');
-$categoryOptions = FormUtilities::getAllOptions($productService->getAllSections(), 'name');
+$sectionOptions = FormUtilities::getAllOptions($productService->getAllSections(), 'name');
 $languageOptions = FormUtilities::getAllOptions($languages, 'language');
 ?>
 
@@ -79,20 +91,13 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
     <?php if (!empty($productId)) : ?>
     <input type="hidden" name="productid" value="<?= $productId ?>" />
     <?php endif; ?>
-    <fieldset>
+    <fieldset id='productImages'>
         <legend>product images</legend>
-        <label for="adding-picture1">Select image to upload:</label>
-        <input type="file" name="productimage" id="adding-picture1" />
-        <label for="adding-picture2">Select interior pic to upload:</label>
-        <input type="file" name="interiorimage" id="adding-picture2" />
-        <label>countries:</label>
-                <select id="countries" onchange="selectCountryLanguage()">
-                    <?= $countryOptions ?>
-                </select>
-        <label for="adding-language">language:</label>
-                <select id="languages" onchange="selectCountryLanguage()">
-                    <?= $languageOptions ?>
-                </select>
+        <a id="addimage"></a>
+        <p class="checkbox index">
+            <?=$imageCategoryOptions?>
+        </p>
+        <input type="file" name="pictype[]"/>
     </fieldset>
     <?php foreach ($countries as $country) : ?>
     <?php   foreach ($languages as $language) : ?>
@@ -122,20 +127,19 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
     <?php   endforeach; ?>
     <?php endforeach; ?>
     <fieldset>
-        <legend>price details</legend>
-        <label for="select-size" class="checkbox-header">sizes:</label>
-        <?= !$validSize ? '<span style="color: red">You must select at least one size</span>' : '' ?>
-        <p class="checkbox">
-            <?= $sizeOptions ?>
-        </p>
-        <label class="checkbox-header">paper:</label>
+        <legend>Item details</legend>
         <p class="checkbox">
             <?= $materialOptions ?>
         </p>
-        <label class="checkbox-header">printing:</label>
-        <p class="checkbox">
-            <?= $techniqueOptions ?>
-        </p>
+       <?php foreach ($materials as $material) : ?>
+            <?php $sizes = $productService->getSizesForMaterial($material); ?>
+            <p class="selectOptions">
+                <label>select sizes for <?= $material->material?></label>
+                <select multiple name="sizes[<?=$material->id?>][]">
+                    <?= FormUtilities::getAllOptions($sizes, 'sizes') ?>
+               </select>
+            </p>
+        <?php endforeach; ?> 
     </fieldset>
     <fieldset>
         <legend>search details</legend>
@@ -145,22 +149,36 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
                 </select>
             <label for="chossing-category">category:</label>
             <select name="category">
-                <?= $categoryOptions ?>
+                <?= $sectionOptions ?>
             </select>
-            <label>color:</label>
-            <input type="text" name="color">
-            <label for="descriping-motive">motive:</label>
-            <input type="text" name="motive" id="descipting-motive">
+            <label>Tag Words</label>
+            <input type="text" name="searchtags">
     </fieldset>
-    <fieldset>
+    <fieldset class="submitField">
         <legend>submit</legend>
       <!--  <button type="submit" name="preview">preview in showroom</button> -->
         <button type="submit" name="submit"><?= $submitName ?></button>
+        <div class="block">
+            <p class="inline">
+                <label>countries:</label>
+                    <select id="countries">
+                        <?= $countryOptions ?>
+                    </select>
+            </p>
+            <p class="inline">
+                <label for="adding-language">language:</label>
+                    <select id="languages">
+                        <?= $languageOptions ?>
+                    </select>
+            </p>
+        </div>
     </fieldset>
-    <fieldset>
+    <fieldset class="notes">
         <legend>notes</legend>
+        <p>
+            
+        </p>
     </fieldset>
 </form>
-<script>initFunctionTable.push(function() { selectCountryLanguage(); })</script>';
-
+<?php $script = '/js/product.js'; ?>
 <?php require_once 'adminpagefooter.php'; ?>
