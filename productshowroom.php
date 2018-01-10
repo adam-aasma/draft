@@ -1,9 +1,13 @@
 <?php
-require_once 'checkauth.php';
-require_once 'views/admintemplate.php';
-$productrep = new ProductRepository;
+use Walltwisters\data\RepositoryFactory;
+
+require_once 'service/ProductService.php';
+require_once 'data/RepositoryFactory.php';
+require_once 'adminpageheader.php';
+
+$productService = new ProductService(RepositoryFactory::getInstance());
 $productid = $_GET['productid'];
-$product = $productrep->getCompleteProduct($productid);
+$product = $productservice->getCompleteProductBy($productid);
 $imagesHtml = '';
 $description = '';
 $name = '';
@@ -16,29 +20,29 @@ if (!empty($product)) {
         $description = $product->descriptions[0];
     }
 }
-$homepage = new adminTemplate();
-$titel = $homepage -> title = 'wally';
-$content = $homepage -> content = '<div class="desktop">
-            <div class="slideshow showroom">' . $imagesHtml . '
+
+?>
+<div class="desktop">
+            <div class="slideshow showroom"><?=$imagesHtml?>
                 <div class="arrowbutton">
                 <button onclick="plusDivs(-1)">&#10094;</button>
                 <button onclick="plusDivs(1)">&#10095;</button>
                 </div>
             </div>
             <div class="product-info">
-                <h1>' . $name . '</h1>
+                <h1><?= $name ?></h1>
                 <div class="priceButton">
                     <h2>35€</h2>
                     <button>confirm</button>
                     <button >edit</button>
                 </div>
             <p>
-                ' . $description . '
+                <?=$description?>
             </p>
             </div>
             
-        </div>';
-
-$homepage -> Display();
-
+</div>
+<?php
+$script = 'js/showroom.js';
+require_once 'adminpagefooter.php';
 ?>

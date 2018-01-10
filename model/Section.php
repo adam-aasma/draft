@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class Section {
     private $id;

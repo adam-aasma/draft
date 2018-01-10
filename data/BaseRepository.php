@@ -1,4 +1,6 @@
 <?php
+namespace Walltwisters\data;
+
 require_once 'Exceptions.php';
 
 abstract class BaseRepository {
@@ -8,10 +10,10 @@ abstract class BaseRepository {
     
     function __construct($tableName = null, $objectName = null) {
         $servername = "127.0.0.1";
-        $username = "adam";
+        $username = "root";
         $password = "Oskar.#4837";
         $dbname = "WT_Test"; 
-        $this->conn = new mysqli($servername, $username, $password, $dbname);
+        $this->conn = new \mysqli($servername, $username, $password, $dbname);
         if ($this->conn->connect_error) {
             throw new Exception($this->conn->connect_error);
         } 
@@ -66,7 +68,7 @@ abstract class BaseRepository {
         call_user_func_array(array($stmt, "bind_param"), $bindp);
         $res = $stmt->execute();
         if (!$res) {
-            throw new Exception($stmt->error);
+            throw new \Exception($stmt->error);
         }   
 
         if ($getId) {

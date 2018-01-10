@@ -15,6 +15,8 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     color: #FF7000;
 }
 
+
+
 .admin {
    font-family: montserrat, sans-serif;
    color: #343434;
@@ -141,7 +143,39 @@ fieldset {
     height: 90%;
     justify-content: center;
     align-items: center;
+}
+#addimage {
+    background-image: url("/img/plus.svg");
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    width: 10%;
+    height: 10%;
+    position: absolute;
+    right: 20px;
+    top: 40px;
+    right: 8%;
+    top: 10%;
     
+}
+
+#productImages {
+    position: relative;
+}
+.submitField .block  {
+    display: block;
+    width: 100%;
+    font-size: 0px;
+    box-sizing: border-box;
+}
+
+.submitField .inline {
+    display: inline-block;
+    width: 50%;
+}
+.submitField .block label{
+    font-size: 1rem;
+    display: block;
 }
 
 legend {
@@ -515,4 +549,12 @@ textarea:active {
 
 .dropzone {
     cursor: pointer;
+}
+
+.selectOptions {
+    display: none;
+}
+
+.showOptions {
+    display: block;
 }

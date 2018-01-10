@@ -1,4 +1,5 @@
 <?php
+use Walltwisters\data\UserRepository;
 require_once 'data/UserRepository.php';
 require_once 'library/security.php';
  

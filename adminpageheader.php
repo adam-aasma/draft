@@ -1,9 +1,13 @@
 <?php
+use Walltwisters\model\User;
+use Walltwisters\model\Country;
+
+    require_once 'data/UserRepository.php';
+    require_once 'checkauth.php';
     $user = unserialize($_SESSION['user']);
-    
     $menu = array("dashboard" => "#",
                 "products" =>"/admin_products.php",
-                "products categories" => "#",
+                "printer" => "addprinter.php",
                 "slides" => "/admin_slides.php",
                 "view customer" => "#",
                 "view orders" => "#",
@@ -31,7 +35,7 @@
         <link href="/css/admin.css" type="text/css" rel="stylesheet">
         <script>var initFunctionTable = [];</script>
     </head>
-    <body onload="initPage()">
+    <body id="bodyLoad">
         <div class="admin">
             <header class="header">
                 <h1>Admin Panel</h1>
@@ -47,4 +51,5 @@
                     </ul>
                 </nav>
                 <div class="desktop">
+
         

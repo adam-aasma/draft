@@ -1,4 +1,9 @@
 <?php
+namespace Walltwisters\data; 
+
+use Walltwisters\interfacesrepo\ILanguageRepository;
+use Walltwisters\model\Language;
+
 require_once 'interfacesrepo/ILanguageRepository.php';
 require_once 'BaseRepository.php';
 require_once 'model/Language.php';
@@ -6,7 +11,7 @@ require_once 'model/Language.php';
 class LanguageRepository extends BaseRepository implements ILanguageRepository {
     
     public function __construct() {
-        parent::__construct("languages", "Language");
+        parent::__construct("languages", "Walltwisters\model\Language");
     }
     
     protected function getColumnNamesForInsert() {
@@ -31,7 +36,7 @@ class LanguageRepository extends BaseRepository implements ILanguageRepository {
             throw new Exception($this->conn->error);
         }
         $languages = [];
-        while ( $row = $result->fetch_object('Language')){
+        while ( $row = $result->fetch_object('Walltwisters\model\Language')){
             $languages[] = $row;
         }
         if (empty($languages)) {

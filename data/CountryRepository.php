@@ -1,5 +1,7 @@
 <?php
+namespace Walltwisters\data; 
 
+use Walltwisters\interfacesrepo\ICountryRepository;
 require_once 'data/BaseRepository.php';
 require_once 'model/Country.php';
 require_once 'interfacesrepo/ICountryRepository.php';
@@ -7,7 +9,7 @@ require_once 'interfacesrepo/ICountryRepository.php';
 class CountryRepository extends BaseRepository implements ICountryRepository {
     
     public function __construct() {
-        parent::__construct("countries", "Country");
+        parent::__construct("countries", "Walltwisters\model\Country");
     }
     
     protected function getColumnNamesForInsert() {

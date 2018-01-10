@@ -1,4 +1,5 @@
 <?php
+namespace Walltwisters\model; 
 
 
 class Privileges {

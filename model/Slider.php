@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class Slider {
     private $imageid;

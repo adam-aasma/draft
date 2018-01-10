@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class Product {
     protected $id;

@@ -1,4 +1,7 @@
 <?php
+namespace Walltwisters\data; 
+
+use Walltwisters\model\CompleteProduct;
 
 require_once 'BaseRepository.php';
 require_once 'model/Product.php';
@@ -21,7 +24,7 @@ require_once 'model/Slider.php';
 class ProductRepository extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("products", "Product");
+        parent::__construct("products", "Walltwisters\model\Product");
     }
     
     protected function getColumnNamesForInsert() {
@@ -257,9 +260,9 @@ class ProductRepository extends BaseRepository {
    
         
         public function addSlider($slider){
-        $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id,
-                                          sales_message, titel, added_by_user_id)
-                                          VALUES(?, ?, ?, ?, ?)");
+            $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id,
+                                              sales_message, titel, added_by_user_id)
+                                              VALUES(?, ?, ?, ?, ?)");
             $stmt->bind_param("iissi", $image_id, $product_id, $salesmessage, $titel, $added_by_user);
             $product_id = $slider->productid;
             $image_id = $slider->imageid;
@@ -272,8 +275,9 @@ class ProductRepository extends BaseRepository {
                 $row = $lastIdRes->fetch_row();                                       
                 $lastId = $row[0];   
                return $lastId;
-           }
+            }
            throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+       
         }
         
         public function getShowSlider($sliderId) {

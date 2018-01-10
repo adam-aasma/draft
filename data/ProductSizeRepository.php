@@ -1,4 +1,5 @@
 <?php
+namespace Walltwisters\data; 
 
 require_once 'data/BaseRepository.php';
 require_once 'data/ProductSizeRepository.php';
@@ -6,15 +7,19 @@ require_once 'model/ProductSize.php';
 
 class ProductSizeRepository extends Baserepository {
     public function __construct() {
-        parent::__construct("sizes", "ProductSize");
+        parent::__construct("sizes", "Walltwisters\model\ProductSize");
     }
     
     protected function getColumnNamesForInsert() {
-        throw new Exception("Not implemented");
+        return ['sizes', 'name'];
     }
     
-    protected function getColumnValuesForBind($aggregate) {
-        throw new Exception("Not implemented");
+    protected function getColumnValuesForBind($size) {
+        $sizes = $size->sizes;
+        $name = $size->name;
+        
+
+        return [['s', &$sizes], ['s', &$name]];
     }
     
     public function getAllSizes() {

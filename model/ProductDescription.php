@@ -1,4 +1,5 @@
 <?php
+namespace Walltwisters\model; 
 
 require_once 'Language.php';
 require_once 'Product.php';

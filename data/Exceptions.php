@@ -1,6 +1,7 @@
 <?php
+namespace Walltwisters\data; 
 
-class DatabaseException extends Exception {
+class DatabaseException extends \Exception {
     //put your code here
     
     function __construct(string $message) {

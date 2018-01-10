@@ -1,11 +1,12 @@
 <?php
+namespace Walltwisters\data; 
 
 require_once 'model/ProductImage.php';
 
 class ProductImageRepository extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("products_images", "ProductImage");
+        parent::__construct("products_images", "Walltwisters\model\ProductImage");
     }
     
     protected function getColumnNamesForInsert() {

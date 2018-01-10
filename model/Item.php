@@ -1,7 +1,9 @@
 <?php
+namespace Walltwisters\model; 
 
 class Item {
     private $id;
+    private $printerId;
     private $productId;
     private $sizeId;
     private $sizes;
@@ -18,33 +20,34 @@ class Item {
         $this->$name = $value;
     }
     
-    public static function create($productId, $sizeId, $materialId, $printTechniqueId) {
+    public static function create($sizeId, $materialId, $printTechniqueId = null, $printerId = null, $id = null) {
         $item = new Item();
-        $item->productId = $productId;
         $item->sizeId = $sizeId;
         $item->materialId = $materialId;
         $item->printTechniqueId = $printTechniqueId;
+        $item->printerId = $printerId;
+        $item->id = $id;
         return $item;
     }
 
     public static function createExtended(
             $itemId, 
-            $productId, 
             $sizeId, 
             $sizes, 
             $materialId, 
             $material, 
             $printTechniqueId, 
-            $printTechnique) {
+            $printTechnique,
+            $printerId) {
         $item = new Item();
         $item->id = $itemId;
-        $item->productId = $productId;
         $item->sizeId = $sizeId;
         $item->sizes = $sizes;
         $item->materialId = $materialId;
         $item->material = $material;
         $item->printTechniqueId = $printTechniqueId;
         $item->printTechnique = $printTechnique;
+        $item->printerId = $printerId;
         return $item;
     }
 }

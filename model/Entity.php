@@ -1,4 +1,6 @@
 <?php
+namespace Walltwisters\model; 
+
 
 abstract class Entity {
     public function __get($name) {

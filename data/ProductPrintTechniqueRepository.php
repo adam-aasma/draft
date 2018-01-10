@@ -1,19 +1,23 @@
 <?php
+namespace Walltwisters\data; 
 
 require_once 'data/BaseRepository.php';
 require_once 'model/ProductPrintTechnique.php';
 
 class ProductPrintTechniqueRepository extends BaseRepository {
     public function __construct() {
-        parent::__construct("print_techniques", "ProductPrintTechnique");
+        parent::__construct("print_techniques", "Walltwisters\model\ProductPrintTechnique");
     }
     
     protected function getColumnNamesForInsert() {
-        throw new Exception("Not implemented");
+        return ['technique', 'description'];
     }
     
-    protected function getColumnValuesForBind($aggregate) {
-        throw new Exception("Not implemented");
+    protected function getColumnValuesForBind($technique) {
+        $tech = $technique->technique;
+        $description = $technique->description;
+       
+        return [['s', &$tech], ['s', &$description]];
     }
     
     public function getAllProductPrintTechniques() {

@@ -1,4 +1,6 @@
 <?php
+namespace Walltwisters\model;
+
 
 
 class User {

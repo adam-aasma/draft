@@ -1,12 +1,10 @@
 <?php
-require_once 'checkauth.php';
-require_once 'views/admintemplate.php';
-
-$homepage = new adminTemplate();
-$titel = $homepage -> title = 'wally';
-
-$content = $homepage -> content = '<div class="desktop"><img src="/img/logo.svg" alt="logotype" /></div>';
-
-$homepage -> Display();
+$titel = 'wally';
+$keywordContent = 'important stuff';
+require_once 'adminpageheader.php';
+?>
+<img src="/img/logo.svg" alt="logotype" />;
+<?php
+require_once 'adminpagefooter.php';
 
 ?>

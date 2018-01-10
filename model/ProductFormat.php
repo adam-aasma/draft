@@ -1,7 +1,8 @@
 <?php
+namespace Walltwisters\model; 
 
 
-class Format {
+class ProductFormat {
     private $id;
     private $format;
     private $description;

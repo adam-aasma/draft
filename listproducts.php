@@ -1,4 +1,6 @@
 <?php
+use Walltwisters\data\RepositoryFactory;
+
 require_once 'checkauth.php';
 require_once 'views/admintemplate.php';
 require_once 'data/ProductDescriptionRepository.php';

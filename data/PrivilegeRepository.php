@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\data; 
 
 class PrivilegeRepository extends BaseRepository {
     
@@ -12,7 +12,7 @@ class PrivilegeRepository extends BaseRepository {
     }
     
     public function __construct() {
-        parent::__construct("privileges", "Privileges");
+        parent::__construct("privileges", "Walltwisters\model\Privileges");
     }
     
     public function getAllPrivileges() {

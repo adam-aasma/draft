@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class ProductSize {
     private $id;
@@ -11,6 +11,14 @@ class ProductSize {
     }
     public function __get($name){
         return $this->$name;
+    }
+    
+    public static function create($sizes, $name='', $id=null){
+        $obj = new ProductSize();
+        $obj->sizes = $sizes;
+        $obj->name = $name;
+        $obj->id = $id;
+        return $obj;
     }
 
 }

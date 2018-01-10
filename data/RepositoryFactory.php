@@ -1,4 +1,8 @@
 <?php
+namespace Walltwisters\data; 
+
+use Walltwisters\interfacesrepo\IRepositoryFactory;
+
 require_once 'interfacesrepo/IRepositoryFactory.php';
 require_once 'productRepository.php';
 require_once 'LanguageRepository.php';
@@ -14,6 +18,10 @@ require_once 'ProductMaterialRepository.php';
 require_once 'ProductSizeRepository.php';
 require_once 'ItemRepository.php';
 require_once 'ImageRepository.php';
+require_once 'PrinterRepository.php';
+require_once 'ItemPriceRepository.php';
+require_once 'ProductItemRepository.php';
+require_once 'ImageCategoryRepository.php';
 
 class RepositoryFactory implements IRepositoryFactory {            
     private $productRepository;
@@ -30,6 +38,10 @@ class RepositoryFactory implements IRepositoryFactory {
     private $productSizeRepository;
     private $itemRepository;
     private $imageRepository;
+    private $printerRepository;
+    private $itemPriceRepository;
+    private $productItemRepository;
+    private $imageCategoryRepository;
     private static $repositoryFactory;
     
     public static function getInstance() {
@@ -87,6 +99,18 @@ class RepositoryFactory implements IRepositoryFactory {
                     break;
                 case 'imageRepository':
                     $this->imageRepository = new ImageRepository();
+                    break;
+                case 'printerRepository':
+                    $this->printerRepository = new PrinterRepository();
+                    break;
+                case 'itemPriceRepository':
+                    $this->itemPriceRepository = new ItemPriceRepository();
+                    break;
+                case 'productItemRepository':
+                    $this->productItemRepository = new ProductItemRepository();
+                    break;
+                case 'imageCategoryRepository':
+                    $this->imageCategoryRepository = new ImageCategoryRepository();
                     break;
             }
         }

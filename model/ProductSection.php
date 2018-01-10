@@ -1,4 +1,5 @@
 <?php
+namespace Walltwisters\model; 
 
 class ProductSection {
     private $productId;

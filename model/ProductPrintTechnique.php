@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class ProductPrintTechnique {
     private $id;
@@ -13,5 +13,10 @@ class ProductPrintTechnique {
         return $this->$name;
     }
 
-
+    public static function create($technique, $description=''){
+        $obj = new ProductPrintTechnique();
+        $obj->technique = $technique;
+        $obj->description = $description;
+        return $obj;
+    }
 }

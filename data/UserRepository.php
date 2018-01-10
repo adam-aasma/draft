@@ -1,4 +1,9 @@
 <?php
+namespace Walltwisters\data; 
+
+use Walltwisters\model\User;
+use Walltwisters\model\Country;
+use Walltwisters\model\Privileges;
 
 require_once 'BaseRepository.php';
 require_once 'model/User.php';
@@ -94,7 +99,7 @@ class UserRepository extends BaseRepository {
             throw new Exception($this->conn->error);
         }
         $countries = [];
-        while ( $row = $result->fetch_object('Country')){
+        while ( $row = $result->fetch_object('Walltwisters\model\Country')){
             $countries[] = $row;
         }
         if (empty($countries)) {

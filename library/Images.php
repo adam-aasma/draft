@@ -1,5 +1,5 @@
 <?php
-
+use Walltwisters\model\Image;
 
 class Images {
     public static function getImageData($imagefiles){
@@ -8,15 +8,11 @@ class Images {
             $filepath = $imagefile["tmp_name"];
             $mime = $imagefile["type"];
             $size = $imagefile["size"];
-            $file = [ 'filepath' => $filepath, 'mime' => $mime, 'size' => $size ];
-            $productimages[] = $file;
+            $image = Image::create($filepath, $size, $mime);
+            $images[] = $image;
         }
-        
-        if ($productimages){
-            return $productimages;
-        } else {
-            return false;
+        return $images;
         }
     }
     
-}
+

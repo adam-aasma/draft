@@ -1,4 +1,5 @@
 <?php
+namespace Walltwisters\data; 
 
 require_once 'BaseRepository.php';
 require_once 'model/Image.php';
@@ -61,26 +62,17 @@ class ImageRepository extends BaseRepository {
     }
     
     public function addImage($image) {
-        $categories = $this->getImagesCategories();
-        
         $data = file_get_contents($image->filepath);
-        $stmt = $this->conn->prepare("INSERT INTO images(data,name,mimetype,images_category_id,size) VALUES(?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id) VALUES(?, ?, ?, ?)");
         $null = NULL;
         try {
-            $bindresult = $stmt->bind_param("bsssi", $null, $imgname, $mimetype, $imgcategory_id, $imgsize);
+            $bindresult = $stmt->bind_param("bssi", $null, $mimetype, $imgsize, $imgcategory_id);
         } catch(Exception $e) {
             var_dump($e);
         }
-        $imgname = $image->name;
         $mimetype = $image->mime;
-        $imgcategory_id = 1;  // TODO change this later added this table slider/product/productinterior
-        foreach($categories as $id => $category) {
-            if ($image->category == $category) {
-                $imgcategory_id = $id;
-                break;
-            }
-        }
         $imgsize = $image->size;
+        $imgcategory_id = $image->categoryId;  
         $stmt->send_long_data(0, $data);
 
         $res = $stmt->execute();
@@ -91,19 +83,6 @@ class ImageRepository extends BaseRepository {
             return $lastId;
         }
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
-    }
-    
-    private function getImagesCategories(){
-        $sql = ("SELECT id, category FROM images_categories"); 
-        $result = $this->conn->query($sql);
-        $imagecategories = [];
-        while ($row = $result->fetch_assoc()){
-            $imagecategories[$row['id']] = $row['category'];
-        }
-        if (empty($imagecategories)) {
-            return false;
-        }
-        return $imagecategories;
     }
     
     public function getImage($id) {

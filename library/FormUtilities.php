@@ -63,5 +63,15 @@ class FormUtilities {
         return $html;
             
     }
+    
+    public static function getAllRadioOptions($objcollection, $propname, $inputname){
+        $html = '';
+        foreach ($objcollection as $obj){
+            $label = $obj->$propname;
+            $value = $obj->id;
+            $html .="<input type='radio' name='$inputname' value='$value' class='indexValue' /><label>$label</label>";
+        }
+        return $html;
+    }
 }
 

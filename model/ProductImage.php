@@ -1,5 +1,7 @@
 <?php
-require_once 'Entity.php';
+namespace Walltwisters\model; 
+
+
 
 class ProductImage {
     private $productId;

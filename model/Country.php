@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\model; 
 
 class Country {
     private $id;

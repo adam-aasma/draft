@@ -1,19 +1,20 @@
 <?php
+namespace Walltwisters\model; 
+
 require_once 'ImageBaseInfo.php';
 
 class Image extends ImageBaseInfo {
     protected $filepath;
     protected $size;
     protected $mime;
-    protected $category;
+    protected $categoryId;
     
-    public static function create($filepath, $size, $mime, $name, $category) {
+    public static function create($filepath, $size, $mime, $categoryId=null) {
         $obj = new Image();
         $obj->filepath = $filepath;
         $obj->size = $size;
         $obj->mime = $mime;
-        $obj->name = $name;
-        $obj->category = $category;
+        $obj->categoryId = $categoryId;
         return $obj;
     }
     
