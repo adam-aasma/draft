@@ -1,7 +1,7 @@
 <?php
+namespace Walltwisters\viewmodel\Product;
 
-
-class Product2 {
+class Product {
    private $images;  //array of object image
    private $productinfo; 
    

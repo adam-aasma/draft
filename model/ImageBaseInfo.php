@@ -3,7 +3,9 @@ namespace Walltwisters\model;
 
 class ImageBaseInfo {
     protected $id;
-    protected $name;
+    protected $categoryId;
+    protected $category; //type of picture, product, interior, slider etc.
+    protected $imageName;
     
     public function __get($name) {
         return $this->$name;
@@ -12,11 +14,13 @@ class ImageBaseInfo {
     public function __set($name, $value) {
         $this->$name = $value;
     }
-    
-    public static function createBaseInfo($id, $name) {
+    // $category is what kind of pic... interior, product, slider etc...
+    public static function createBaseInfo($id, $imageName, $categoryId, $category = null) {
         $obj = new ImageBaseInfo();
         $obj->id = $id;
-        $obj->name = $name;
+        $obj->imageName = $imageName;
+        $obj->categoryId = $categoryId;
+        $obj->category = $category;
         return $obj;
     }
 }

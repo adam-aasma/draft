@@ -42,12 +42,13 @@ class FormUtilities {
         }
     }
     
-    public static function getAllOptions($objcollection, $name){
+    public static function getAllOptions($objcollection, $name, $checkedIds = []){
         $optionsHtml = '';
         foreach ($objcollection as $obj){
             $val = $obj->id;
             $text = $obj->$name;
-            $optionsHtml .= "<option value='" . $val . "'>" . $text . "</option>";
+            $checked = in_array($obj->id, $checkedIds) ? 'selected' : '';
+            $optionsHtml .= "<option value='" . $val . "' $checked>" . $text . "</option>";
         }
         return $optionsHtml;
             
@@ -64,12 +65,13 @@ class FormUtilities {
             
     }
     
-    public static function getAllRadioOptions($objcollection, $propname, $inputname){
+    public static function getAllRadioOptions($objcollection, $propname, $inputname, $checkedIds = []){
         $html = '';
         foreach ($objcollection as $obj){
             $label = $obj->$propname;
             $value = $obj->id;
-            $html .="<input type='radio' name='$inputname' value='$value' class='indexValue' /><label>$label</label>";
+            $checked = in_array($obj->id, $checkedIds) ? 'checked' : '';
+            $html .="<input type='radio' name='$inputname' value='$value' $checked class='indexValue' /><label>$label</label>";
         }
         return $html;
     }

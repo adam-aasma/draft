@@ -4,18 +4,24 @@ namespace Walltwisters\model;
 class Product {
     protected $id;
     protected $artistdesignerid;
-    protected $userid;
+    protected $createdByUserId;
+    protected $updatedByUserId;
     protected $formatid;
+    protected $formatName;
+    protected $sectionId;
+    protected $sectionName;
     
     public static function create(
         $id, 
         $artistDesignerId,
-        $userId, 
+        $createdByUserId,
+        $updatedByUserId,    
         $formatId) {
         $obj = new Product();
         $obj->id = $id;
         $obj->artistdesignerid = $artistDesignerId;
-        $obj->userid = $userId;
+        $obj->createdByUserId = $createdByUserId;
+        $obj->updatedByUserId = $updatedByUserId;
         $obj->formatid = $formatId;
         return $obj;
     }

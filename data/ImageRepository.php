@@ -15,64 +15,19 @@ class ImageRepository extends BaseRepository {
         throw new Exception("Not implemented");
     }
     
-    public function getCategories() {
-        
-        $sql = "SELECT id, name FROM categories";
-        $result = $this->conn->query($sql);
-        if ($result === FALSE) {
-            throw new DatabaseException($this->conn->error);
-        }
-        $keysAndValues =[];
-        $row= $result->fetch_assoc();
-        while ($row){
-            $keysAndValues[$row['id']] = $row['name'];
-            $row=$result->fetch_assoc();
-        }
-        return $keysAndValues;
-    }
-    
-    public function getAllImageIds() {
-        $sql = "SELECT id FROM images";
-        $result = $this->conn->query($sql);  
-        if ($result === FALSE) {
-            throw new DatabaseException($this->conn->error);
-        }
-
-        $ids = [];
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $ids[] = $row["id"];
-            }
-        }
-        return $ids;
-    }
-    
-    public function getImagesByCategory($category) {
-         $sql = "SELECT id FROM images where category_id='" . $category . "'";
-         $result = $this->conn->query($sql);
-
-         $ids = [];
-         if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $ids[] = $row["id"];
-            }
-        }
-        return $ids;
-        
-    }
-    
     public function addImage($image) {
         $data = file_get_contents($image->filepath);
-        $stmt = $this->conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id) VALUES(?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id, image_name) VALUES(?, ?, ?, ?, ?)");
         $null = NULL;
         try {
-            $bindresult = $stmt->bind_param("bssi", $null, $mimetype, $imgsize, $imgcategory_id);
+            $bindresult = $stmt->bind_param("bssis", $null, $mimetype, $imgsize, $imgcategory_id, $imageName);
         } catch(Exception $e) {
             var_dump($e);
         }
         $mimetype = $image->mime;
         $imgsize = $image->size;
-        $imgcategory_id = $image->categoryId;  
+        $imgcategory_id = $image->categoryId;
+        $imageName = $image->imageName;
         $stmt->send_long_data(0, $data);
 
         $res = $stmt->execute();
@@ -82,7 +37,7 @@ class ImageRepository extends BaseRepository {
             $lastId = $row[0];
             return $lastId;
         }
-        throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
+        throw new \Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
     
     public function getImage($id) {
@@ -96,7 +51,20 @@ class ImageRepository extends BaseRepository {
         return ['size' => $size, 'mime' => $mimetype, 'data' => $data];
     }
     
-    
+    public function getImageIdByProductId($id){
+        $stmt = $this->conn->prepare("SELECT i.id FROM images i
+                                      INNER JOIN products_images pi ON pi.product_id = ?
+                                      INNER JOIN images_categories ic ON ic.id = i.images_category_id
+                                      WHERE ic.category = 'product'");
+                                      
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($id);
+        $stmt->fetch();
+        
+        return $id;
+    }
     
 }
     

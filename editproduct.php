@@ -1,7 +1,7 @@
 <?php
 use Walltwisters\data\RepositoryFactory;
 
-require_once 'checkauth.php';
+
 require_once 'library/security.php';
 require_once 'library/FormUtilities.php';
 require_once 'data/RepositoryFactory.php';
@@ -12,7 +12,7 @@ require_once 'service/ProductService.php';
 $title = 'Edit Product';
 $keywordContent = "very important SEO stuff";
 
-require_once 'adminpageheader.php';
+require_once 'adminpageheaderlogic.php';
 
 $productService = new ProductService(RepositoryFactory::getInstance());
 $editProduct = null;
@@ -24,39 +24,49 @@ $submitName = "Add Product";
 
 $validSize = true;
 if (isset($_POST["submit"])) {
-    try{$isUpdate = isset($_POST['productid']);
+    try{
+        $isUpdate = isset($_POST['productid']);
+        $imageCategoryValues= [];
+        $inx = 0;
+        while (isset($_POST['category'][$inx])){
+            $imageCategoryValues[] = $_POST['category'][$inx];
+            $inx++;
+        }
+
         if ($isUpdate) {
             $productId = $_POST['productid'];
-            // TODO updateProduct.... in case we coming from productList then id set..
-            
-            
+            $productService->updateProduct(
+                    $productId,
+                    $imageCategoryValues,
+                    $_FILES,
+                    $_POST['product_info'],
+                    $_POST['format'],
+                    $_POST['section'],
+                    $_POST['material'],
+                    $_POST['sizes'],
+                    $user->id
+                    );
         } else {
-            //adding new product procedure
-            
-            $imageCategoryValues= [];
-            $inx = 0;
-            while ($_POST[$inx]){
-                $imageCategoryValues[] = $_POST[$inx];
-                $inx++;
-            }
+            //adding new product procedure            
             $productId = $productService->addProduct(
                     $imageCategoryValues,
                     $_FILES,
                     $_POST['product_info'],
                     $_POST['format'],
-                    $_POST['category'],
+                    $_POST['section'],
+                    $_POST['material'],
                     $_POST['sizes'],
                     $user->id
                     );
-            }
+        }
             
           // after new product is added redirect for preview in ShowRoom   
         if (headers_sent()) {
             die("Redirect failed");
-        } else{
+        } else {
             exit(header("location: productshowroom.php?productid=$productId"));
             die(); 
-          }
+        }
           // if the add didn't succedd Exception trown
      } catch (Exception $e) {
         http_response_code(500); 
@@ -79,12 +89,10 @@ if (isset($_POST["submit"])) {
 $countries = $user->countries;
 $materials = $productService->getAllMaterials();
 $languages = $productService->getCountryLanguages($countries);
-$formatOptions = FormUtilities::getAllOptions($productService->getAllFormats(), 'format');
 $materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material', $checkedMaterials);
-$imageCategoryOptions = FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', '0');
-$countryOptions = FormUtilities::getAllOptions($countries, 'country');
-$sectionOptions = FormUtilities::getAllOptions($productService->getAllSections(), 'name');
 $languageOptions = FormUtilities::getAllOptions($languages, 'language');
+
+require_once 'adminpageheader.php';
 ?>
 
 <form action="editproduct.php" method="post" enctype="multipart/form-data">
@@ -94,10 +102,25 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
     <fieldset id='productImages'>
         <legend>product images</legend>
         <a id="addimage"></a>
-        <p class="checkbox index">
-            <?=$imageCategoryOptions?>
-        </p>
-        <input type="file" name="pictype[]"/>
+        <?php if (!empty($editProduct)) : ?>
+        <?php $idx = 0; foreach ($editProduct->imageBaseInfos as $imageBaseInfo) : ?>
+            <div>
+                <p class="checkbox index">
+                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', "category[$idx]", [$imageBaseInfo->categoryId]) ?>
+                </p>
+                <span><?= $imageBaseInfo->imageName ?></span>
+                <span><aclass="deleteimage">delete</a></span>
+            </div>
+
+        <?php $idx++; endforeach; ?>
+        <?php else : ?>
+            <div>
+                <p class="checkbox index">
+                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', "category[0]");?>
+                </p>
+                <input type="file" name="pictype[]"/>
+            </div>
+        <?php endif; ?>
     </fieldset>
     <?php foreach ($countries as $country) : ?>
     <?php   foreach ($languages as $language) : ?>
@@ -128,7 +151,7 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
     <?php endforeach; ?>
     <fieldset>
         <legend>Item details</legend>
-        <p class="checkbox">
+        <p class="checkbox control">
             <?= $materialOptions ?>
         </p>
        <?php foreach ($materials as $material) : ?>
@@ -136,7 +159,16 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
             <p class="selectOptions">
                 <label>select sizes for <?= $material->material?></label>
                 <select multiple name="sizes[<?=$material->id?>][]">
-                    <?= FormUtilities::getAllOptions($sizes, 'sizes') ?>
+                    <?php if(!empty($editProduct)) : ?>
+                        <?php $checkedIds = []; ?>
+                        <?php foreach($editProduct->items as $item) : ?>
+                            <?php $checkedIds[] = $item->sizeId ?>
+                        <?php endforeach; ?>
+                        <?= FormUtilities::getAllOptions($sizes, 'sizes', $checkedIds) ?>
+                    
+                        <?php else : ?>
+                        <?= FormUtilities::getAllOptions($sizes, 'sizes') ?>
+                    <?php endif; ?>
                </select>
             </p>
         <?php endforeach; ?> 
@@ -145,24 +177,36 @@ $languageOptions = FormUtilities::getAllOptions($languages, 'language');
         <legend>search details</legend>
             <label for="adding-format">format:</label>
                 <select name="format">
-                    <?= $formatOptions ?>
+                    <?php if(!empty($editProduct)) : ?>
+                       <?php $formatId[] = $editProduct->formatId ?>
+                       <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format', $formatId) ?>
+                    <?php else : ?>
+                    <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format') ?>
+                    <?php endif; ?>
                 </select>
-            <label for="chossing-category">category:</label>
-            <select name="category">
-                <?= $sectionOptions ?>
+            <label for="choosing-section">section:</label>
+            <select name="section">
+                <?php if(!empty($editProduct)) : ?>
+                    <?php $sectionId[] = $editProduct->sectionId ?>
+                    <?= FormUtilities::getAllOptions($productService->getAllSections(), 'titel',  $sectionId)?>
+                <?php else : ?>
+                <?= FormUtilities::getAllOptions($productService->getAllSections(), 'titel');?>
+                <?php endif; ?>
             </select>
             <label>Tag Words</label>
             <input type="text" name="searchtags">
     </fieldset>
     <fieldset class="submitField">
         <legend>submit</legend>
-      <!--  <button type="submit" name="preview">preview in showroom</button> -->
         <button type="submit" name="submit"><?= $submitName ?></button>
+        <?php if(!empty($editProduct)) : ?>
+            <button type="submit" name="delete">Delete product</button>
+        <?php endif; ?>
         <div class="block">
             <p class="inline">
                 <label>countries:</label>
                     <select id="countries">
-                        <?= $countryOptions ?>
+                        <?= FormUtilities::getAllOptions($countries, 'country') ?>
                     </select>
             </p>
             <p class="inline">

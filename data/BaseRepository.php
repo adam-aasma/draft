@@ -28,6 +28,12 @@ abstract class BaseRepository {
     
     abstract protected function getColumnNamesForInsert();
     abstract protected function getColumnValuesForBind($aggregate);
+    protected function getColumnNamesForUpdate() {
+        return $this->getColumnNamesForInsert();
+    }
+    protected function getColumnValuesForBindUpdate($aggregate) {
+        return $this->getColumnValuesForBind($aggregate);
+    }
     
     public function getAll() {
         $sql = ("SELECT * FROM $this->tableName");         
@@ -43,29 +49,57 @@ abstract class BaseRepository {
         return $collection;                                       
     }
     
-    public function save($aggregate, bool $getId = false) {
-        $colNames = $this->getColumnNamesForInsert();
-        $colList = join(',', $colNames);
-        $colVals = join(',', array_map(function ($n) { return '?'; }, $colNames));
-        $bindTypesAndValues = $this->getColumnValuesForBind($aggregate);
+    public function update($aggregate) {
+        $colNames = $this->getColumnNamesForUpdate();
+        $colList = '';
+        foreach($colNames as $colName) {
+            if (!empty($colList)) {
+                $colList .= ', ';
+            }
+            $colList .= $colName . ' = ?';
+        }
+        $sql = "UPDATE $this->tableName SET $colList WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception("SQL syntax: " . $sql);
+        }
+        $this->bindParams($stmt, $aggregate, $aggregate->id);
+        $res = $stmt->execute();
+        if (!$res) {
+            throw new \Exception($stmt->error);
+        }   
+        return $aggregate;
+    }
+    
+    private function bindParams($stmt, $aggregate, $id = null) {
+        $bindTypesAndValues = empty($id) ? 
+            $this->getColumnValuesForBind($aggregate) :
+            $this->getColumnValuesForBindUpdate($aggregate);
         $bindTypes = join('', array_map(function($bv) { return $bv[0]; }, $bindTypesAndValues));
-        //function &getVal(&$bv) {
-        //    return $bv[1];
-        //}
-
         $bindValues = array_map(function($bv) {return $bv[1];}, $bindTypesAndValues);
+        if (!empty($id)) {
+            $bindTypes .= 'i';
+            $bindValues[] = $id;
+        }
         $bindp = [];
         $bindp[] = &$bindTypes;
         for ($i = 0; $i < count($bindValues); $i++) {
             $bindp[] = &$bindValues[$i];
         }
 
+        call_user_func_array(array($stmt, "bind_param"), $bindp);
+    }
+    
+    public function create($aggregate, bool $getId = false) {
+        $colNames = $this->getColumnNamesForInsert();
+        $colList = join(',', $colNames);
+        $colVals = join(',', array_map(function ($n) { return '?'; }, $colNames));
         $sql = "INSERT INTO $this->tableName ($colList) VALUES($colVals)";
         $stmt = $this->conn->prepare($sql);
         if ($stmt === false) {
             throw new Exception("SQL syntax: " . $sql);
         }
-        call_user_func_array(array($stmt, "bind_param"), $bindp);
+        $this->bindParams($stmt, $aggregate);
         $res = $stmt->execute();
         if (!$res) {
             throw new \Exception($stmt->error);
@@ -79,6 +113,20 @@ abstract class BaseRepository {
         }
         
         return $aggregate;
+    }
+    
+    public function deleteForId($idName, $idValue) {
+        $sql = "DELETE FROM $this->tableName WHERE $idName = ?";
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            throw new Exception("SQL syntax: " . $sql);
+        }
+        $stmt->bind_param('i', $idValue);
+        $res = $stmt->execute();
+        if (!$res) {
+            throw new \Exception($stmt->error);
+        }   
+        
     }
 
 }

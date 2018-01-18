@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\viewmodel;
 
 class ProductListRow {
     private $productId;
@@ -26,9 +26,6 @@ class ProductListRow {
     }
     
     public function addItemDetails($size, $material, $technique) {
-        if (!(empty($this->itemDetails))) {
-            $this->itemDetails .= '; ';
-        }
-        $this->itemDetails .= sprintf("%s, %s, %s", $size, $material, $technique);
+        $this->itemDetails .= sprintf("<span>%s, %s, %s</span>", $size, $material, $technique);
     }
 }

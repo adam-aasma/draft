@@ -1,10 +1,7 @@
 <?php
 ?>
 
-  <!-- page footer js/admin.js-->
- <!-- <footer>
-      <p>copyrights walltwisters</p>
-  </footer> -->
+ 
 
 </div>  <!-- desktop -->
 </div>  <!-- flex-wrapper -->

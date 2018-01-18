@@ -1,4 +1,6 @@
 <?php
+use Walltwisters\data\ImageRepository;
+
     require_once('data/ImageRepository.php');
     require_once('data/Exceptions.php');
 

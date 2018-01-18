@@ -4,7 +4,7 @@ use Walltwisters\data\RepositoryFactory;
 $titel = 'wally';
 $keywordContent = 'important stuff';
 
-require_once 'adminpageheader.php';
+require_once 'adminpageheaderlogic.php';
 require_once 'library/FormUtilities.php';
 require_once 'library/security.php';
 require_once 'model/Item2.php';
@@ -34,6 +34,7 @@ if (isset($_POST['submit'])){
     }
     $ok = $printerservice->addItem($items, $printerid, $itemPrices);
 }
+require_once 'adminpageheader.php';
 ?>
 <form action="addprinter.php" method="post" enctype="multipart/form-data">
     <fieldset>

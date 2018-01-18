@@ -16,9 +16,9 @@ class ImageCategoryRepository extends BaseRepository {
         return "not implemented";
     }
     
-   public function getImageCategoriesBy($condition1='product', $condition2='productinterior'){
-        $stmt = $this->conn->prepare("SELECT id, category, description FROM images_categories WHERE category=? OR category=?");         
-        $stmt->bind_param("ss",$condition1, $condition2);                                                              
+   public function getImageCategoriesBy($condition1='product', $condition2='productinterior' , $condition3=''){
+        $stmt = $this->conn->prepare("SELECT id, category, description FROM images_categories WHERE category=? OR category=? OR category=?");         
+        $stmt->bind_param("sss",$condition1, $condition2, $condition3);                                                              
         $res = $stmt->execute(); 
         $imageCategories= [];
         if ($res) {

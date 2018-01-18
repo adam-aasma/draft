@@ -1,16 +1,6 @@
 <?php
+namespace Walltwisters\viewmodel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Localization
- *
- * @author ToivoAasma
- */
 class Localization {
    private $country;
    private $language;

@@ -1,58 +1,25 @@
 <?php
-require_once 'interfacesrepo/IRepositoryFactory.php';
+require_once 'service/BaseService.php';
 require_once 'viewmodel/ProductListRow.php';
 require_once 'library/Images.php';
 
 use Walltwisters\model\ProductItem;
+use Walltwisters\viewmodel\ProductListRow;
 
-class ProductService {
-    private $repositoryFactory;
+class ProductService extends BaseService {
     
     public function __construct($repositoryFactory) {
-        $this->repositoryFactory = $repositoryFactory;
+        parent::__construct($repositoryFactory);
     }
-    
-    public function getCountryLanguages($countries){
-        $languageRepository = $this->repositoryFactory->getRepository('languageRepository');
-        $countriesIds = [];
-        foreach ($countries as $country){
-            $countryId = $country->id;
-            $countriesIds[] = $countryId;
-        }
-        $languages = $languageRepository->getUserLanguages($countriesIds);
-        return $languages;
-    }
-    
-    public function getAllMaterials() {
-        return $this->repositoryFactory->getRepository('productMaterialRepository')->getAll();
-    }
-    
-    public function getAllSizes() {
-        return $this->repositoryFactory->getRepository('productSizeRepository')->getAll();
-    }
-    
-    public function getAllFormats() {
-        return $this->repositoryFactory->getRepository('productFormatRepository')->getAll();
-    }
-    
-    public function getAllPrintTechniques() {
-        return $this->repositoryFactory->getRepository('productPrintTechniqueRepository')->getAll();
-    }
-    
-    public function getAllSections() {
-        return $this->repositoryFactory->getRepository('sectionRepository')->getAll();
-    }
-    
-    public function getImageCategoriesBy(){
-        return $this->repositoryFactory->getRepository('imageCategoryRepository')->getImageCategoriesBy();
-    }
-
-    public function addProduct(
+   
+    public function updateProduct(
+            $productId,
             $imageCategoryValues,
             $imageDatas,
             $productinfos,
             $formatId,
             $sectionId,
+            $materialIds,
             $sizeMaterialIds,
             $userId) {
         $productRepository = $this->repositoryFactory->getRepository('productRepository');
@@ -60,32 +27,59 @@ class ProductService {
         $productImageRepository = $this->repositoryFactory->getRepository('productImageRepository');
         $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
         $productSectionRepository = $this->repositoryFactory->getRepository('productSectionRepository');
-        $itemRepository = $this->repositoryFactory->getRepository('itemRepository');
+        
+        $product = $productRepository->update(Walltwisters\model\Product::create($productId, null, null, $userId, $formatId));
+
+        $productDescriptionRepository->deleteForId('product_id', $product->id);
+        $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
+        foreach ($productdescriptions as $productdescription){
+            $productDescriptionRepository->create($productdescription);
+        }
+        $productSectionRepository->deleteForId('product_id', $product->id);
+        $productSectionRepository->create(Walltwisters\model\ProductSection::create($product->id, $sectionId));
+        
+        $this->saveProductItems($product->id, $materialIds, $sizeMaterialIds, true);
+    
+    }
+    
+    public function addProduct(
+            $imageCategoryValues,
+            $imageDatas,
+            $productinfos,
+            $formatId,
+            $sectionId,
+            $materialIds,
+            $sizeMaterialIds,
+            $userId) {
+        $productRepository = $this->repositoryFactory->getRepository('productRepository');
+        $imageRepository = $this->repositoryFactory->getRepository('imageRepository');
+        $productImageRepository = $this->repositoryFactory->getRepository('productImageRepository');
+        $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
+        $productSectionRepository = $this->repositoryFactory->getRepository('productSectionRepository');
         
         $getId = true;
-        $product = $productRepository->save(Walltwisters\model\Product::create(0, null, $userId, $formatId), $getId);
+        $product = $productRepository->create(Walltwisters\model\Product::create(0, null, $userId, $userId, $formatId), $getId);
         
         $fileidx = 0;
         foreach ($imageDatas as $imagefile){
             $imageCategoryValue = $imageCategoryValues[$fileidx];
+            $imageName = $imagefile['name'][0];
             $filepath = $imagefile["tmp_name"][0];
             $mime = $imagefile["type"][0];
             $size = $imagefile["size"][0];
-            $image = Walltwisters\model\Image::create($filepath, $size, $mime, $imageCategoryValue);
+            $image = Walltwisters\model\Image::create($filepath, $size, $mime, $imageName, $imageCategoryValue);
             $imageId = $imageRepository->addImage($image);
-            $productImageRepository->save(Walltwisters\model\ProductImage::create($product->id, $imageId));
+            $productImageRepository->create(Walltwisters\model\ProductImage::create($product->id, $imageId));
             $fileidx++;
         }
-       foreach( $imageCategoryValues as $imageCategoryValue){
-         }
-        
+      
         $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
         foreach ($productdescriptions as $productdescription){
-            $productDescriptionRepository->save($productdescription);
+            $productDescriptionRepository->create($productdescription);
         }
-        $productSectionRepository->save(Walltwisters\model\ProductSection::create($product->id, $sectionId));
+        $productSectionRepository->create(Walltwisters\model\ProductSection::create($product->id, $sectionId));
         
-        $this->getItemsToSave($product->id, $sizeMaterialIds, $itemRepository);
+        $this->saveProductItems($product->id, $materialIds, $sizeMaterialIds);
         
         return $product->id;
     }
@@ -105,17 +99,24 @@ class ProductService {
         return $productDescriptions;
     }
     
-    private function getItemsToSave($productId, $sizeMaterialIds, $itemRepo) {
+    private function saveProductItems($productId, $materialIds, $sizeMaterialIds, $updateExisting = false) {
         $items = [];
+        $itemRepo = $this->repositoryFactory->getRepository('itemRepository');
         $productItemRepo = $this->repositoryFactory->getRepository('productItemRepository');
         foreach($sizeMaterialIds as $materialId => $sizeIds) {
+            if (!isset($materialIds[$materialId])) {
+                continue;
+            }
             foreach($sizeIds as $sizeId){
                 $item = Walltwisters\model\Item::create($sizeId, $materialId);
                 $items = array_merge($items, $itemRepo->getItemsByMaterialSizeId($item));
             }
         }
+        if ($updateExisting) {
+            $productItemRepo->deleteForid('product_id', $productId);
+        }
         foreach ($items as $itemObj){
-            $productItemRepo->save(ProductItem::create($productId, $itemObj->id));
+            $productItemRepo->create(ProductItem::create($productId, $itemObj->id));
         }
         
        
@@ -139,7 +140,7 @@ class ProductService {
                 $productListRow->addItemDetails($item->sizes, $item->material, $item->printTechnique);
             }
             foreach ($product->imageBaseInfos as $imageBaseInfo) {
-                $productListRow->addImage($imageBaseInfo->id, $imageBaseInfo->name);
+                $productListRow->addImage($imageBaseInfo->id, $imageBaseInfo->category);
             }
             
             $productListRows[] = $productListRow;
@@ -154,11 +155,34 @@ class ProductService {
        
     }
     
-    public function getCompeteProductBy($id){
-        $repo = $this->repositoryFactory->getRepository('productRepository');
-        $showRoomProduct = $repo->getCompleteProduct($id);
+    public function getShowRoomProductBy($id){
+        $completeProduct = $this->getProductById($id);
+        $showRoomProduct = new Walltwisters\viewmodel\ShowRoomProduct();
+        foreach ($completeProduct->productDescriptions as $productDescriptions){
+            foreach ( $productDescriptions as $productDescription){
+                $productInfo =  \Walltwisters\viewmodel\ProductInfoView::create($productDescription->countryName, $productDescription->languageName, $productDescription->name, $productDescription->descriptionText);
+                $showRoomProduct->addInfo($productInfo);
+            }
+        }
+        
+        foreach($completeProduct->imageBaseInfos as $imagebaseinfo){
+            $showRoomProduct->addImageId($imagebaseinfo->id);
+        }
+        
         
         return $showRoomProduct;
+    }
+    
+    public function addSection($titel, $salesLine, $imageIds, $createdByUserId, $languageId, $productIds){
+        $section = Walltwisters\model\Section::create($titel, $salesLine, $imageIds['bigpicid'], $imageIds['smallpicid'], $imageIds['mobilepicid'], $languageId, $createdByUserId);
+        $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
+        $sectionId = $sectionrepo->create($section, true)->id;
+        $productsectionrepo = $this->repositoryFactory->getRepository('productSectionRepository');
+        foreach ($productIds as $productId){
+            $productsectionrepo->create(\Walltwisters\model\ProductSection::create($productId, $sectionId));
+        }
+        
+        return $sectionId;
     }
    
 }

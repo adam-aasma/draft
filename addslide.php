@@ -1,48 +1,50 @@
 <?php
 
-require_once 'checkauth.php';
-require_once 'views/admintemplate.php';
-require_once 'library/security.php';
-require_once 'data/productRepository.php';
-require_once 'data/ImageRepository.php';
-require_once 'library/FormUtilities.php';
+use Walltwisters\data\RepositoryFactory;
 
-$user = unserialize($_SESSION['user']);
-$countries = $user->countries;
-$productrep = new productRepository();
-$productlist = $productrep->getProductList($countries);
-$productOptions ='';
-foreach ($productlist as $product){
-    $val = $product['id'];
-    $name = $product['name'];
-    $productOptions .= '<option value="' . $val . '">' . $name . '</option>';
-}
+require_once 'data/RepositoryFactory.php';
+require_once 'library/FormUtilities.php';
+require_once 'service/SliderService.php';
+
+$titel = 'add slider';
+$keywordContent = '';
+require_once 'adminpageheaderlogic.php';
+
 if (isset($_POST['submit'])){
     try {
-    $imagerepo = new ImageRepository();
-    $imagedata = FormUtilities::getImagedata($_FILES);
-    $titel = $_POST['name'];
-    $salesmessage = $_POST['text'];
-    $productid = $_POST['product'];
-    $image = Image::create($imagedata[0]['filepath'], $imagedata[0]['size'], $imagedata[0]['mime'], $titel, 'slider');
-    $imageId = $imagerepo->addImage($image);
-    $slider = new Slider($imageId, $productid, $salesmessage, $titel, $user->id);
-    $sliderId = $productrep->addSlider($slider);
-    header("location: showslides.php?slider=$sliderId");
-    }
+        $sliderService = new SliderService(RepositoryFactory::getInstance());
+        $imagerepo = new Walltwisters\data\ImageRepository();
+        $image = Walltwisters\model\Image::create($_FILES['sliderimage']['tmp_name'], $_FILES['sliderimage']['size'], $_FILES['sliderimage']['type'], $_FILES['sliderimage']['name'], 4); //TODO DYNAMICALLY GET CATEGORY_ID NOW SET TO 4
+        $imageId = $imagerepo->addImage($image);
+        $sliderId = $sliderService->addSlider(  $_POST['name'],
+                                                $_POST['text'],
+                                                $_POST['productid'],
+                                                $imageId,
+                                                $user->id
+                                             );
+        if (headers_sent()){
+            die("redirect failed");
+        } else {
+        exit(header("location: showslides.php?slider=$sliderId"));
+        die();
+        }
+    }     
     catch (Exception $e) {
         $message = $e->getMessage();
     }
-}
-$homepage = new adminTemplate();
-$content = $homepage -> content = '
-            <div class="desktop">
+    } else {
+        $productId = $_GET['id'];
+    }
+require_once 'adminpageheader.php';
+?>
+            
             <form action="addslide.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="productid" value='<?= $productId ?>' />
                 <fieldset>
                     <legend>slider</legend>
                     <p>
                         <label for="adding-picture1">Select image to upload:</label>
-                        <input type="file" name="productimage" id="adding-picture1">
+                        <input type="file" name="sliderimage" id="adding-picture1">
                     </p>
                 </fieldset>
                 <fieldset>
@@ -60,20 +62,13 @@ $content = $homepage -> content = '
                 </fieldset>
                 <fieldset>
                 <legend>submiting</legend>
-                <label for="assign-product">assign to product</label>
-                <select id="assign-product" name="product">
-                ' . $productOptions . '
-                </select>
                 <button type="submit" name="submit">add slide</button>
                 </fieldset>
                 
-            </form>';
+            </form>
+  <?php $script = '/js/addslide.js'  ; ?>        
+ <?php require_once 'adminpagefooter.php'; ?>
 
 
-
-$homepage -> Display();
-
-
-?>
 
 

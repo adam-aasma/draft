@@ -1,30 +1,17 @@
 <?php
-//namespace walltwisters\service;
 
-require_once 'interfacesrepo/IRepositoryFactory.php';
 
-class PrinterService {
-    private $repositoryFactory;
+require_once 'service/BaseService.php';
+
+class PrinterService extends BaseService {
     
     public function __construct($repositoryFactory) {
-        $this->repositoryFactory = $repositoryFactory;
-    }
-    
-    private function getAllMaterials() {
-        return $this->repositoryFactory->getRepository('productMaterialRepository')->getAll();
-    }
-    
-    private function getAllSizes() {
-        return $this->repositoryFactory->getRepository('productSizeRepository')->getAll();
-    }
-    
-    private  function getAllPrintTechniques() {
-        return $this->repositoryFactory->getRepository('productPrintTechniqueRepository')->getAll();
+        parent::__construct($repositoryFactory);
     }
     
     public function addPrinter($printer){
         $printerRepository = $this->repositoryFactory->getRepository('printerRepository');
-        $printer = $printerRepository->save($printer, true);
+        $printer = $printerRepository->create($printer, true);
         return $printer->id;
     }
     
@@ -49,7 +36,7 @@ class PrinterService {
             }
             if (!$sizeId){
             $productSizeRepo = $this->repositoryFactory->getRepository('productSizeRepository');
-            $sobj= $productSizeRepo->save(WallTwisters\model\ProductSize::create($item->size), true);
+            $sobj= $productSizeRepo->create(WallTwisters\model\ProductSize::create($item->size), true);
             $modelItem->sizeId = $sobj->id;
             }
             foreach ($techniques as $technique){
@@ -61,7 +48,7 @@ class PrinterService {
             }
             if (!$techniqueId){
             $productTechRepo = $this->repositoryFactory->getRepository('productPrintTechniqueRepository');
-            $tobj = $productTechRepo->save(Walltwisters\model\ProductPrintTechnique::create($item->technique), true);
+            $tobj = $productTechRepo->create(Walltwisters\model\ProductPrintTechnique::create($item->technique), true);
             $modelItem->printTechniqueId = $tobj->id;
             }
             foreach ($papers as $paper){
@@ -73,11 +60,11 @@ class PrinterService {
             }
             if (!$paperId){
             $productMaterialRepo = $this->repositoryFactory->getRepository('productMaterialRepository');
-            $mobj = $productMaterialRepo->save(Walltwisters\model\ProductMaterial::create($item->paper), true);
+            $mobj = $productMaterialRepo->create(Walltwisters\model\ProductMaterial::create($item->paper), true);
             $modelItem->materialId = $mobj->id;
             }
             $itemRepo = $this->repositoryFactory->getRepository('itemRepository');
-            $iobj = $itemRepo->save($modelItem, true);
+            $iobj = $itemRepo->create($modelItem, true);
             $itemPrices[$index]->itemId = $iobj->id;
             $index += 1;
         }
@@ -87,7 +74,7 @@ class PrinterService {
     
     private function addItemPrices($itemPrices){
         foreach ($itemPrices as $itemPrice){
-            $this->repositoryFactory->getRepository('itemPriceRepository')->save($itemPrice);
+            $this->repositoryFactory->getRepository('itemPriceRepository')->create($itemPrice);
         }
         
     }

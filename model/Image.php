@@ -7,13 +7,13 @@ class Image extends ImageBaseInfo {
     protected $filepath;
     protected $size;
     protected $mime;
-    protected $categoryId;
     
-    public static function create($filepath, $size, $mime, $categoryId=null) {
+    public static function create($filepath, $size, $mime, $name, $categoryId = null) {
         $obj = new Image();
         $obj->filepath = $filepath;
         $obj->size = $size;
         $obj->mime = $mime;
+        $obj->imageName = $name;
         $obj->categoryId = $categoryId;
         return $obj;
     }

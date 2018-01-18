@@ -3,7 +3,6 @@ namespace Walltwisters\model;
 
 class Item {
     private $id;
-    private $printerId;
     private $productId;
     private $sizeId;
     private $sizes;
@@ -11,6 +10,7 @@ class Item {
     private $material;
     private $printTechniqueId;
     private $printTechnique;
+    private $printerId;
     
     public function __get($name) {
         return $this->$name;
@@ -31,15 +31,17 @@ class Item {
     }
 
     public static function createExtended(
-            $itemId, 
+            $itemId,
+            $productId,
             $sizeId, 
             $sizes, 
             $materialId, 
             $material, 
             $printTechniqueId, 
             $printTechnique,
-            $printerId) {
+            $printerId = null) {
         $item = new Item();
+        $item->productId = $productId;
         $item->id = $itemId;
         $item->sizeId = $sizeId;
         $item->sizes = $sizes;

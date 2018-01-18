@@ -1,13 +1,12 @@
 <?php
-
+namespace Walltwisters\viewmodel;
 
 class ShowRoomProduct {
-    private $name;
-    private $descriptions;
+    private $productInfo;
     private $imageids;
     
     public function __construct() {
-        $this->descriptions = [];
+        $this->productInfo = [];
         $this->imageids = [];
     }
     
@@ -19,8 +18,9 @@ class ShowRoomProduct {
         $this->$name = $value;
     }
     
-    public function addDescription($text) {
-        $this->descriptions[] = $text;
+    
+    public function addInfo($obj) {
+        $this->productInfo[] = $obj;
     }
     
     public function addImageId($val) {

@@ -19,4 +19,17 @@ class ProductImageRepository extends BaseRepository {
       
         return [['i', &$product_id], ['i', &$image_id]];
     }
+    
+    public function getImagesIdBy($id){
+        $stmt = $this->conn->prepare("SELECT image_id FROM products_images pi
+                                      WHERE pi.product_id = ?");
+                                      
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($id);
+        $stmt->fetch();
+        
+        return ['size' => $size, 'mime' => $mimetype, 'data' => $data];
+    }
 }

@@ -15,20 +15,19 @@ function showProductInfoForms(country, language){
     document.getElementById("productinfo_" + country + "_" + language).style.display = "flex";
 }
 
-window.onload = selectCountryLanguage(), hideDisplayOptions();
 var elCountry = document.getElementById('countries');
 var elLanguage = document.getElementById('languages');
 elCountry.addEventListener('change', selectCountryLanguage, false);
 elLanguage.addEventListener('change', selectCountryLanguage, false);
 
 function hideDisplayOptions(e){
-    if(e){
-        var target = e.target.nextElementSibling.innerHTML;
-    }
     var els =  document.getElementsByClassName('selectOptions');
     var labels = document.querySelectorAll('.selectOptions label');
  
+    
     if(e){
+        var target = e.target.nextElementSibling.innerHTML;
+    
         for ( i = 0; i < labels.length; i++) {
             if ( labels[i].innerHTML.indexOf(target) > 0 && !labels[i].parentElement.classList.contains('showOptions')){
                 labels[i].parentElement.classList.add('showOptions');
@@ -37,7 +36,21 @@ function hideDisplayOptions(e){
                 labels[i].parentElement.classList.remove('showOptions');
             }
         }
+    }   else {
+        var elInputs = document.querySelectorAll('.control input');
+        for ( var i = 0 ; i < elInputs.length; i++){
+            var elCheckIfTrue = elInputs[i].checked;
+            if (elCheckIfTrue){
+                for( var j = 0; j < labels.length; j++){
+                    if ( labels[j].innerHTML.indexOf(elInputs[i].nextSibling.innerHTML) > 0 )
+                    {
+                    labels[j].parentElement.classList.add('showOptions');
+                    }
+                }
+            }
+        }
     }
+    
 }
 
 var elcheckboxes =  document.getElementsByClassName('checkbox');
@@ -46,27 +59,53 @@ for (var x in elcheckboxes){
 }
 
 
-function addMorePictures(){
-    var index = document.getElementsByClassName('index').length;
-    var loopIndex = document.getElementsByClassName('indexValue').length;
-    var values = [];
-    for(i=0; i < loopIndex; i++){
-        value = document.getElementsByClassName('indexValue')[i].value;
-        if (value){
-            values.push(value);
+function addMorePictures(e){
+    var elTarget = e.target;
+    
+    if(elTarget.id === 'addimage'){
+        var index = document.getElementsByClassName('index').length;
+        var loopIndex = document.getElementsByClassName('indexValue').length;
+        var values = [];
+        for(i=0; i < loopIndex; i++){
+            value = document.getElementsByClassName('indexValue')[i].value;
+            if (value){
+                values.push(value);
+            }
         }
+        var Html =' <div> \n\
+                        <p class="checkbox index">\n\
+                            <input type="radio" name="category[' + index + ']" value="' + values[0] + '">\n\
+                            <label>product</label>\n\
+                            <input type="radio" name="category[' + index + ']" value="' + values[1] + '">\n\
+                            <label>productinterior</label>\n\
+                        </p>\n\
+                        <input type="file" name="pictype' + index + '[]">\n\
+                        <span><a class="deleteimage""´>delete</a></span>\n\
+                    </div>';
+        var anchor= document.getElementById('productImages');
+        anchor.insertAdjacentHTML('beforeend',Html);
+        
+    
+    } else if (elTarget.className === 'deleteimage'){
+        elParent = document.getElementById("productImages");
+        elChild = elParent.lastChild;
+        elParent.removeChild(elChild);
+        
+        
+        
     }
-    var Html =' <p class="checkbox index">\n\
-                    <input type="radio" name="' + index + '" value="' + values[0] + '">\n\
-                    <label>product</label>\n\
-                    <input type="radio" name="' + index + '" value="' + values[1] + '">\n\
-                    <label>productinterior</label>\n\
-                </p>\n\
-                <input type="file" name="pictype' + index + '[]">';
-                
-    var anchor= document.getElementById('productImages');
-    anchor.insertAdjacentHTML('beforeend',Html);
+    
 }
 
-var elPlusImages = document.getElementById('addimage');
-elPlusImages.addEventListener('click', function(e) {addMorePictures(e); }, false);
+function addEventListener(){
+     var el = document.getElementById("productImages");
+     el.removeEventListener('click', addMorePictures);
+     el.addEventListener('click', addMorePictures, false);
+}
+ 
+window.onload = function() {
+    selectCountryLanguage();
+    hideDisplayOptions();
+    addEventListener();
+};
+
