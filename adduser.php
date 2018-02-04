@@ -8,6 +8,10 @@ require_once 'checkauth.php';
 require_once 'data/RepositoryFactory.php';
 require_once 'library/FormUtilities.php';
 
+$title = 'adduser';
+$keywordContent = 'very important seo';
+require_once 'adminpageheaderlogic.php';
+
 if (count($_POST) && (!Security::filled_out($_POST)) || (isset($_POST['password'], $_POST['contpassword']) && $_POST['password'] !== $_POST['contpassword'])) {
     throw new Exception('you have not filled out the form correctly');
     die();
@@ -46,8 +50,7 @@ $countries = $repositoryFactory->countryRepository->getAllCountries();
 $privOptions = FormUtilities::getAllOptions($privileges, 'privileges');
 $countryOptions = FormUtilities::getAllOptions($countries, 'country');
 require_once 'adminpageheader.php';
-$title = 'adduser';
-$keywordContent = 'very important seo';
+
 
 ?> 
 

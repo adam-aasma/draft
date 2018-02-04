@@ -15,13 +15,9 @@ class ImageService extends BaseService {
         $image = Walltwisters\model\Image::create($filepath, $size, $mime, $name);
         return $image;
     }
-    
-    private function getImageCategoriesBy($condition1, $condition2, $condition3){
-        return $this->repositoryFactory->getRepository('imageCategoryRepository')->getImageCategoriesBy($condition1, $condition2, $condition3);
-    }
         
     public function addSectionImages($sectionPictures) {
-       $imageCategories = $this->getImageCategoriesBy('sectionbig', 'sectionsmall', 'sectionmobile');
+       $imageCategories = $this->getImageCategoriesBy(['sectionbig', 'sectionsmall', 'sectionmobile']);
        foreach ($imageCategories as $imagecategory){
            if($imagecategory->category == 'sectionbig'){
                $bigSectionPicId = $imagecategory->id;

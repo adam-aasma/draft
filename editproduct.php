@@ -89,8 +89,9 @@ if (isset($_POST["submit"])) {
 $countries = $user->countries;
 $materials = $productService->getAllMaterials();
 $languages = $productService->getCountryLanguages($countries);
+$countrylanguages = $productService->getCountryLanguages2($countries);
 $materialOptions = FormUtilities::getAllCheckBoxes($materials, 'material', 'material', $checkedMaterials);
-$languageOptions = FormUtilities::getAllOptions($languages, 'language');
+//$languageOptions = FormUtilities::getAllOptions($languages, 'language');
 
 require_once 'adminpageheader.php';
 ?>
@@ -106,7 +107,7 @@ require_once 'adminpageheader.php';
         <?php $idx = 0; foreach ($editProduct->imageBaseInfos as $imageBaseInfo) : ?>
             <div>
                 <p class="checkbox index">
-                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', "category[$idx]", [$imageBaseInfo->categoryId]) ?>
+                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(['product', 'productinterior']),'category', "category[$idx]", [$imageBaseInfo->categoryId]) ?>
                 </p>
                 <span><?= $imageBaseInfo->imageName ?></span>
                 <span><aclass="deleteimage">delete</a></span>
@@ -116,7 +117,7 @@ require_once 'adminpageheader.php';
         <?php else : ?>
             <div>
                 <p class="checkbox index">
-                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(),'category', "category[0]");?>
+                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(['product', 'productinterior']),'category', "category[0]");?>
                 </p>
                 <input type="file" name="pictype[]"/>
             </div>
@@ -212,7 +213,6 @@ require_once 'adminpageheader.php';
             <p class="inline">
                 <label for="adding-language">language:</label>
                     <select id="languages">
-                        <?= $languageOptions ?>
                     </select>
             </p>
         </div>
@@ -224,5 +224,8 @@ require_once 'adminpageheader.php';
         </p>
     </fieldset>
 </form>
+<script>
+    var countryLanguages = <?= json_encode($countrylanguages) ?>
+</script>
 <?php $script = '/js/product.js'; ?>
 <?php require_once 'adminpagefooter.php'; ?>

@@ -129,4 +129,19 @@ abstract class BaseRepository {
         
     }
 
+    protected function createStatementForInClause($query, $colName, $inValues, $typeLetter) {
+        $qs = array_map(function() { return '?'; }, $inValues);
+        $inclause = implode(',', $qs);
+        $bs = array_map(function() use($typeLetter) { return $typeLetter; }, $inValues);
+        $stmt = $this->conn->prepare($query . " WHERE $colName IN ($inclause)");         
+        $bindTypes = implode('', $bs);
+        $bindp = [];
+        $bindp[] = &$bindTypes;
+        for ($i = 0; $i < count($inValues); $i++) {
+            $bindp[] = &$inValues[$i];
+        }
+        call_user_func_array(array($stmt, "bind_param"), $bindp);
+        
+        return $stmt;
+    }
 }

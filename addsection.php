@@ -8,63 +8,128 @@ require_once 'service/SectionService.php';
 require_once 'adminpageheaderlogic.php';
 require_once 'adminpageheader.php';
 require_once 'library/Images.php';
+require_once 'library/FormUtilities.php';
 require_once 'data/RepositoryFactory.php';
 
+$sectionService =  new SectionService(RepositoryFactory::getInstance());
 $imageService = new ImageService(RepositoryFactory::getInstance());
-if (isset($_POST['submit'])){
-    $sectionPictures = [ 'desktopbig' => $_FILES['desktopbig'] , 'desktopsmall' => $_FILES['desktopsmall'], 'mobile' => $_FILES['mobile']];
-    $titel = $_POST['titel'];
-    $salesLine = $_POST['salesline'];
-    $imageIds = $imageService->addSectionImages($sectionPictures);
-    $sectionService =  new SectionService(RepositoryFactory::getInstance());
-    $languageId = 3;
-    $productIds = $_POST['products'];
-    $sectionService->addSection($titel, $salesLine, $imageIds, $user->id, $languageId,$productIds);
-}
+$countries = $user->countries;
+$languages = $sectionService->getCountryLanguages($user->countries);
+$isUpdate = false;
+$imagehtml = '';
 $html = '';
 $thumbnails = '';
-foreach ($_POST['products'] as $product){
-        $html .= "<input type='hidden' name='products[]' value='$product'/>";
-        $id = $imageService->getProductImageIdById($product);
-        $thumbnails .= "<img class='picturethumbnails' src='getimage.php?id=$id' alt='productpic' />";
+$selectedProducts = null;
+if (isset($_GET['sectionid'])){
+    $isUpdate = true;
+    $editsection = $sectionService->getCompleteSectionsById($_GET['sectionid']);
+    foreach($editsection->imageBaseInfos as $imageBaseInfo){
+        $imagehtml .= "<div class='row'>
+                        <label>$imageBaseInfo->category </label>
+                        <img src='getimage.php?id=$imageBaseInfo->id' style='width: 20px;'
+                       </div>";
+    }
+    $selectedProducts = $sectionService->getSelectedproductsById($editsection->productIds, true);
+} else {
+    $imagesCategories = $sectionService->getImageCategoriesBy(['sectionsmall', 'sectionbig', 'sectionmobile']);
+    foreach ( $imagesCategories as $imageCategory){
+        $imagehtml .= "<div class='row'>
+                        <label>$imageCategory->category </label>
+                        <input type='file' name='$imageCategory->category'/>
+                      </div>";
+    }
 }
+if (isset($_POST['submit'])){
+    $sectionPictures = [ 'desktopbig' => $_FILES['sectionbig'] , 'desktopsmall' => $_FILES['sectionsmall'], 'mobile' => $_FILES['sectionmobile']];
+    $imageIds = $imageService->addSectionImages($sectionPictures);
+    $countryId = $_POST['country'];
+    $languageId = $_POST['language'];
+    $productIds = null;
+    if(!empty($_POST['products'])){
+        $productIds = $_POST['products'];
+    }
+    $sectionInfos = ['title' => $_POST['title'], 'saleslineheader' => $_POST['saleslineheader'], 'saleslineparagraph' => $_POST['saleslineparagraph']];
+    $sectionIds = $sectionService->addSection($sectionInfos, $imageIds, $user->id, $countryId, $languageId, $productIds);
+}
+
+if(isset($_POST['products'])){
+    $selectedProducts = $sectionService->getSelectedproductsById($_POST['products'], true);
+    } 
 ?>
-<div id="notjustify" />
-    <form action="addsection.php" method="post" enctype="multipart/form-data" id="addingSectionForm">
-        <fieldset id="addingSection">
-            <legend>Section:</legend>
-            <p>
-                <label class="inline-block">add big picture for desktop</label>
-                <input class="inline-block" type="file" name="desktopbig"/>
-            </p>
-            <p>
-                <label class="inline-block">add small picture for desktop</label>
-                <input class="inline-block" type="file" name="desktopsmall"/>
-            </p>
-            <p>
-                <label class="inline-block">add picture for mobile</label>
-                <input class="inline-block" type="file" name="mobile" />
-            </p>
-            <p>
-                <label>add titel:</label>
-                <input type="text" name="titel" />
-            </p>
-            <p>
-                <label>add salesline</label>
-                <textarea type="text" name="salesline"></textarea>
-            </p>
-        </fieldset>
-        <?= $html ?>
-        <button type="submit" name="submit" form="addingSectionForm" id="sectionSubmitButton">submit</button>
+<div id="addSection" class="center" />
+    <form action="addsection.php"  method="post" enctype="multipart/form-data" id="addingSectionForm">
+            <fieldset class="addingGenerals">
+                <?php if($isUpdate) : ?>
+                  <legend>Create Section</legend>
+                    <?php foreach($editsection->sectionBaseInfos as $sectionBaseInfo) : ?>
+                        <p class="Inline-flex space-between">
+                            <label>title:</label>
+                            <input type="text" name="title"  value="<?=$sectionBaseInfo->title?>"/>
+                        </p>
+                        <p class="Inline-flex space-between">
+                            <label>salesline header:</label>
+                            <input type="text" name="saleslineheader" value="<?=$sectionBaseInfo->saleslineHeader?>"></input>
+                        </p>
+                        <p class="Inline-flex space-between">
+                            <label>salesline paragraph:</label>
+                            <input type="text" name="saleslineparagraph" value="<?=$sectionBaseInfo->salelineParagraph?>"></input>
+                        </p>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <div class="inline-flex space-around rowHeader">
+                        <legend>Create Section</legend>
+                        <select name="country">
+                            <?= FormUtilities::getAllOptions($user->countries, 'country');?>
+                        </select>
+                        <select name="language">
+                            <?= FormUtilities::getAllOptions($sectionService->getCountryLanguages($user->countries), 'language') ?>
+                        </select>
+                    </div>
+                    <p class="Inline-flex space-between row">
+                        <label>title:</label>
+                        <input type="text" name="title" />
+                    </p>
+                    <p class="Inline-flex space-between row">
+                        <label>salesline header:</label>
+                        <input type="text" name="saleslineheader"></input>
+                    </p>
+                    <p class="Inline-flex space-between row">
+                        <label>salesline paragraph:</label>
+                        <input type="text" name="saleslineparagraph"></input>
+                    </p>
+                <?php endif; ?>
+            </fieldset>
+        <fieldset id="addingSectionImages">
+            <legend class="rowHeader">add images</legend>
+            <?= $imagehtml ?>
+        </fieldset> 
+   
+        <div id="addSectionActionBar">
+            <select name="sectionName">
+                <option value='' disabeled selected>New Section</option>
+                <?= FormUtilities::getAllOptions($sectionService->getAllSectionNamesBy($countries[0], $languages[0]), 'title') ?>
+            </select>
+            <div id="sectionProductsHeader" class="Inline-flex">
+                <span>included in section</span>
+                <span>all products</span>
+            </div>
+            <div class="Inline-flex space-between">
+                <div class="sectionProducts" id="sectionProducts">
+                    <?php if($selectedProducts) : ?>
+                        <?= $selectedProducts ?>
+                    <?php endif; ?>
+                </div>
+                <div class="sectionProducts" id="sectionAllProducts">
+                    <?php $fullProductList = $sectionService->getAvailableProductsforSection($countries[0], $languages[0]) ?>
+                    <?= $fullProductList?>
+                </div>
+                <?php $isUpdate == true ? $buttonName= 'edit' : $buttonName ='add'?>
+                <button type="submit" name="submit" form="addingSectionForm" id="sectionSubmitButton"><?= $buttonName ?></button>
+            </div>
+        </div>
     </form>
-    <div id="sectionProducts">
-        <?= $thumbnails ?>
-    </div>
-        
-    
-               
 </div>
-<?php $script= '/js/addsection.js' ?>
-<?php require_once 'adminpagefooter.php'?>
+<?php $script= 'js/addsection.js'; ?>
+<?php require_once 'adminpagefooter.php'; ?>
 
 

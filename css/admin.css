@@ -15,6 +15,17 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     color: #FF7000;
 }
 
+.duo {
+    width: 50%;
+}
+
+.center {
+    margin:0 auto;
+}
+
+.flex{
+    display: flex;
+}
 
 
 .admin {
@@ -24,6 +35,9 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
    width: 100%;
    font-weight: 400;
    height: 100%;
+}
+.inline {
+    display: inline;
 }
 
 .inline-block {
@@ -37,6 +51,14 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
 
 .end{
     justify-content: flex-end;
+}
+
+.space-around{
+    justify-content: space-around;
+}
+
+.space-between{
+    justify-content: space-between;
 }
 
 .header {
@@ -81,7 +103,7 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     justify-content: center;
     align-items: center;
     height: 100%;
-    max-height: 55rem;
+    max-height: 70rem;
 }
 
 .menu ul {
@@ -103,7 +125,7 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     margin-top: 0;
     justify-content: center;
     height: 100%;
-    max-height: 55rem;
+    max-height: 70rem;
     overflow: auto;
 }
 
@@ -165,6 +187,18 @@ fieldset {
     bottom: 0px;
     bottom: 10%;
     
+}
+
+/*ICONS LIBRARY */
+
+.addIcon {
+    background-image: url("/img/plus.svg");
+    background-repeat: no-repeat;
+}
+
+.deleteIcon{
+    background-image: url("/img/delete.svg");
+    background-repeat: no-repeat;
 }
 
 .deleteImage{
@@ -698,84 +732,112 @@ textarea:active {
     width: 100%;
 }
 
-#addingSection{
-    border: none;
-    width: 80%;
-    height: 80%;
-}
+/* ADDING SECTION STYLES */
 
-#addingSection .inline-block {
-    display: inline-block;
-}
-
-#addingSection textarea{
-    width: 100%;
-    
-}
-
-#addingSectionForm {
-    width: 50%;
+#addSection{
+    width: 67%;
     height: 100%;
-    background-color: lightgoldenrodyellow;
     position: relative;
-    
+    background-color: #F7F7F7;
 }
 
-#notjustify{
-    display:inline-flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 80%;
-    height: 100%;
-}
-
-#sectionTemplate {
+#addSection fieldset{
+    border: none;
     width: 50%;
     height: 40%;
+    position: relative;
+    background-color: #F7F7F7;
 }
 
-#sectionTemplate section {
-    display: inline-flex;
+#addSection #addingSectionForm {
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+ 
+#addSection .addingGenerals .rowHeader,
+#addSection #addingSectionImages .rowHeader{
+    height: 20%;
+}
+
+#addSection .addingGenerals .row{
+    height: 20%;
+}
+ 
+#addSection .inline-flex input,
+#addSection .inline-flex label{
+    width: 50%;
+}
+
+#addSectionActionBar{
     width: 100%;
-    height: 100%;
-}
-
-#sectionTemplate #bigpic {
-    width: 60%;
-    height: 100%;
-    border: 1px solid black;
-}
-
-#sectionTemplate #smallpic {
-    width: 40%;
-    height: 100%;
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 #sectionSubmitButton{
     width: 30%;
     height: 3rem;
-    color: #FF7000;
-    border: 2px solid #FF7000;
-    color: #FF7000;
     text-transform: uppercase;
-    position: absolute;
-    bottom: 1rem;
-    right: 0px;
-    
-    
 }
-#sectionProducts {
-    width: 40%;
-    border: 1px solid black;
-    height: 50%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-left: 1rem;
+
+.sectionProducts{
+    width: 30%;
 }
-#sectionProducts .picturethumbnails{
+
+#addSectionActionBar .sectionProducts {
+    border: 2px solid black;
+    height: 20%;
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+#sectionProductsHeader span{
+    width: 35%;
+}
+ 
+ #addSectionActionBar .sectionProducts .thumbnails{
     width: 20%;
     border: 1px solid black;
     margin: 0.5rem;
+}
+
+#addSectionActionBar #sectionAllProducts {
+    height: 20%;
+    overflow-y: scroll;
+}
+
+#addSectionActionBar #sectionAllProducts .thumnail img{
+    width:  90%;
+}
+
+#addSectionActionBar #sectionAllProducts .thumnail h6{
+    display: block;
+    width: 40%;
+    text-align: center;
+    
+}
+
+#sectionPreview{
+    width: 60%;
+    max-height: 100%;
+    
+}
+
+#sectionPreview section{
+    width: 100%;
+}
+
+#sectionPreview #big{
+    width: 58%;
+}
+
+#sectionPreview #small{
+    width: 38%;
+}
+
+#sectionPreview .product{
+    width: 24%;
+    border: 1px solid black;
 }

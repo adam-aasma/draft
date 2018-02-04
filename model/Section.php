@@ -1,14 +1,12 @@
 <?php
 namespace Walltwisters\model; 
 
+
 class Section {
     private $id;
-    private $titel;
-    private $salesLine;
     private $desktopBigPicId;
     private $desktopSmallPicId;
     private $mobilePicId;
-    private $languageId;
     private $createdByUserId;
     
     
@@ -20,14 +18,11 @@ class Section {
         $this->$name = $value;
     }
     
-    public static function create($name, $salesLine, $desktopBigPicId, $desktopSmallPicId, $mobilePicId, $languageId, $createdByUserId){
+    public static function create($desktopBigPicId, $desktopSmallPicId, $mobilePicId, $createdByUserId){
         $obj = new Section();
-        $obj->titel = $name;
-        $obj->salesLine = $salesLine;
         $obj->desktopBigPicId = $desktopBigPicId;
         $obj->desktopSmallPicId = $desktopSmallPicId;
         $obj->mobilePicId = $mobilePicId;
-        $obj->languageId = $languageId;
         $obj->createdByUserId= $createdByUserId;
         
         return $obj;
