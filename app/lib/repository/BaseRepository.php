@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\data;
 
-use Walltwisters\repository\exceptions\DatabaseException;
+require_once 'Exceptions.php';
 
 abstract class BaseRepository {
     protected $conn;
@@ -15,7 +15,7 @@ abstract class BaseRepository {
         $dbname = "WT_Test"; 
         $this->conn = new \mysqli($servername, $username, $password, $dbname);
         if ($this->conn->connect_error) {
-            throw new DatabaseException($this->conn->connect_error);
+            throw new Exception($this->conn->connect_error);
         } 
         
         $this->tableName = $tableName;
@@ -129,4 +129,19 @@ abstract class BaseRepository {
         
     }
 
+    protected function createStatementForInClause($query, $colName, $inValues, $typeLetter) {
+        $qs = array_map(function() { return '?'; }, $inValues);
+        $inclause = implode(',', $qs);
+        $bs = array_map(function() use($typeLetter) { return $typeLetter; }, $inValues);
+        $stmt = $this->conn->prepare($query . " WHERE $colName IN ($inclause)");         
+        $bindTypes = implode('', $bs);
+        $bindp = [];
+        $bindp[] = &$bindTypes;
+        for ($i = 0; $i < count($inValues); $i++) {
+            $bindp[] = &$inValues[$i];
+        }
+        call_user_func_array(array($stmt, "bind_param"), $bindp);
+        
+        return $stmt;
+    }
 }

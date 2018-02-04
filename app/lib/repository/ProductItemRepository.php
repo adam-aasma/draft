@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\data;
 
 use Walltwisters\model\ProductItem;
 

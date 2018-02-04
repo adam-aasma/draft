@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\data; 
 
 require_once 'model/ProductImage.php';
 

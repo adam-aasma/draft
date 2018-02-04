@@ -1,10 +1,10 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\data; 
 
 use Walltwisters\interfacesrepo\IRepositoryFactory;
 
 require_once 'interfacesrepo/IRepositoryFactory.php';
-require_once 'ProductRepository.php';
+require_once 'productRepository.php';
 require_once 'LanguageRepository.php';
 require_once 'CountryRepository.php';
 require_once 'PrivilegeRepository.php';
@@ -22,6 +22,10 @@ require_once 'PrinterRepository.php';
 require_once 'ItemPriceRepository.php';
 require_once 'ProductItemRepository.php';
 require_once 'ImageCategoryRepository.php';
+require_once 'SectionDescriptionRepository.php';
+require_once 'SliderDescriptionRepository.php';
+require_once 'SliderRepository.php';
+
 
 class RepositoryFactory implements IRepositoryFactory {            
     private $productRepository;
@@ -42,6 +46,9 @@ class RepositoryFactory implements IRepositoryFactory {
     private $itemPriceRepository;
     private $productItemRepository;
     private $imageCategoryRepository;
+    private $sectionDescriptionRepository;
+    private $sliderRepository;
+    private $sliderDescriptionRepository;
     private static $repositoryFactory;
     
     public static function getInstance() {
@@ -111,6 +118,15 @@ class RepositoryFactory implements IRepositoryFactory {
                     break;
                 case 'imageCategoryRepository':
                     $this->imageCategoryRepository = new ImageCategoryRepository();
+                    break;
+                case 'sectionDescriptionRepository':
+                    $this->sectionDescriptionRepository = new SectionDescriptionRepository();
+                    break;
+                case 'sliderDescriptionRepository':
+                    $this->sliderDescriptionRepository = new SliderDescriptionRepository();
+                    break;
+                case 'sliderRepository' :
+                    $this->sliderRepository = new SliderRepository();
                     break;
             }
         }

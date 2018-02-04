@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\data; 
 
 use Walltwisters\model\CompleteProduct;
 use Walltwisters\viewmodel\ShowRoomProduct;
@@ -76,7 +76,7 @@ class ProductRepository extends BaseRepository {
         ,form.format as product_format_name
         ,p.formats_id as product_format_id
         ,sec.id as section_id
-        ,sec.titel as section_name
+        ,secd.title as section_name
         FROM products p
         LEFT JOIN product_descriptions pd ON pd.product_id = p.id
         INNER JOIN languages la ON la.id = pd.language_id
@@ -91,7 +91,8 @@ class ProductRepository extends BaseRepository {
         INNER JOIN images_categories ic ON ic.id = im.images_category_id
         LEFT JOIN products_sections p_sec ON p_sec.product_id = p.id
         LEFT JOIN sections sec ON sec.id = p_sec.section_id
-         INNER JOIN formats as form ON form.id = p.formats_id
+        LEFT JOIN section_descriptions secd ON secd.section_id = sec.id
+        INNER JOIN formats as form ON form.id = p.formats_id
         WHERE p.id = ?
         ORDER BY co.id, la.id
         ";
@@ -185,7 +186,7 @@ class ProductRepository extends BaseRepository {
         LEFT JOIN materials ma ON ma.id = it.material_id
         LEFT JOIN print_techniques pt ON pt.id = it.print_technique_id
         LEFT JOIN products_images pi ON pi.product_id = p.id
-        INNER JOIN images im ON im.id = pi.image_id
+        LEFT JOIN images im ON im.id = pi.image_id
         LEFT JOIN images_categories imc ON imc.id =im.images_category_id
         WHERE pd.country_id = ? AND pd.language_id = ?
         ORDER BY p.id, it.id, im.id
@@ -335,5 +336,6 @@ class ProductRepository extends BaseRepository {
             }
             return false;
         }
-    
+        
+       
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\data; 
 
 require_once 'BaseRepository.php';
 require_once 'model/Customer.php';

@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\data; 
 
 use Walltwisters\model\User;
 use Walltwisters\model\Country;
