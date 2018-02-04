@@ -4,13 +4,13 @@ require __DIR__ . '/vendor/autoload.php';
 use Walltwisters\repository\UserRepository;
 
 require_once 'library/security.php';
- 
+
+$error = '';
 if (security::filled_out($_POST)) {
     try {
         $userName = $_POST["username"];
         $password = $_POST["password"];
         $repo = new UserRepository();
-        var_dump($repo);
         $user = $repo->LoginUser($userName,$password);
         if ($user) {
             session_set_cookie_params(600);
