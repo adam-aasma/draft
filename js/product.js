@@ -5,6 +5,23 @@ function selectCountryLanguage(){
     showProductInfoForms(country, language);
 }
 
+function setCountryLanguages() {
+    var country = document.getElementById("countries").value;
+    var languages = countryLanguages[country];
+    var language = document.getElementById("languages");
+    var firstChild = language.firstChild;
+    while (firstChild) {
+        language.removeChild(firstChild);
+        firstChild = language.firstChild;
+    }
+    for (var i in languages) {
+        var opt = document.createElement('OPTION');
+        opt.value = languages[i].languageId;
+        var text = document.createTextNode(languages[i].languageName);
+        opt.appendChild(text);
+        language.appendChild(opt);
+    }
+}
 
 function showProductInfoForms(country, language){
     var i;
@@ -101,9 +118,13 @@ function addEventListener(){
      var el = document.getElementById("productImages");
      el.removeEventListener('click', addMorePictures);
      el.addEventListener('click', addMorePictures, false);
+     
+     var countryEl = document.getElementById('countries');
+     countryEl.addEventListener('change', setCountryLanguages);
 }
  
 window.onload = function() {
+    setCountryLanguages();
     selectCountryLanguage();
     hideDisplayOptions();
     addEventListener();

@@ -2,24 +2,27 @@
 namespace Walltwisters\model; 
 
 class Slider {
-    private $imageid;
-    private $productid;
-    private $salesmessage;
-    private $titel;
-    private $userid;
+    private $desktopImageId;
+    private $mobileImageId;
+    private $productId;
+    private $userId;
     
-    public function __construct($imageid, $productid,
-            $salesmessage, $titel,
-            $userid){
-        $this->imageid = $imageid;
-        $this->productid = $productid;
-        $this->salesmessage = $salesmessage;
-        $this->titel = $titel;
-        $this->userid = $userid;
+    public static function create($mobileImageId, $desktopImageId, $productId, $userId){
+        $obj = new Slider();
+        $obj->mobileImageId = $mobileImageId;
+        $obj->desktopImageId = $desktopImageId;
+        $obj->productId = $productId;
+        $obj->userId = $userId;
+        
+        return $obj;
     }
     
     public function __get($name){
         return $this->$name;
+    }
+    
+    public function __set($name, $value){
+        $this->$name = $value;
     }
 }
 
