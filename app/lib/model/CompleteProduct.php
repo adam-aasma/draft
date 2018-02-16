@@ -1,11 +1,6 @@
 <?php
 namespace Walltwisters\model; 
 
-require_once 'Product.php';
-require_once 'ProductDescription.php';
-require_once 'Image.php';
-require_once 'Item.php';
-
 class CompleteProduct extends Product {
     protected $productDescriptions;
     protected $imageBaseInfos;

@@ -1,10 +1,9 @@
 <?php
 
-use Walltwisters\data\RepositoryFactory;
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\SliderService;
+use Walltwisters\utilities\FormUtilities;
 
-require_once 'data/RepositoryFactory.php';
-require_once 'library/FormUtilities.php';
-require_once 'service/SliderService.php';
 
 $titel = 'add slider';
 $keywordContent = '';
@@ -13,7 +12,7 @@ require_once 'adminpageheaderlogic.php';
 if (isset($_POST['submit'])){
     try {
         $sliderService = new SliderService(RepositoryFactory::getInstance());
-        $imagerepo = new Walltwisters\data\ImageRepository();
+        $imagerepo = new Walltwisters\repository\ImageRepository();
         $image = Walltwisters\model\Image::create($_FILES['sliderimage']['tmp_name'], $_FILES['sliderimage']['size'], $_FILES['sliderimage']['type'], $_FILES['sliderimage']['name'], 4); //TODO DYNAMICALLY GET CATEGORY_ID NOW SET TO 4
         $imageId = $imagerepo->addImage($image);
         $sliderId = $sliderService->addSlider(  $_POST['name'],

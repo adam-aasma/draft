@@ -1,7 +1,5 @@
 <?php
-namespace Walltwisters\data;
-
-require_once 'model/ItemPrice.php';
+namespace Walltwisters\repository;
 
 class ItemPriceRepository extends BaseRepository {
     

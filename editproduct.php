@@ -1,13 +1,9 @@
 <?php
-use Walltwisters\data\RepositoryFactory;
-
-
-require_once 'library/security.php';
-require_once 'library/FormUtilities.php';
-require_once 'data/RepositoryFactory.php';
-require_once 'data/ImageRepository.php';
-require_once 'library/Images.php';
-require_once 'service/ProductService.php';
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\ProductService;
+use Walltwisters\utilities\Security;
+use Walltwisters\utilities\FormUtilities;
+use Walltwisters\utilities\Images;
 
 $title = 'Edit Product';
 $keywordContent = "very important SEO stuff";
@@ -21,6 +17,7 @@ $checkedMaterials = [];
 $checkedTechniques = [];
 $productId = null;
 $submitName = "Add Product";
+
 
 $validSize = true;
 if (isset($_POST["submit"])) {
@@ -100,6 +97,23 @@ require_once 'adminpageheader.php';
     <?php if (!empty($productId)) : ?>
     <input type="hidden" name="productid" value="<?= $productId ?>" />
     <?php endif; ?>
+    <fieldset id="addProductSelectBar">
+        <p class="quartet">
+            <label>countries:</label>
+                <select id="countries">
+                    <?= FormUtilities::getAllOptions($countries, 'country') ?>
+                </select>
+        </p>
+        <p class="quartet">
+            <label for="adding-language">language:</label>
+                <select id="languages">
+                </select>
+        </p>
+        <button type="submit" name="submit"><?= $submitName ?></button>
+        <?php if(!empty($editProduct)) : ?>
+            <button type="submit" name="delete">Delete product</button>
+        <?php endif; ?>
+    </fieldset>
     <fieldset id='productImages'>
         <legend>product images</legend>
         <a id="addimage"></a>
@@ -199,23 +213,6 @@ require_once 'adminpageheader.php';
     </fieldset>
     <fieldset class="submitField">
         <legend>submit</legend>
-        <button type="submit" name="submit"><?= $submitName ?></button>
-        <?php if(!empty($editProduct)) : ?>
-            <button type="submit" name="delete">Delete product</button>
-        <?php endif; ?>
-        <div class="block">
-            <p class="inline">
-                <label>countries:</label>
-                    <select id="countries">
-                        <?= FormUtilities::getAllOptions($countries, 'country') ?>
-                    </select>
-            </p>
-            <p class="inline">
-                <label for="adding-language">language:</label>
-                    <select id="languages">
-                    </select>
-            </p>
-        </div>
     </fieldset>
     <fieldset class="notes">
         <legend>notes</legend>

@@ -1,27 +1,8 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 use Walltwisters\model\CompleteProduct;
 use Walltwisters\viewmodel\ShowRoomProduct;
-
-require_once 'BaseRepository.php';
-require_once 'model/Product.php';
-require_once 'model/LocalizedProduct.php';
-require_once 'model/CompleteProduct.php';
-require_once 'model/ProductDescription.php';
-require_once 'model/Language.php';
-require_once 'model/User.php';
-require_once 'model/Country.php';
-require_once 'model/ProductFormat.php';
-require_once 'model/ProductSize.php';
-require_once 'model/ProductMaterial.php';
-require_once 'model/Section.php';
-require_once 'model/ProductPrintTechnique.php';
-require_once 'viewmodel/ShowRoomProduct.php';
-require_once 'viewmodel/ProductInfoView.php';
-require_once 'model/Slider.php';
-
-
 
 class ProductRepository extends BaseRepository {
     

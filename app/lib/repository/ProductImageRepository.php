@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
-require_once 'model/ProductImage.php';
+use Walltwisters\model\ProductImage;
 
 class ProductImageRepository extends BaseRepository {
     
@@ -13,7 +13,7 @@ class ProductImageRepository extends BaseRepository {
         return ['product_id', 'image_id'];
     }
     
-    protected function getColumnValuesForBind($productImage) {
+    protected function getColumnValuesForBind(ProductImage $productImage) {
         $product_id = $productImage->productId;
         $image_id = $productImage->imageId;
       

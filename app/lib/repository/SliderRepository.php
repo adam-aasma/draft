@@ -1,9 +1,7 @@
 <?php
 
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
-require_once 'data/BaseRepository.php';
-require_once 'model/Slider.php';
 class SliderRepository extends BaseRepository {
     public function __construct() {
         parent::__construct("sliders", "Walltwisters\model\Slider");

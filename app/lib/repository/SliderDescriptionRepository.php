@@ -1,8 +1,5 @@
 <?php
-namespace Walltwisters\data;
-
-require_once 'data/BaseRepository.php';
-require_once 'model/SliderDescription.php';
+namespace Walltwisters\repository;
 
 class SliderDescriptionRepository extends BaseRepository {
    public function __construct() {

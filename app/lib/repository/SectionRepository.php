@@ -1,16 +1,8 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 use Walltwisters\model\CompleteSection;
 use Walltwisters\model\ImageBaseInfo;
-
-require_once 'data/BaseRepository.php';
-require_once 'model/Section.php';
-require_once 'model/CompleteSection.php';
-require_once 'model/ImageBaseInfo.php';
-require_once 'model/Localization.php';
-require_once 'model/CompleteSection2.php';
-
 
 class SectionRepository extends BaseRepository {
     public function __construct() {

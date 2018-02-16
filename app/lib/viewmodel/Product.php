@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\viewmodel\Product;
+namespace Walltwisters\viewmodel;
 
 class Product {
    private $images;  //array of object image

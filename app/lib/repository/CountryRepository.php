@@ -1,10 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 use Walltwisters\interfacesrepo\ICountryRepository;
-require_once 'data/BaseRepository.php';
-require_once 'model/Country.php';
-require_once 'interfacesrepo/ICountryRepository.php';
 
 class CountryRepository extends BaseRepository implements ICountryRepository {
     
@@ -20,6 +17,10 @@ class CountryRepository extends BaseRepository implements ICountryRepository {
         throw new Exception("Not implemented");
     }
     
+    /**
+     * 
+     * @return type
+     */
     public function getAllCountries() {
         return $this->getAll();
     }

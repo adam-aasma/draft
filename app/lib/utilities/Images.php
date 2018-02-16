@@ -1,4 +1,6 @@
 <?php
+namespace Walltwisters\utilities;
+
 use Walltwisters\model\Image;
 
 class Images {

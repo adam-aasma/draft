@@ -1,14 +1,9 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 use Walltwisters\model\User;
 use Walltwisters\model\Country;
 use Walltwisters\model\Privileges;
-
-require_once 'BaseRepository.php';
-require_once 'model/User.php';
-require_once 'model/Country.php';
-require_once 'model/Privileges.php';
 
 class UserRepository extends BaseRepository { 
     protected function getColumnNamesForInsert() {

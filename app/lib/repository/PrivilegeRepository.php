@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 class PrivilegeRepository extends BaseRepository {
     

@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
-require_once 'model/Printer.php';
+use Walltwisters\model\Printer;
 
 class PrinterRepository extends BaseRepository{
    
@@ -13,7 +13,7 @@ class PrinterRepository extends BaseRepository{
         return ['company_name', 'email', 'telephone', 'contact_name', 'country_id', 'added_by_user'];
     }
     
-    protected function getColumnValuesForBind($printer) {
+    protected function getColumnValuesForBind(Printer $printer) {
         $company_name = $printer->companyName;
         $email = $printer->email;
         $telephone = $printer->phoneNumber;

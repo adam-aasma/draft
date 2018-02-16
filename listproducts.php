@@ -1,10 +1,10 @@
 <?php
-use Walltwisters\data\RepositoryFactory;
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\ProductService;
+use Walltwisters\utilities\FormUtilities;
 
-require_once 'data/ProductDescriptionRepository.php';
-require_once 'service/ProductService.php';
-require_once 'data/RepositoryFactory.php';
-require_once 'library/FormUtilities.php';
+
+
 
 
 $keywordContent = 'very important stuff';

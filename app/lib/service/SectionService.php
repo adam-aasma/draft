@@ -1,7 +1,9 @@
 <?php
-require_once 'service/BaseService.php';
-require_once 'viewmodel/SectionListRow.php';
-require_once 'library/HtmlUtilities.php';
+namespace Walltwisters\service;
+
+
+use Walltwisters\utilities\HtmlUtilities;
+
 
 class SectionService extends BaseService {
     

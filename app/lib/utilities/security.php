@@ -1,5 +1,5 @@
 <?php
-
+namespace Walltwisters\utilities;
 
 class Security {
     public static function filled_out($form_vars) {

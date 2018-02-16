@@ -1,7 +1,5 @@
 <?php
-namespace Walltwisters\data;
-
-require_once 'model/ImageCategory.php';
+namespace Walltwisters\repository;
 
 class ImageCategoryRepository extends BaseRepository {
     public function __construct() {

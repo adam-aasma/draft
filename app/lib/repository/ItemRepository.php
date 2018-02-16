@@ -1,11 +1,8 @@
 <?php
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
 use Walltwisters\model\ProductSize;
 use Walltwisters\model\Item;
-
-require_once 'BaseRepository.php';
-require_once 'model/Item.php';
 
 class ItemRepository  extends BaseRepository {
     

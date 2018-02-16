@@ -1,8 +1,9 @@
 <?php
-use Walltwisters\data\RepositoryFactory;
-require_once 'service/SectionService.php';
-require_once 'data/RepositoryFactory.php';
-require_once 'library/FormUtilities.php';
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\ProductService;
+use Walltwisters\service\SectionService;
+use Walltwisters\utilities\FormUtilities;
+
 
 $titel = 'listslides';
 $keywordContent = '';

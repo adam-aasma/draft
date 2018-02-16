@@ -1,16 +1,21 @@
 <?php
-use Walltwisters\data\ImageRepository;
+require __DIR__ . '/vendor/autoload.php';
 
-    require_once('data/ImageRepository.php');
-    require_once('data/Exceptions.php');
+use Walltwisters\repository\ImageRepository;
+
 
     $id = $_GET['id'];
-    $repo = new ImageRepository();
-    $image = $repo->getImage($id);
+    try {
+        $repo = new ImageRepository();
+        $image = $repo->getImage($id);
 
-    header('Content-Type: ' . $image['mime']);
-//header('Content-Length: ' . $size);
-    echo $image['data'];
-    die();
+        header('Content-Type: ' . $image['mime']);
+    //header('Content-Length: ' . $size);
+        echo $image['data'];
+        die();
+    } catch (Exception $ex) {
+        header("HTTP/1.0 404 Not Found");
+        die();
+    }
 
 ?>

@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
-require_once 'Exceptions.php';
+use Walltwisters\repository\exceptions\DatabaseException;
 
 abstract class BaseRepository {
     protected $conn;
@@ -15,7 +15,7 @@ abstract class BaseRepository {
         $dbname = "WT_Test"; 
         $this->conn = new \mysqli($servername, $username, $password, $dbname);
         if ($this->conn->connect_error) {
-            throw new Exception($this->conn->connect_error);
+            throw new DatabaseException($this->conn->connect_error);
         } 
         
         $this->tableName = $tableName;

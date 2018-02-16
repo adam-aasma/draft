@@ -1,8 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
-require_once 'data/BaseRepository.php';
-require_once 'model/ProductMaterial.php';
+use Walltwisters\model\ProductMaterial;
 
 class ProductMaterialRepository extends BaseRepository {
     public function __construct() {

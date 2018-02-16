@@ -1,15 +1,16 @@
 <?php
-use \Walltwisters\data\RepositoryFactory;
+use \Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\SectionService;
+use Walltwisters\service\ImageService;
+use Walltwisters\utilities\Images;
+use Walltwisters\utilities\FormUtilities;
 
 $titel = 'addsection';
 $keywordContent = '';
-require_once 'service/ImageService.php';
-require_once 'service/SectionService.php';
+
 require_once 'adminpageheaderlogic.php';
 require_once 'adminpageheader.php';
-require_once 'library/Images.php';
-require_once 'library/FormUtilities.php';
-require_once 'data/RepositoryFactory.php';
+
 
 $sectionService =  new SectionService(RepositoryFactory::getInstance());
 $imageService = new ImageService(RepositoryFactory::getInstance());

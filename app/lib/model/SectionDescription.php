@@ -1,13 +1,7 @@
 <?php
 namespace Walltwisters\model;
 
-use Walltwisters\model\SectionBaseInfo;
-
-require_once 'model/SectionBaseInfo.php';
-
-
-
-class SectionDescription extends \Walltwisters\model\SectionBaseInfo {
+class SectionDescription extends SectionBaseInfo {
     private $countryId;
     private $languageId;
     

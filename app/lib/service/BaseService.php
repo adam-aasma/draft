@@ -1,5 +1,5 @@
 <?php
-require_once 'interfacesrepo/IRepositoryFactory.php';
+namespace Walltwisters\service;
 
 class BaseService {
     protected $repositoryFactory;

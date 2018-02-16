@@ -2,8 +2,6 @@
 
 namespace Walltwisters\model;
 
-use Walltwisters\model\Section;
-
 class CompleteSection extends Section {
    private $imageBaseInfos;
    private $productIds;

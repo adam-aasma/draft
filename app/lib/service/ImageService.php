@@ -1,5 +1,7 @@
 <?php
-require_once 'service/BaseService.php';
+namespace Walltwisters\service;
+
+
 
 class ImageService extends BaseService {
     

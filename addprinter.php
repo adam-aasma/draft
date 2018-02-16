@@ -1,5 +1,8 @@
 <?php
-use Walltwisters\data\RepositoryFactory;
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\PrinterService;
+use Walltwisters\utilities\FormUtilities;
+use Walltwisters\utilities\Security;
 
 $titel = 'wally';
 $keywordContent = 'important stuff';
@@ -7,10 +10,7 @@ $keywordContent = 'important stuff';
 require_once 'adminpageheaderlogic.php';
 require_once 'library/FormUtilities.php';
 require_once 'library/security.php';
-require_once 'model/Item2.php';
-require_once 'model/ItemPrice.php';
-require_once 'data/RepositoryFactory.php';
-require_once 'service/PrinterService.php';
+
 
 $countries = $user->countries;
 $countryOptions = FormUtilities::getAllOptions($countries, 'country');

@@ -1,9 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
-require_once 'BaseRepository.php';
-require_once 'model/Image.php';
-
+use Walltwisters\model\Image;
 
 class ImageRepository extends BaseRepository {
     
@@ -15,7 +13,7 @@ class ImageRepository extends BaseRepository {
         throw new Exception("Not implemented");
     }
     
-    public function addImage($image) {
+    public function addImage(Image $image) {
         $data = file_get_contents($image->filepath);
         $stmt = $this->conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id, image_name) VALUES(?, ?, ?, ?, ?)");
         $null = NULL;

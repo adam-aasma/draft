@@ -1,8 +1,5 @@
 <?php
-namespace Walltwisters\data; 
-
-require_once 'data/BaseRepository.php';
-require_once 'model/ProductPrintTechnique.php';
+namespace Walltwisters\repository; 
 
 class ProductPrintTechniqueRepository extends BaseRepository {
     public function __construct() {

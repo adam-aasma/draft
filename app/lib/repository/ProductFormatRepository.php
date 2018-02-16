@@ -1,9 +1,5 @@
 <?php
-namespace Walltwisters\data; 
-
-require_once 'data/BaseRepository.php';
-require_once 'model/ProductFormat.php';
-
+namespace Walltwisters\repository; 
 
 class ProductFormatRepository extends BaseRepository {
     

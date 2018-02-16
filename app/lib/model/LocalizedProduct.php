@@ -1,10 +1,6 @@
 <?php
 namespace Walltwisters\model; 
 
-require_once 'Product.php';
-require_once 'Image.php';
-require_once 'Item.php';
-
 class LocalizedProduct extends Product {
     protected $productDescription;
     protected $imageBaseInfos;

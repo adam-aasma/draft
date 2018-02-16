@@ -2,8 +2,9 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Walltwisters\repository\UserRepository;
+use Walltwisters\utilities\Security;
 
-require_once 'library/security.php';
+
 
 $error = '';
 if (security::filled_out($_POST)) {

@@ -1,12 +1,12 @@
 <?php
-use Walltwisters\data\UserRepository;
+use Walltwisters\repository\UserRepository;
 use Walltwisters\model\Privileges;
-use Walltwisters\data\RepositoryFactory;
-require_once 'data/UserRepository.php';
-require_once 'library/security.php';
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\utilities\Security;
+use Walltwisters\utilities\FormUtilities;
+
 require_once 'checkauth.php';
-require_once 'data/RepositoryFactory.php';
-require_once 'library/FormUtilities.php';
+
 
 $title = 'adduser';
 $keywordContent = 'very important seo';

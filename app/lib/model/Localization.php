@@ -1,12 +1,6 @@
 <?php
 namespace Walltwisters\model;
 
-use Walltwisters\model\Country;
-use Walltwisters\model\Language;
-
-require_once 'model/Language.php';
-require_once 'model/Country.php';
-
 class Localization {
    private $country;
    private $language;

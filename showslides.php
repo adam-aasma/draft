@@ -1,6 +1,5 @@
 <?php
 
-require_once 'data/productRepository.php';
 $keywordContent= '';
 require_once 'adminpageheaderlogic.php';
 require_once 'adminpageheader.php';
@@ -10,7 +9,7 @@ $imagesHtml = '';
 if (!$_GET['slider']) {
     echo 'no slider selected' ;
 } else {
-    $productrep = new Walltwisters\data\ProductRepository;
+    $productrep = new Walltwisters\repository\ProductRepository;
     $sliderid = $_GET['slider'];
     $slider = $productrep->getShowslider($sliderid);
     $imageId = $slider['image_id'];

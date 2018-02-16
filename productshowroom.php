@@ -1,9 +1,8 @@
 <?php
-use Walltwisters\data\RepositoryFactory;
+use Walltwisters\repository\RepositoryFactory;
+use Walltwisters\service\ProductService;
 
 
-require_once 'service/ProductService.php';
-require_once 'data/RepositoryFactory.php';
 $keywordContent = '';
 require_once 'adminpageheaderlogic.php';
 
@@ -42,9 +41,6 @@ require_once 'adminpageheader.php';
                 </div>
             </div>
             <div class="product-info">
-                <span>market:<?= $markets[0] ?></span>
-                <span>language: <?= $languages[0] ?></span>
-                <span>change language/market</span>
                 <h1><?= $names[0] ?></h1>
                 <div class="priceButton">
                     <h2>35€</h2>

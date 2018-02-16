@@ -1,10 +1,10 @@
 <?php
-require_once 'service/BaseService.php';
-require_once 'viewmodel/ProductListRow.php';
-require_once 'library/Images.php';
+namespace Walltwisters\service;
 
+use Walltwisters\utilities\Images;
 use Walltwisters\model\ProductItem;
 use Walltwisters\viewmodel\ProductListRow;
+use Walltwisters\viewmodel\ShowRoomProduct;
 
 class ProductService extends BaseService {
     
@@ -12,16 +12,28 @@ class ProductService extends BaseService {
         parent::__construct($repositoryFactory);
     }
    
+    /**
+     * Updates product
+     * @param int $productId
+     * @param array $imageCategoryValues
+     * @param array $imageDatas
+     * @param array $productinfos
+     * @param int $formatId
+     * @param int $sectionId
+     * @param array $materialIds
+     * @param array $sizeMaterialIds
+     * @param int $userId
+     */
     public function updateProduct(
-            $productId,
-            $imageCategoryValues,
-            $imageDatas,
-            $productinfos,
-            $formatId,
-            $sectionId,
-            $materialIds,
-            $sizeMaterialIds,
-            $userId) {
+            int $productId,
+            array $imageCategoryValues,
+            array $imageDatas,
+            array $productinfos,
+            int $formatId,
+            int $sectionId,
+            array $materialIds,
+            array $sizeMaterialIds,
+            int $userId) {
         $productRepository = $this->repositoryFactory->getRepository('productRepository');
         $imageRepository = $this->repositoryFactory->getRepository('imageRepository');
         $productImageRepository = $this->repositoryFactory->getRepository('productImageRepository');
@@ -42,6 +54,18 @@ class ProductService extends BaseService {
     
     }
     
+    /**
+     * 
+     * @param type $imageCategoryValues
+     * @param type $imageDatas
+     * @param type $productinfos
+     * @param type $formatId
+     * @param type $sectionId
+     * @param type $materialIds
+     * @param type $sizeMaterialIds
+     * @param integer $userId
+     * @return type
+     */
     public function addProduct(
             $imageCategoryValues,
             $imageDatas,
@@ -157,7 +181,7 @@ class ProductService extends BaseService {
     
     public function getShowRoomProductBy($id){
         $completeProduct = $this->getProductById($id);
-        $showRoomProduct = new Walltwisters\viewmodel\ShowRoomProduct();
+        $showRoomProduct = new ShowRoomProduct();
         foreach ($completeProduct->productDescriptions as $productDescriptions){
             foreach ( $productDescriptions as $productDescription){
                 $productInfo =  \Walltwisters\viewmodel\ProductInfoView::create($productDescription->countryName, $productDescription->languageName, $productDescription->name, $productDescription->descriptionText);

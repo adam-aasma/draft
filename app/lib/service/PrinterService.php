@@ -1,7 +1,7 @@
 <?php
+namespace Walltwisters\service;
 
 
-require_once 'service/BaseService.php';
 
 class PrinterService extends BaseService {
     

@@ -1,9 +1,7 @@
 <?php
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
 use Walltwisters\model\ProductItem;
-
-require_once 'model/ProductItem.php';
 
 class ProductItemRepository extends BaseRepository {
     public function __construct() {

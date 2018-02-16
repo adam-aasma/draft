@@ -1,11 +1,7 @@
 <?php
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
 use \Walltwisters\model\SectionDescription;
-
-require_once 'model/SectionDescription.php';
-require_once 'data/BaseRepository.php';
-
 
 class SectionDescriptionRepository extends BaseRepository {
     public function __construct() {

@@ -1,8 +1,5 @@
 <?php
-
-require_once 'data/UserRepository.php';
-require_once 'data/productRepository.php';
-require_once 'library/FormUtilities.php';
+use Walltwisters\utilities\FormUtilities;
 
 
 class adminTemplate {

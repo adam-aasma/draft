@@ -1,8 +1,5 @@
 <?php
-namespace Walltwisters\data; 
-
-require_once 'data/BaseRepository.php';
-require_once 'model/ProductSection.php';
+namespace Walltwisters\repository; 
 
 class ProductSectionRepository extends BaseRepository {
     public function __construct() {

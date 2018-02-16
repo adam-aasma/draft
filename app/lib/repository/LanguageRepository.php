@@ -1,13 +1,8 @@
 <?php
 
-namespace Walltwisters\data;
+namespace Walltwisters\repository;
 
 use Walltwisters\interfacesrepo\ILanguageRepository;
-use Walltwisters\model\Language;
-
-require_once 'interfacesrepo/ILanguageRepository.php';
-require_once 'BaseRepository.php';
-require_once 'model/Language.php';
 
 class LanguageRepository extends BaseRepository implements ILanguageRepository {
 

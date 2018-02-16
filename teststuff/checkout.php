@@ -1,7 +1,6 @@
 <?php
 
 require_once 'domain/Customer.php';
-require_once 'data/OrderRepository.php';
 
 $details = 'no details';
 if (isset($_POST['firstname']) &&

@@ -1,8 +1,6 @@
 <?php
 namespace Walltwisters\model;
 
-require_once 'model/Localization.php';
-
 class SectionBaseInfo {
     protected $title;
     protected $saleslineHeader;

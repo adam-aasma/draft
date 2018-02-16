@@ -1,8 +1,6 @@
 <?php
 namespace Walltwisters\model; 
 
-require_once 'ImageBaseInfo.php';
-
 class Image extends ImageBaseInfo {
     protected $filepath;
     protected $size;

@@ -1,31 +1,7 @@
 <?php
-namespace Walltwisters\data; 
+namespace Walltwisters\repository; 
 
 use Walltwisters\interfacesrepo\IRepositoryFactory;
-
-require_once 'interfacesrepo/IRepositoryFactory.php';
-require_once 'productRepository.php';
-require_once 'LanguageRepository.php';
-require_once 'CountryRepository.php';
-require_once 'PrivilegeRepository.php';
-require_once 'ProductFormatRepository.php';
-require_once 'ProductPrintTechniqueRepository.php';
-require_once 'SectionRepository.php';
-require_once 'ProductDescriptionRepository.php';
-require_once 'ProductImageRepository.php';
-require_once 'ProductSectionRepository.php';
-require_once 'ProductMaterialRepository.php';
-require_once 'ProductSizeRepository.php';
-require_once 'ItemRepository.php';
-require_once 'ImageRepository.php';
-require_once 'PrinterRepository.php';
-require_once 'ItemPriceRepository.php';
-require_once 'ProductItemRepository.php';
-require_once 'ImageCategoryRepository.php';
-require_once 'SectionDescriptionRepository.php';
-require_once 'SliderDescriptionRepository.php';
-require_once 'SliderRepository.php';
-
 
 class RepositoryFactory implements IRepositoryFactory {            
     private $productRepository;

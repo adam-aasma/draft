@@ -61,6 +61,14 @@ body, h1, h2, h3, h4, p, li, a, ul, figure {
     justify-content: space-between;
 }
 
+.quartet{
+    width: 25%;
+}
+
+.duo{
+    width: 50%;
+}
+
 .header {
     background-color: #343434;
     min-height: 5rem;
@@ -840,4 +848,19 @@ textarea:active {
 #sectionPreview .product{
     width: 24%;
     border: 1px solid black;
+}
+
+
+/*editproduct */
+
+#addProductSelectBar{
+    width: 100%;
+    height: 10%;
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+
+#addProductSelectBar p {
+    display: flex;
 }

@@ -1,9 +1,6 @@
 <?php
 namespace Walltwisters\model; 
 
-require_once 'Language.php';
-require_once 'Product.php';
-
 class ProductDescription {
     private $descriptionText;
     private $productId;
