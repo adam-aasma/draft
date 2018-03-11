@@ -3,6 +3,10 @@ namespace Walltwisters\repository;
 
 use Walltwisters\model\CompleteProduct;
 use Walltwisters\viewmodel\ShowRoomProduct;
+use Walltwisters\model\ItemExtended;
+use Walltwisters\model\ProductDescription;
+use Walltwisters\model\ProductItem;
+use Walltwisters\model\ImageBaseInfo;
 
 class ProductRepository extends BaseRepository {
     
@@ -42,13 +46,10 @@ class ProductRepository extends BaseRepository {
         , la.language as language
         , co.id as country_id
         , co.country as country
-        , it.id as item_id
         , sz.id as size_id
         , sz.sizes
         , ma.id as material_id
         , ma.material
-        , pt.id as print_technique_id
-        , pt.technique
         , im.id as image_id
         , im.image_name
         , ic.id as image_category_id
@@ -56,28 +57,22 @@ class ProductRepository extends BaseRepository {
         , im.size as image_size
         ,form.format as product_format_name
         ,p.formats_id as product_format_id
-        ,sec.id as section_id
-        ,secd.title as section_name
         FROM products p
         LEFT JOIN product_descriptions pd ON pd.product_id = p.id
         INNER JOIN languages la ON la.id = pd.language_id
-        INNER JOIN countries co ON co.id = pd.country_id
-        INNER JOIN products_items pitem ON pitem.product_id = p.id
-        LEFT JOIN items it ON it.id = pitem.item_id
-        LEFT JOIN sizes sz ON sz.id = it.size_id
-        LEFT JOIN materials ma ON ma.id = it.material_id
-        LEFT JOIN print_techniques pt ON pt.id = it.print_technique_id
+        INNER JOIN countries_languages cl on cl.language_id = la.id
+        INNER JOIN countries co ON co.id = cl.country_id
+        INNER JOIN products_items pit ON pit.product_id = p.id
+        LEFT JOIN sizes sz ON sz.id = pit.size_id
+        LEFT JOIN materials ma ON ma.id = pit.material_id
         LEFT JOIN products_images pi ON pi.product_id = p.id
-        INNER JOIN images im ON im.id = pi.image_id
-        INNER JOIN images_categories ic ON ic.id = im.images_category_id
-        LEFT JOIN products_sections p_sec ON p_sec.product_id = p.id
-        LEFT JOIN sections sec ON sec.id = p_sec.section_id
-        LEFT JOIN section_descriptions secd ON secd.section_id = sec.id
-        INNER JOIN formats as form ON form.id = p.formats_id
+        LEFT JOIN images im ON im.id = pi.image_id
+        LEFT JOIN images_categories ic ON ic.id = im.images_category_id
+        LEFT JOIN formats as form ON form.id = p.formats_id
         WHERE p.id = ?
         ORDER BY co.id, la.id
         ";
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("i", $productId);                                                              
         $res = $stmt->execute();                                                                        
         if ($res) {
@@ -88,22 +83,17 @@ class ProductRepository extends BaseRepository {
                     $language,
                     $countryId,
                     $country,
-                    $itemId, 
                     $sizeId, 
                     $size, 
                     $materialId, 
                     $material, 
-                    $techniqueId, 
-                    $technique, 
                     $imageId,
                     $imageName,
                     $imageCategoryId,
                     $imageCategory, 
                     $imageSize,
                     $productFormatName,
-                    $productFormatId,
-                    $productSectionId,
-                    $productSectionName
+                    $productFormatId                    
                     );
             $okfetch = $stmt->fetch();
             if ($okfetch) {
@@ -111,26 +101,26 @@ class ProductRepository extends BaseRepository {
                 $product->id = $productId;
                 $product->formatId = $productFormatId;
                 $product->formatName = $productFormatName;
-                $product->sectionId = $productSectionId;
-                $product->sectionName = $productSectionName;
-                $countryAndLang = null;
                 $imagesHandled = [];
-                $itemsHandled = [];
+                $addedProductMaterialSize = [];
+                $addedLanguages = [];
                 while ($okfetch) {
                     $okfetch = $stmt->fetch();
-                    if ($countryAndLang != $countryId . '_' . $languageId) {
-                        $countryAndLang = $countryId . '_' . $languageId;
+                    if (!isset($addedLanguages[$languageId])) {
                         $product->addProductDescription(
-                                \Walltwisters\model\ProductDescription::createExtended($productId, $languageId, $language, $description, $countryId, $country, $name));
+                                ProductDescription::createExtended($productId, $languageId, $language, $description, $name));
+                        $addedLanguages[$languageId] = true;
                     }
-                    if (!array_key_exists($itemId, $itemsHandled)){
-                        $product->addItem(\Walltwisters\model\Item::createExtended($itemId, $productId, $sizeId, $size, $materialId, $material, $techniqueId, $technique));
-                        $itemsHandled[$itemId] = true;
-                    }
+                    if (!isset($addedProductMaterialSize[$materialId]) ||
+                             !isset($addedProductMaterialSize[$materialId][$sizeId])) {
+                         $product->addItem(ItemExtended::createExtended( $productId, $countryId, $country, $sizeId, $size, $materialId, $material));
+
+                         $addedProductMaterialSize[$materialId][$sizeId] = true;
+                     }
                 
                     if (!array_key_exists($imageId, $imagesHandled)) {
                         if ($imageSize > 0) {
-                            $product->addImageBaseInfo(\Walltwisters\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
+                            $product->addImageBaseInfo(ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
                         }
                         $imagesHandled[$imageId] = true;
                     }
@@ -142,63 +132,64 @@ class ProductRepository extends BaseRepository {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
     
-    public function getLocalizedProductsByCountryAndLanguage($country, $language) {
+    public function getLocalizedProductsByCountryAndLanguage($countryobj, $languageobj) {
         $sql = "SELECT p.id as product_id
         , pd.description
         , pd.name 
-        , it.id as item_id
         , sz.id as size_id
         , sz.sizes
         , ma.id as material_id
         , ma.material
-        , pt.id as print_technique_id
-        , pt.technique
+        , co.country as country
+        , co.id as country_id
         , im.id as image_id
         , im.size as image_size
         , im.image_name as image_name
         , imc.id as image_category_id
         , imc.category as image_category
-        , it.printer_id as printer_id
         FROM products p
         LEFT JOIN product_descriptions pd ON pd.product_id = p.id
         LEFT JOIN products_items pri ON pri.product_id = p.id
-        LEFT JOIN items it ON it.id = pri.item_id
-        LEFT JOIN sizes sz ON sz.id = it.size_id
-        LEFT JOIN materials ma ON ma.id = it.material_id
-        LEFT JOIN print_techniques pt ON pt.id = it.print_technique_id
+        LEFT JOIN sizes sz ON sz.id = pri.size_id
+        LEFT JOIN countries co ON co.id = pri.country_id
+        LEFT JOIN materials ma ON ma.id = pri.material_id
         LEFT JOIN products_images pi ON pi.product_id = p.id
         LEFT JOIN images im ON im.id = pi.image_id
         LEFT JOIN images_categories imc ON imc.id =im.images_category_id
-        WHERE pd.country_id = ? AND pd.language_id = ?
-        ORDER BY p.id, it.id, im.id
+        WHERE pd.language_id = ? AND co.id = ?
+        ORDER BY p.id, im.id;
         ";
-        $stmt = $this->conn->prepare($sql);     
-        $countryId = $country->id;
-        $languageId = $language->id;
-        $stmt->bind_param("ii", $countryId, $languageId);                                                              
+        $stmt = self::$conn->prepare($sql);     
+        $language_Id = $languageobj->id;
+        $country_Id = $countryobj->id;
+        $stmt->bind_param("ii", $language_Id, $country_Id);                                                              
         $res = $stmt->execute();                                                                        
         if ($res) {
-            $stmt->bind_result($productId, $description, $name, $itemId, $sizeId, $size, $materialId, $material, $techniqueId, $technique, $imageId, $imageSize, $imageName, $imageCategoryId, $imageCategory, $printerId);
+            $stmt->bind_result($productId, $description, $name, $sizeId, $size, $materialId, $material, $countryId, $country, $imageId, $imageSize, $imageName, $imageCategoryId, $imageCategory);
             $okfetch = $stmt->fetch();
             $currentLocalizedProduct = null;
             $localizedProducts = [];
+            $addedProductMaterialSize = [];
             while ($okfetch) {  
                 if (empty($currentLocalizedProduct) || $productId != $currentLocalizedProduct->id) {
                     $currentLocalizedProduct = new \Walltwisters\model\LocalizedProduct();
                     $currentLocalizedProduct->id = $productId;
-                    $currentLocalizedProduct->productDescription = \Walltwisters\model\ProductDescription::create($productId, $language->id, $description, $country->id, $name);
+                    $currentLocalizedProduct->productDescription = ProductDescription::create($productId, $languageobj->id, $description, $name);
                     $localizedProducts[] = $currentLocalizedProduct;
                     $imagesHandled = [];
                     $itemsHandled = [];
                 }
-                if (!array_key_exists($itemId, $itemsHandled)){
-                    $currentLocalizedProduct->addItem(\Walltwisters\model\Item::createExtended($itemId, $productId,  $sizeId, $size, $materialId, $material, $techniqueId, $technique, $printerId));
-                    $itemsHandled[$itemId] = true;
+                if (!isset($addedProductMaterialSize[$productId]) || 
+                        !isset($addedProductMaterialSize[$productId][$materialId]) ||
+                        !isset($addedProductMaterialSize[$productId][$materialId][$sizeId])) {
+                    $currentLocalizedProduct->addItem(ItemExtended::createExtended( $productId, $countryId, $country,  $sizeId, $size, $materialId, $material));
+                 
+                    $addedProductMaterialSize[$productId][$materialId][$sizeId] = true;
                 }
                 
                 if (!array_key_exists($imageId, $imagesHandled)) {
                     if ($imageSize > 0) {
-                        $currentLocalizedProduct->addImageBaseInfo(\Walltwisters\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
+                        $currentLocalizedProduct->addImageBaseInfo(ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
                     }
                     $imagesHandled[$imageId] = true;
                 }
@@ -211,7 +202,7 @@ class ProductRepository extends BaseRepository {
     }
     
     public function getProduct($productid) {                                                              
-        $stmt = $this->conn->prepare("SELECT id, formats_id, artist_designer_id, added_by_user_id FROM products where id=?");         
+        $stmt = self::$conn->prepare("SELECT id, formats_id, artist_designer_id, added_by_user_id FROM products where id=?");         
         $stmt->bind_param("i",$productid);                                                              
         $res = $stmt->execute();                                                                        
         if ($res) {
@@ -226,7 +217,7 @@ class ProductRepository extends BaseRepository {
     }  
 
     public function getProductDescriptionById($id) {                                                              
-        $stmt = $this->conn->prepare("SELECT p.id, p.description, l.id as lang_id, l.language "
+        $stmt = self::$conn->prepare("SELECT p.id, p.description, l.id as lang_id, l.language "
                 . "FROM product_descriptions p INNER JOIN languages l ON l.id = p.language_id where id=?");        
         $stmt->bind_param("i", $id);                                                              
         $res = $stmt->execute();                                                                        
@@ -255,9 +246,9 @@ class ProductRepository extends BaseRepository {
            INNER JOIN products_images pi ON pi.product_id = p.id
            INNER JOIN images im ON im.id = pi.image_id
            WHERE p.id = $productid";
-        $result = $this->conn->query($sql);                                                                        
+        $result = self::$conn->query($sql);                                                                        
         if ($result === FALSE) {
-            throw new Exception($this->conn->error);
+            throw new Exception(self::$conn->error);
         }
         $showRoomProduct = null;
         $lastDescriptionId = null;
@@ -284,7 +275,7 @@ class ProductRepository extends BaseRepository {
    
         
         public function addSlider($slider){
-            $stmt = $this->conn->prepare("INSERT INTO slider_text(image_id, product_id,
+            $stmt = self::$conn->prepare("INSERT INTO slider_text(image_id, product_id,
                                               sales_message, titel, added_by_user_id)
                                               VALUES(?, ?, ?, ?, ?)");
             $stmt->bind_param("iissi", $image_id, $product_id, $salesmessage, $titel, $added_by_user);
@@ -295,7 +286,7 @@ class ProductRepository extends BaseRepository {
             $added_by_user = $slider->userid;
             $res = $stmt->execute();
             if ($res) {
-                $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");
+                $lastIdRes = self::$conn->query("SELECT LAST_INSERT_ID()");
                 $row = $lastIdRes->fetch_row();                                       
                 $lastId = $row[0];   
                return $lastId;
@@ -306,7 +297,7 @@ class ProductRepository extends BaseRepository {
         
         public function getShowSlider($sliderId) {
             $sql = ("SELECT sales_message, titel, image_id FROM slider_text WHERE id = ?");
-            $stmt = $this->conn->prepare($sql);
+            $stmt = self::$conn->prepare($sql);
             $stmt->bind_param('i', $sliderId);
             $res = $stmt->execute();
             if ($res){

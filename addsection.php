@@ -7,6 +7,7 @@ use Walltwisters\utilities\FormUtilities;
 
 $titel = 'addsection';
 $keywordContent = '';
+$css = 'css/addSection.css';
 
 require_once 'adminpageheaderlogic.php';
 require_once 'adminpageheader.php';
@@ -32,7 +33,7 @@ if (isset($_GET['sectionid'])){
     }
     $selectedProducts = $sectionService->getSelectedproductsById($editsection->productIds, true);
 } else {
-    $imagesCategories = $sectionService->getImageCategoriesBy(['sectionsmall', 'sectionbig', 'sectionmobile']);
+    $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategories');
     foreach ( $imagesCategories as $imageCategory){
         $imagehtml .= "<div class='row'>
                         <label>$imageCategory->category </label>

@@ -1,0 +1,115 @@
+/*#adding-section {
+    display: block;
+    height: 2rem;
+    width: 100%;
+} */
+
+/* ADDING SECTION STYLES */
+
+#addSection{
+    width: 67%;
+    height: 100%;
+    position: relative;
+    background-color: #F7F7F7;
+}
+
+#addSection fieldset{
+    border: none;
+    width: 50%;
+    height: 40%;
+    position: relative;
+    background-color: #F7F7F7;
+}
+
+#addSection #addingSectionForm {
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-start;
+}
+ 
+#addSection .addingGenerals .rowHeader,
+#addSection #addingSectionImages .rowHeader{
+    height: 20%;
+}
+
+#addSection .addingGenerals .row{
+    height: 20%;
+}
+ 
+#addSection .inline-flex input,
+#addSection .inline-flex label{
+    width: 50%;
+}
+
+#addSectionActionBar{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#sectionSubmitButton{
+    width: 30%;
+    height: 3rem;
+    text-transform: uppercase;
+}
+
+.sectionProducts{
+    width: 30%;
+}
+
+#addSectionActionBar .sectionProducts {
+    border: 2px solid black;
+    height: 20%;
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+#sectionProductsHeader span{
+    width: 35%;
+}
+ 
+ #addSectionActionBar .sectionProducts .thumbnails{
+    width: 20%;
+    border: 1px solid black;
+    margin: 0.5rem;
+}
+
+#addSectionActionBar #sectionAllProducts {
+    height: 20%;
+    overflow-y: scroll;
+}
+
+#addSectionActionBar #sectionAllProducts .thumnail img{
+    width:  90%;
+}
+
+#addSectionActionBar #sectionAllProducts .thumnail h6{
+    display: block;
+    width: 40%;
+    text-align: center;
+    
+}
+
+#sectionPreview{
+    width: 60%;
+    max-height: 100%;
+    
+}
+
+#sectionPreview section{
+    width: 100%;
+}
+
+#sectionPreview #big{
+    width: 58%;
+}
+
+#sectionPreview #small{
+    width: 38%;
+}
+
+#sectionPreview .product{
+    width: 24%;
+    border: 1px solid black;
+}

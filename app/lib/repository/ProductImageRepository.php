@@ -13,7 +13,7 @@ class ProductImageRepository extends BaseRepository {
         return ['product_id', 'image_id'];
     }
     
-    protected function getColumnValuesForBind(ProductImage $productImage) {
+    protected function getColumnValuesForBind($productImage) {
         $product_id = $productImage->productId;
         $image_id = $productImage->imageId;
       
@@ -21,7 +21,7 @@ class ProductImageRepository extends BaseRepository {
     }
     
     public function getImagesIdBy($id){
-        $stmt = $this->conn->prepare("SELECT image_id FROM products_images pi
+        $stmt = self::$conn->prepare("SELECT image_id FROM products_images pi
                                       WHERE pi.product_id = ?");
                                       
         $stmt->bind_param("i", $id);

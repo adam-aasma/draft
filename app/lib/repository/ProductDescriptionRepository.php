@@ -7,7 +7,7 @@ class ProductDescriptionRepository extends BaseRepository {
     }
     
     protected function getColumnNamesForInsert() {
-        return ['language_id', 'product_id', 'description', 'country_id', 'name'];
+        return ['language_id', 'product_id', 'description', 'name'];
     }
     
     protected function getColumnValuesForBind($productDescription) {
@@ -15,45 +15,35 @@ class ProductDescriptionRepository extends BaseRepository {
         $product_id = $productDescription->productId;
         $description = $productDescription->descriptionText;
         $name = $productDescription->name;
-        $country_id = $productDescription->countryId;
-        return [['i', &$language_id], ['i', &$product_id], ['s', &$description], ['i', &$country_id], ['s', &$name]];
+        return [['i', &$language_id], ['i', &$product_id], ['s', &$description], ['s', &$name]];
     }
     
     public function getAllDescriptions() {
         return $this->getAll();
     }
     
-     public function getProductList($countries, $languages){
-        $countryIds = [];
-        foreach ($countries as $country){
-            $countryIds[] = $country->id;
-        }
+    public function getProductList($languages){
         $languageIds = [];
         foreach ($languages as $language){
             $languageIds[] = $language->id;
         }
-        $strCountry = join(',', $countryIds);
         $strLanguage = join (',', $languageIds);
         $sql = "SELECT pd.name, pd.description, pd.product_id
                 FROM  product_descriptions as pd
-                WHERE pd.country_id IN ($strCountry) AND pd.language_id IN ($strLanguage)";
-        $result = $this->conn->query($sql);
+                WHERE pd.language_id IN ($strLanguage)";
+        $result = self::$conn->query($sql);
         if ($result === FALSE) {
-            throw new Exception($this->conn->error);
+            throw new Exception(self::$conn->error);
         }
         $product = ['product_id' => 0, 'name' => '', 'description' => ''];
         $productlist = [];
         while ($row =$result->fetch_assoc()){
-        $product['product_id'] = $row['product_id'];
-        $product['name'] = $row['name'];
-        $product['description'] = $row['description'];
-        $productlist[] = $product;
+            $product['product_id'] = $row['product_id'];
+            $product['name'] = $row['name'];
+            $product['description'] = $row['description'];
+            $productlist[] = $product;
         }
-        if ($productlist){
-            return $productlist;
-        }
-        else {
-            return false;
-        }
-        }
+
+        return !empty($productlist) ? $productlist : false;
+    }
 }

@@ -3,7 +3,7 @@ namespace Walltwisters\model;
 
 
 
-class Item2 {
+class PrinterItem {
    private $paper;
    private $technique;
    private $size;
@@ -11,7 +11,7 @@ class Item2 {
    public static function create($paper, 
                                  $technique,
                                  $size){
-      $obj = new Item2();
+      $obj = new PrinterItem();
       $obj->paper = $paper;
       $obj->technique = $technique;
       $obj->size = $size;

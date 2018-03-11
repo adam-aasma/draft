@@ -16,9 +16,9 @@ class UserRepository extends BaseRepository {
     
     public function LoginUser($userName, $password) {
          $sql = "SELECT * FROM users WHERE username = '$userName'";
-        $result = $this->conn->query($sql);
+        $result = self::$conn->query($sql);
         if ($result === FALSE) {
-            throw new DatabaseException($this->conn->error);
+            throw new DatabaseException(self::$conn->error);
         }
         $row = $result->fetch_assoc();
         if ($row){
@@ -58,14 +58,14 @@ class UserRepository extends BaseRepository {
         $countriesIds = $user -> countries;
         list($password, $salt) =$this->PasswordCryp($user->password);
         $sql = ("INSERT INTO users(name,lastname,username,password, passwordsalt, privileges) VALUES(?, ?, ?, ?, ?, ?)");
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $bindresult = $stmt->bind_param("sssssi", $name, $lastname, $username, $password, $salt, $privileges);
         if (!$bindresult ) {
             throw Exception('fail to bind');
         }
         $res = $stmt->execute();
         if ($res) {
-            $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");         
+            $lastIdRes = self::$conn->query("SELECT LAST_INSERT_ID()");         
             $row = $lastIdRes->fetch_row();                                       
             $userid = $row[0];
             $this->AddUserCountry($userid, $countriesIds);
@@ -78,7 +78,7 @@ class UserRepository extends BaseRepository {
     private function AddUserCountry($userid, $countriesIds) {
         foreach ($countriesIds as $countryId){
         $sql = ("INSERT INTO user_country(user_id,country_id) VALUES(?, ?)");
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $bindresult = $stmt->bind_param("ii", $userid, $countryId);
         $stmt->execute();
         }
@@ -89,9 +89,9 @@ class UserRepository extends BaseRepository {
         $user_id = $user->id;
         $sql = ("SELECT countries.* FROM countries, user_country WHERE user_country.user_id = $user_id
                 AND countries.id = user_country.country_id;");
-        $result = $this->conn->query($sql);
+        $result = self::$conn->query($sql);
         if ($result === FALSE) {
-            throw new Exception($this->conn->error);
+            throw new Exception(self::$conn->error);
         }
         $countries = [];
         while ( $row = $result->fetch_object('Walltwisters\model\Country')){

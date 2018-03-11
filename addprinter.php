@@ -22,7 +22,7 @@ if (isset($_POST['submit'])){
     $items = [];
     $itemPrices = [];
     for ($i = 0; $i < count($_POST['paper']); $i++){
-        $item = Walltwisters\model\Item2::create($_POST['paper'][$i], 
+        $item = Walltwisters\model\PrinterItem::create($_POST['paper'][$i], 
                                $_POST['technique'][$i],
                                $_POST['size'][$i]);
         $itemPrice = Walltwisters\model\ItemPrice::create($_POST['paperprice'][$i],

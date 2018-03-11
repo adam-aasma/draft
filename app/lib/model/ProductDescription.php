@@ -1,14 +1,12 @@
 <?php
 namespace Walltwisters\model; 
 
-class ProductDescription {
+class ProductDescription implements \JsonSerializable {
     private $descriptionText;
     private $productId;
     private $languageId;
     private $languageName;
-    private $countryId;
-    private $countryName;
-    private $productName;
+    private $name;
     
     public function __get($name) {
         return $this->$name;
@@ -18,20 +16,26 @@ class ProductDescription {
         $this->$name = $value;
     }
     
-    public static function create($productId, $languageId, $description, $countryId, $name){
+    public function getIdArray() {
+        return [ 'product_id' => $this->productId, 'language_id' => $this->languageId];
+    }
+    
+    public static function create($productId, $languageId, $description, $name){
         $obj = new ProductDescription();
         $obj->languageId = $languageId;
         $obj->productId = $productId;
-        $obj->countryId = $countryId;
         $obj->descriptionText = $description;
         $obj->name = $name;
         return $obj;
     }
     
-    public static function createExtended($productId, $languageId, $languageName, $description, $countryId, $countryName, $name) {
-        $obj = self::create($productId, $languageId, $description, $countryId, $name);
-        $obj->countryName = $countryName;
+    public static function createExtended($productId, $languageId, $languageName, $description, $name) {
+        $obj = self::create($productId, $languageId, $description, $name);
         $obj->languageName = $languageName;
         return $obj;
+    }
+    
+    public function jsonSerialize() {
+        return ['languageId' => $this->languageId, 'name' => $this->name, 'description' => $this->descriptionText];
     }
 }

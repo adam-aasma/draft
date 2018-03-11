@@ -49,7 +49,7 @@ class SectionRepository extends BaseRepository {
                 WHERE sd.country_id  = ? AND sd.language_id = ?
                 ORDER BY s.id, i.id
                 ");
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("ii", $countryId, $languageId);
         $res = $stmt->execute();
         $completeSection = null;
@@ -100,7 +100,7 @@ class SectionRepository extends BaseRepository {
                  INNER JOIN countries c ON c.id = sd.country_id
                  INNER JOIN languages l ON l.id = sd.language_id
                  WHERE country_id = ? AND language_id = ?" );
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("ii", $countryId, $languageId); 
         $res = $stmt->execute();
         if ($res){
@@ -145,7 +145,7 @@ class SectionRepository extends BaseRepository {
                  LEFT JOIN products_sections ps ON ps.section_id = s.id
                  WHERE s.id = ?
                  ORDER BY sd.id, i.images_category_id");
-        $stmt = $this->conn->prepare($sql);
+        $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $res = $stmt->execute();
         if ($res){

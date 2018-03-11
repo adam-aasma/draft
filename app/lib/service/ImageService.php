@@ -2,6 +2,9 @@
 namespace Walltwisters\service;
 
 
+use Walltwisters\model\Image;
+
+
 
 class ImageService extends BaseService {
     
@@ -10,16 +13,23 @@ class ImageService extends BaseService {
     }
     
     private function getImageData($imagefile){
-        $filepath = $imagefile["tmp_name"];
-        $mime = $imagefile["type"];
-        $size = $imagefile["size"];
-        $name = $imagefile["name"];
-        $image = Walltwisters\model\Image::create($filepath, $size, $mime, $name);
+        $filepath = $imagefile["tmp_name"][0];
+        $mime = $imagefile["type"][0];
+        $size = $imagefile["size"][0];
+        $name = $imagefile["name"][0];
+        $image = Image::create($filepath, $size, $mime, $name);
         return $image;
     }
-        
+    
+    public function addProductImage($imageDatas, $imageCategoryId) {
+        foreach($imageDatas as $imageData){
+         $imageId = $this->addImage($imageData, $imageCategoryId);
+        }
+         return $imageId;
+       
+    }        
     public function addSectionImages($sectionPictures) {
-       $imageCategories = $this->getImageCategoriesBy(['sectionbig', 'sectionsmall', 'sectionmobile']);
+       $imageCategories = $this->getImageCategoriesBy('sectionImageCategories');
        foreach ($imageCategories as $imagecategory){
            if($imagecategory->category == 'sectionbig'){
                $bigSectionPicId = $imagecategory->id;
@@ -33,17 +43,18 @@ class ImageService extends BaseService {
        }
        extract($sectionPictures);
        $imageRepo = $this->repositoryFactory->getRepository('imageRepository');
-       $bigPicId = $this->addImage($imageRepo,$desktopbig, $bigSectionPicId);
-       $smallPicId = $this->addImage($imageRepo,$desktopsmall, $smallSectionPicId);
-       $mobilePicId = $this->addImage($imageRepo,$mobile, $mobileSectionPicId);
+       $bigPicId = $this->addImage($desktopbig, $bigSectionPicId);
+       $smallPicId = $this->addImage($desktopsmall, $smallSectionPicId);
+       $mobilePicId = $this->addImage($mobile, $mobileSectionPicId);
        
        return ['bigpicid' => $bigPicId, 'smallpicid' => $smallPicId, 'mobilepicid' =>$mobilePicId];
        
     }
     
-    private function addImage($imageRepo,$imageArray, $pictureId){
+    private function addImage($imageArray, $pictureId){
        $image= $this->getImageData($imageArray);
        $image->categoryId = $pictureId;
+       $imageRepo = $this->repositoryFactory->getRepository('imageRepository'); 
        $id = $imageRepo->addImage($image);
        
        return $id;
@@ -55,5 +66,10 @@ class ImageService extends BaseService {
         
         return $id;
 
+    }
+    
+    public function deleteImage($id) {
+        $imageRepo = $this->repositoryFactory->getRepository('imageRepository');    
+        $imageRepo->delete($id);
     }
 }

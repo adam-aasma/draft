@@ -15,6 +15,7 @@ $marketHtml = FormUtilities::getAllOptions($countries, 'country');
 $productService = new ProductService(RepositoryFactory::getInstance());
 $languages = $productService->getCountryLanguages($countries);
 $languageHtml = FormUtilities::getAllOptions($languages,'language');
+$css = 'css/productlist.css';
 
 if (isset($_POST['countrylanguage'])){
     $country = Walltwisters\model\Country::create($_POST['market'],'');
@@ -38,7 +39,7 @@ foreach ($productlist as $product){
     }
     //TODO add itemdetails
     $Html .= ' <tr>
-                    <td><a class="tablerow" href="editproduct.php?id=' . $id . '">' . $id . '</a></td>
+                    <td><a class="tablerow" href="edit2.php?id=' . $id . '">' . $id . '</a></td>
                     <td><span class="tablerow">' . $name . '</span></td>
                     <td><div  class="tablerow productDescription" >' . $description . '</div></td>
                     <td><div class="tabelrow productImages">' . $images . '</div></td>
@@ -51,7 +52,7 @@ foreach ($productlist as $product){
                     </td>
                     <td><div class="tablerow productCheckBoxes""><input type="checkbox" name="products[]" value="' . $id . '" form="adding-section" /></div></td>
                 </tr>';
-}
+} 
 
 require_once 'adminpageheader.php';
 ?>

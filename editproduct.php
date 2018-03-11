@@ -121,10 +121,10 @@ require_once 'adminpageheader.php';
         <?php $idx = 0; foreach ($editProduct->imageBaseInfos as $imageBaseInfo) : ?>
             <div>
                 <p class="checkbox index">
-                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy(['product', 'productinterior']),'category', "category[$idx]", [$imageBaseInfo->categoryId]) ?>
+                    <?= FormUtilities::getAllRadioOptions($productService->getImageCategoriesBy('prodcutImageCategories'),'category', "category[$idx]", [$imageBaseInfo->categoryId]) ?>
                 </p>
                 <span><?= $imageBaseInfo->imageName ?></span>
-                <span><aclass="deleteimage">delete</a></span>
+                <span><a class="deleteimage">delete</a></span>
             </div>
 
         <?php $idx++; endforeach; ?>
@@ -190,15 +190,15 @@ require_once 'adminpageheader.php';
     </fieldset>
     <fieldset>
         <legend>search details</legend>
-            <label for="adding-format">format:</label>
-                <select name="format">
-                    <?php if(!empty($editProduct)) : ?>
-                       <?php $formatId[] = $editProduct->formatId ?>
-                       <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format', $formatId) ?>
-                    <?php else : ?>
-                    <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format') ?>
-                    <?php endif; ?>
-                </select>
+            <label>format:</label>
+            <select name="format">
+                <?php if(!empty($editProduct)) : ?>
+                   <?php $formatId[] = $editProduct->formatId ?>
+                   <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format', $formatId) ?>
+                <?php else : ?>
+                <?= FormUtilities::getAllOptions($productService->getAllFormats(), 'format') ?>
+                <?php endif; ?>
+            </select>
             <label for="choosing-section">section:</label>
             <select name="section">
                 <?php if(!empty($editProduct)) : ?>

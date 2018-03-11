@@ -22,4 +22,7 @@ class ProductMaterialRepository extends BaseRepository {
     public function getAllMaterials() {
         return $this->getAll();
     }
+    
+    
+    
 }

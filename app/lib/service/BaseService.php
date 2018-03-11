@@ -28,11 +28,9 @@ class BaseService {
         return $this->repositoryFactory->getRepository('sectionRepository')->getAll();
     }
     
-    public function getImageCategoriesBy($conditions){
-        return $this->repositoryFactory->getRepository('imageCategoryRepository')->getImageCategoriesBy($conditions);
+    public function getImageCategoriesBy($string){
+        return $this->repositoryFactory->getRepository('imageCategoryRepository')->getImageCategoriesBy($string);
     }
-    
-    
     
     public function getCountryLanguages($countries){
         $languageRepository = $this->repositoryFactory->getRepository('languageRepository');
@@ -54,5 +52,11 @@ class BaseService {
         }
         $languages = $languageRepository->getCountryLanguages($countriesIds);
         return $languages;
+    }
+    
+    public function getCountryItems($countries) {
+        $countryIds = array_map(function ($country) { return $country->id; }, $countries);
+        $itemRepository = $this->repositoryFactory->getRepository('itemRepository');
+        return $itemRepository->getCountryItems($countryIds);
     }
 }

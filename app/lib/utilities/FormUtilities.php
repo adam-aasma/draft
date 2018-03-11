@@ -42,24 +42,24 @@ class FormUtilities {
         }
     }
     
-    public static function getAllOptions($objcollection, $name, $checkedIds = []){
+    public static function getAllOptions($objcollection, $name, $checkedIds = [], $class =''){
         $optionsHtml = '';
         foreach ($objcollection as $obj){
             $val = $obj->id;
             $text = $obj->$name;
             $checked = in_array($obj->id, $checkedIds) ? 'selected' : '';
-            $optionsHtml .= "<option value='" . $val . "' $checked>" . $text . "</option>";
+            $optionsHtml .= "<option class='$class' value='" . $val . "' $checked>" . $text . "</option>";
         }
         return $optionsHtml;
             
     }
     
-     public static function getAllCheckBoxes($objcollection, $propname, $inputname, $checkedIds = []){
+     public static function getAllCheckBoxes($objcollection, $propname, $inputname, $checkedIds = [], $class=''){
         $html = '';
         foreach ($objcollection as $obj){
             $label = $obj->$propname;
             $checked = in_array($obj->id, $checkedIds) ? 'checked' : '';
-            $html .= "<input type='checkbox' value='true' name='$inputname" . "[$obj->id]' $checked /><label>$label</label>";
+            $html .= "<input type='checkbox' value='true' name='$inputname" . "[$obj->id]' $checked /><label class='$class'>$label</label>";
         }
         return $html;
             
@@ -71,7 +71,7 @@ class FormUtilities {
             $label = $obj->$propname;
             $value = $obj->id;
             $checked = in_array($obj->id, $checkedIds) ? 'checked' : '';
-            $html .="<input type='radio' name='$inputname' value='$value' $checked class='indexValue' /><label>$label</label>";
+            $html .="<li class='solo inline-block'><input type='radio' name='$inputname' value='$value' $checked class='' /><span class=''>$label</span></li>";
         }
         return $html;
     }

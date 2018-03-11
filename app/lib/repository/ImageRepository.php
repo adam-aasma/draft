@@ -5,6 +5,10 @@ use Walltwisters\model\Image;
 
 class ImageRepository extends BaseRepository {
     
+    
+    function __construct() {
+        parent::__construct("images", "Walltwisters\model\Image");
+    }
     protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
@@ -15,7 +19,7 @@ class ImageRepository extends BaseRepository {
     
     public function addImage(Image $image) {
         $data = file_get_contents($image->filepath);
-        $stmt = $this->conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id, image_name) VALUES(?, ?, ?, ?, ?)");
+        $stmt = self::$conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id, image_name) VALUES(?, ?, ?, ?, ?)");
         $null = NULL;
         try {
             $bindresult = $stmt->bind_param("bssis", $null, $mimetype, $imgsize, $imgcategory_id, $imageName);
@@ -30,7 +34,7 @@ class ImageRepository extends BaseRepository {
 
         $res = $stmt->execute();
         if ($res) {
-            $lastIdRes = $this->conn->query("SELECT LAST_INSERT_ID()");
+            $lastIdRes = self::$conn->query("SELECT LAST_INSERT_ID()");
             $row = $lastIdRes->fetch_row();
             $lastId = $row[0];
             return $lastId;
@@ -39,7 +43,7 @@ class ImageRepository extends BaseRepository {
     }
     
     public function getImage($id) {
-        $stmt = $this->conn->prepare("SELECT size,mimetype,data FROM images WHERE id=?"); 
+        $stmt = self::$conn->prepare("SELECT size,mimetype,data FROM images WHERE id=?"); 
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $stmt->store_result();
@@ -50,7 +54,7 @@ class ImageRepository extends BaseRepository {
     }
     
     public function getImageIdByProductId($id){
-        $stmt = $this->conn->prepare("SELECT i.id FROM images i
+        $stmt = self::$conn->prepare("SELECT i.id FROM images i
                                       INNER JOIN products_images pi ON pi.product_id = ?
                                       INNER JOIN images_categories ic ON ic.id = i.images_category_id
                                       WHERE ic.category = 'product'");
@@ -63,7 +67,6 @@ class ImageRepository extends BaseRepository {
         
         return $id;
     }
-    
 }
     
     

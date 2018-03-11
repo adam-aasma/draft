@@ -25,6 +25,7 @@ class RepositoryFactory implements IRepositoryFactory {
     private $sectionDescriptionRepository;
     private $sliderRepository;
     private $sliderDescriptionRepository;
+    private $artistDesignerRepository;
     private static $repositoryFactory;
     
     public static function getInstance() {
@@ -103,6 +104,9 @@ class RepositoryFactory implements IRepositoryFactory {
                     break;
                 case 'sliderRepository' :
                     $this->sliderRepository = new SliderRepository();
+                    break;
+                case 'artistDesignerRepository':
+                    $this->artistDesignerRepository = new ArtistDesignerRepository();
                     break;
             }
         }

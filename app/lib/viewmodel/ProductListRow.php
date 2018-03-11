@@ -25,7 +25,7 @@ class ProductListRow {
         $this->images[] = ['id' => $imageId, 'name' => $imageName];
     }
     
-    public function addItemDetails($size, $material, $technique) {
-        $this->itemDetails .= sprintf("<span>%s, %s, %s</span>", $size, $material, $technique);
+    public function addItemDetails($size, $material) {
+        $this->itemDetails .= sprintf("<span>%s, %s</span>", $size, $material);
     }
 }

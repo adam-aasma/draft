@@ -14,8 +14,8 @@ class ImageCategoryRepository extends BaseRepository {
         return "not implemented";
     }
     
-    public function getImageCategoriesBy($conditions){
-        $stmt = $this->createStatementForInClause("SELECT id, category, description FROM images_categories", 'category', $conditions, 's');
+    public function getImageCategoriesBy($string){
+        $stmt = $this->createStatementForInClause("SELECT id, category, description FROM images_categories", 'category', $this->imageCategories($string), 's');
         $imageCategories= [];
         $res = $stmt->execute();
         if ($res) {
@@ -26,5 +26,19 @@ class ImageCategoryRepository extends BaseRepository {
         } 
         return $imageCategories;
       
+    }
+    
+    private function imageCategories($string){
+        $condition = [];
+        switch ($string){
+            case 'productImageCategories':
+                $condition = ['product', 'productinterior'];
+                break;
+            case 'sectionImageCategories':
+                $condition = ['sectionsmall', 'sectionbig', 'sectionmobile'];
+                break;
+            
+        }
+        return $condition;
     }
 }

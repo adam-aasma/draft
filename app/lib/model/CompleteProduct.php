@@ -1,7 +1,7 @@
 <?php
 namespace Walltwisters\model; 
 
-class CompleteProduct extends Product {
+class CompleteProduct extends Product implements \JsonSerializable {
     protected $productDescriptions;
     protected $imageBaseInfos;
     protected $items;
@@ -9,6 +9,7 @@ class CompleteProduct extends Product {
     public function __construct() {
         $this->productDescriptions = [];
         $this->items = [];
+        $this->imageBaseInfos = [];
     }
     
     public function __get($name){
@@ -28,8 +29,27 @@ class CompleteProduct extends Product {
     }
     
     public function addProductDescription($productDescription) {
-        $countryId = $productDescription->countryId;
         $languageId = $productDescription->languageId;
-        $this->productDescriptions[$countryId][$languageId] = $productDescription;
+        $this->productDescriptions[$languageId] = $productDescription;
+    }
+    
+    public function jsonSerialize() {
+        $images = [];
+        $productDescriptions = [];
+        $items = [];
+        foreach($this->imageBaseInfos as $imageBaseInfo) {
+            $images[] = $imageBaseInfo->jsonSerialize();
+        }
+        foreach($this->productDescriptions as $productDescription) {
+            $productDescriptions[] = $productDescription->jsonSerialize();
+        }
+        foreach($this->items as $item) {
+            $items[] = $item->jsonSerialize();
+        }
+        return [
+            'images' => $images,
+            'productDescriptions' => $productDescriptions,
+            'items' => $items
+        ];
     }
 }

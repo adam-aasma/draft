@@ -3,11 +3,13 @@
     <head>
         <title><?= $title ?></title>
         <meta name="keywords" content="<?= $keywordContent ?>">
-        <link href="/css/admin.css" type="text/css" rel="stylesheet">
-        <script>var initFunctionTable = [];</script>
+        <link href="css/AdminBase.css" type="text/css" rel="stylesheet">
+        <link href="<?=$css ?>" type="text/css" rel="stylesheet"> -->
+       <!--  <link href="css/admin.css" type="text/css" rel="stylesheet"> 
+        <!--<script>var initFunctionTable = [];</script> -->
     </head>
     <body id="bodyLoad">
-        <div class="admin">
+        <div id="jsAdmin" class="admin">
             <header class="header">
                 <h1>Admin Panel</h1>
                 <p>happy workday Dear <?= $user->name ?>!</p>

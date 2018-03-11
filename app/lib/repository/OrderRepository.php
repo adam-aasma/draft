@@ -13,7 +13,7 @@ class OrderRepository extends BaseRepository {
     }
     
     public function insertCustomer(Customer $customer) {
-        $stmt = $this->conn->prepare("INSERT INTO customers(firstname,lastname,address,zipcode,city,country,email,phonenumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = self::$conn->prepare("INSERT INTO customers(firstname,lastname,address,zipcode,city,country,email,phonenumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
         $bindresult = $stmt->bind_param("ssssssss", $fn, $ln, $a, $z, $c, $co, $e, $t);
         $fn = $customer->getFirstName();
         $ln = $customer->getLastName();

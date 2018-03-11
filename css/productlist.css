@@ -1,0 +1,111 @@
+.col-section {
+    width: 40%;
+}
+
+#producttableform {
+    display: block;
+    width: 30%;
+    margin: 0px;
+    align-self: flex-end;
+}
+
+#producttable .productDescription {
+    font-size: 0.6rem;
+    text-transform: none;
+    text-align: left;
+    padding-left: 4px;
+    background-color: rgba(167, 240, 210, 0.3);
+   
+}
+
+#producttable .productCheckBoxes{
+    
+}
+
+#producttable .productCheckBoxes input{
+    
+}
+
+#producttable .productImages{
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#producttable .previewsliderlinks{
+     
+}
+
+#producttable .previewsliderlinks a{
+    display: inline;
+    color: #FF7000;
+    text-decoration: underline;
+    margin: 1rem;
+ }
+
+#producttable .productItems {
+    font-size: 0.9rem;
+    color: green;
+}
+
+#producttable .productItems span {
+    display: block;
+}
+
+#producttable .productImages img {
+    max-height: 4rem;
+    margin-right: 0.5rem;
+    
+}
+
+#searchProduct {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+}
+
+#searchProductInput{
+    margin: 0;
+    padding: 0px;
+    height: 2rem;
+    width: 75%;
+    box-sizing: border-box;
+    border: 2px solid white;
+}
+
+#searchProduct button {
+    width: 15%;
+    margin: 0px;
+    box-sizing: border-box;
+    border: 2px solid black;
+    color: black;
+ }
+
+#productlistmenu {
+    width: 60%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#productlistmenu ul{
+    display: inline-flex;
+    width: 80%;
+    justify-content: space-between;
+}
+
+#productlistmenu ul li {
+   width: 23%;
+   height: 2rem;
+   border: 2px solid black;
+   background-color: white;
+ }
+ 
+#productlistmenu ul li a {
+    background-color: white;
+    height: 100%;
+    color: black;
+ }
+
+#producttable #createNewSection {
+    border: none;
+    color: black;
+}

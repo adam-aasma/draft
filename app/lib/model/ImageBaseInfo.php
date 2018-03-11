@@ -1,7 +1,7 @@
 <?php
 namespace Walltwisters\model; 
 
-class ImageBaseInfo {
+class ImageBaseInfo implements \JsonSerializable {
     protected $id;
     protected $categoryId;
     protected $category; //type of picture, product, interior, slider etc.
@@ -22,5 +22,9 @@ class ImageBaseInfo {
         $obj->categoryId = $categoryId;
         $obj->category = $category;
         return $obj;
+    }
+    
+    public function jsonSerialize() {
+        return ['id' => $this->id, 'name' => $this->imageName, 'categoryId' => $this->categoryId];
     }
 }
