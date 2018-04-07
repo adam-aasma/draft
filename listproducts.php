@@ -78,7 +78,7 @@ require_once 'adminpageheader.php';
                 </div>
                 <nav id="productlistmenu">
                     <ul>
-                        <li><a href="editproduct.php">new product</a></li>
+                        <li><a href="edit2.php">new product</a></li>
                         <li><a href="listslides.php">Slides</a></li>
                         <li><a href="listsections.php">Sections</a></li>
                         <li><form action="addsection.php" method="post" enctype="multipart/form-data" id="adding-section"><button id="createNewSection">new section</button></form></li>

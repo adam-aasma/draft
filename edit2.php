@@ -60,7 +60,7 @@ if (isset($_GET['id'])) {
             <h2>pictures</h2>
             <div id="thumbnails">
             </div>
-            <h2>markets</h2>
+            <h2>Markets</h2>
             <?= Walltwisters\utilities\HtmlUtilities::createSpans(
                     array_map(function($country){
                         return ['id' => $country->id, 'text' => $country->country];
@@ -96,9 +96,9 @@ if (isset($_GET['id'])) {
 <script>
     var countryLanguages = <?= json_encode($countrylanguages) ?>;
     var countryItems = <?= json_encode($countryItems) ?>;
-    
     var productId = <?= $productId ?>; 
 </script>
+<script src="js/general/product.js" type="text/javascript"></script>
+<script src="js/page/editproduct.js" type="text/javascript"></script>
 <?php
-$script = '';
 require_once 'adminpagefooter.php';

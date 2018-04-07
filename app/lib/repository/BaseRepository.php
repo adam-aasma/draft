@@ -11,9 +11,9 @@ abstract class BaseRepository {
     function __construct($tableName = null, $objectName = null) {
         if(!isset($conn)){
             $servername = "127.0.0.1";
-            $username = "adam";
-            $password = "rocky";
-            $dbname = "walltwisters"; 
+            $username = "root";
+            $password = "Oskar.#4837";
+            $dbname = "WT_Test"; 
             self::$conn = new \mysqli($servername, $username, $password, $dbname);
             if (self::$conn->connect_error) {
                 throw new DatabaseException(self::$conn->connect_error);
