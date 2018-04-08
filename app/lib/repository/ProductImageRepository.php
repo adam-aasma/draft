@@ -3,6 +3,7 @@ namespace Walltwisters\repository;
 
 use Walltwisters\model\ProductImage;
 
+
 class ProductImageRepository extends BaseRepository {
     
     public function __construct() {

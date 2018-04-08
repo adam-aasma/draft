@@ -3,7 +3,7 @@
 function Product(productId) {
     this.currentLanguageId = 0;
     this.currentMarketId = 0;
-    this.productId = 0;
+    this.productId = productId;
     this.imageIds = [];
     this.formatId = null;
     this.artistId = null;
@@ -55,7 +55,7 @@ function Product(productId) {
         if (typeof marketId === "undefined") {
             marketId = this.currentMarketId;
         }
-        var market = this.markets.find(m => m.marketId === marketId);
+        var market = this.markets.find(function(m) { return m.marketId === marketId; } );
         if (!market) {
             market = new Market(marketId);
             this.markets.push(market);
@@ -115,6 +115,15 @@ function Product(productId) {
         pi.tags = tags;
     };
     
+    /*
+     * This function is not encapsulated but dependent of functions defined in editproduct.js
+     */
+    this.setImages = function(id, name) {
+        createImageSpan(id, name);
+        onImageAdded(id);
+        
+    }
+    
     this.setItem = function(marketId, materialId, sizeId) {
         var market = this.getMarket(marketId);
         var material = market.getMaterial(materialId);
@@ -141,6 +150,7 @@ function Product(productId) {
     };
     
     this.saveProduct = function() {
+        var that = this;
         var f = new formData();
         f.url('ajaxtest.php');
         f.addPart('requestType', 'product');
@@ -154,7 +164,7 @@ function Product(productId) {
         f.callback(function(response) { 
             console.log(JSON.stringify(response)); 
             if (response.productId) {
-                this.productId = response.productId;
+                that.productId = response.productId;
             }
         });
 
@@ -162,6 +172,7 @@ function Product(productId) {
     };
     
     this.saveArtist = function(artist) {
+        var that = this;
         var f = new formData();
         f.url('ajaxtest.php');
         f.addPart('requestType', 'artist');
@@ -174,13 +185,14 @@ function Product(productId) {
         f.callback(function(response) { 
             console.log(JSON.stringify(response)); 
             if (response.artistId) {
-                this.artistId = response.artistId;
+                that.artistId = response.artistId;
             }
         });
         f.post();
     };
     
     this.saveItems = function() {
+        var that = this;
         var f = new formData();
         f.url('ajaxtest.php');
         f.addPart('requestType', 'productitems');
@@ -198,12 +210,16 @@ function Product(productId) {
             //f.addPart('marketId', market.marketId);
         }
         f.callback(function(response) { 
+            that.productId = response.productId;
             console.log(JSON.stringify(response)); 
         });
         f.post();
     };
-
+    /*
+     * Not encapsulated may have a second look at the image handling logic
+     */
     this.saveImage = function(e) {
+        var that = this;
         e.preventDefault();
         var div = wQuery(e.target).closest("DIV .pictureBar").first();
         //var div = closestAncestor(e.target, "DIV .pictureBar");
@@ -222,7 +238,7 @@ function Product(productId) {
                     console.log(JSON.stringify(response)); 
                     if (response.imageId) {
                         onImageAdded(response.imageId);
-                        this.productId = response.productId;
+                        that.productId = response.productId;
                         createImageSpan(response.imageId, response.imageName);
                         wQuery("input[type='file']").val('');
                     }
@@ -258,7 +274,7 @@ function Product(productId) {
             this.setItem(item.countryId, item.materialId, item.sizeId);
         }
         for(let image of data.images) {
-            
+            this.setImages(image.id, image.name)
         }
     };
 }

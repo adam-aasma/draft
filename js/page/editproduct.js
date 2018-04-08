@@ -80,6 +80,9 @@ function setMaterialsForMarket(marketId, marketName) {
 
 function onMaterialsClicked(e) {
     var elTarget = e.target;
+    if (elTarget.tagName !== "INPUT") {
+        return;
+    }
     var marketId = elTarget.getAttribute("data-market-id");
     var materialId = elTarget.getAttribute("data-material-id");
     if (!elTarget.checked) {
@@ -152,6 +155,7 @@ function appendSizesHtml(materialId, sizes, parent) {
 }
 
 function onSizesChanged(e) {
+    e.stopPropagation();
     var elTarget = e.target;
     var options = wQuery(elTarget).find("OPTION");
     for (let option of options) {

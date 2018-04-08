@@ -3,6 +3,8 @@ namespace Walltwisters\service;
 
 
 use Walltwisters\model\Image;
+use Walltwisters\model\ProductImage;
+
 
 
 
@@ -12,6 +14,26 @@ class ImageService extends BaseService {
         parent::__construct($repositoryFactory);
     }
     
+    //add productImage to db
+    
+    public function addProductImage($imageDatas, $imageCategoryId, $productId) {
+        $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
+        foreach($imageDatas as $imageData){
+         $imageId = $this->addImage($imageData, $imageCategoryId);
+         $productImageRepo->create(ProductImage::create($productId, $imageId));
+         
+        }
+         return $imageId;
+       
+    } 
+    private function addImage($imageArray, $pictureId){
+       $image= $this->getImageData($imageArray);
+       $image->categoryId = $pictureId;
+       $imageRepo = $this->repositoryFactory->getRepository('imageRepository'); 
+       $id = $imageRepo->addImage($image);
+       
+       return $id;
+    }
     private function getImageData($imagefile){
         $filepath = $imagefile["tmp_name"][0];
         $mime = $imagefile["type"][0];
@@ -21,13 +43,7 @@ class ImageService extends BaseService {
         return $image;
     }
     
-    public function addProductImage($imageDatas, $imageCategoryId) {
-        foreach($imageDatas as $imageData){
-         $imageId = $this->addImage($imageData, $imageCategoryId);
-        }
-         return $imageId;
-       
-    }        
+    
     public function addSectionImages($sectionPictures) {
        $imageCategories = $this->getImageCategoriesBy('sectionImageCategories');
        foreach ($imageCategories as $imagecategory){
@@ -49,15 +65,6 @@ class ImageService extends BaseService {
        
        return ['bigpicid' => $bigPicId, 'smallpicid' => $smallPicId, 'mobilepicid' =>$mobilePicId];
        
-    }
-    
-    private function addImage($imageArray, $pictureId){
-       $image= $this->getImageData($imageArray);
-       $image->categoryId = $pictureId;
-       $imageRepo = $this->repositoryFactory->getRepository('imageRepository'); 
-       $id = $imageRepo->addImage($image);
-       
-       return $id;
     }
     
     public function getProductImageIdById($id){
