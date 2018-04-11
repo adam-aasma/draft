@@ -44,15 +44,6 @@ function thumbnailDelete(imageId) {
     }
 }
 
-function onLanguageAdded(e) {
-    var language = e.target.innerText;
-    var para = document.getElementById('languages');
-    var span = document.createElement('SPAN');
-    span.innerText = language + '->';
-    para.appendChild(span);
-    
-}
-
 function setMarketLanguages(marketId, marketName) {
     if (!marketId) return;
     var languages = countryLanguages[marketId];
@@ -64,14 +55,16 @@ function setMarketLanguages(marketId, marketName) {
 }
 
 function setMaterialsForMarket(marketId, marketName) {
-    
+    if(!marketName.length){
+        marketName = 'no items'
+    }
     product.currentMarketId = marketId;
-    
     buildItemsBoxLabelHtml(marketName, marketId);
-    
-    var items = countryItems[marketId];
-    if(!items){ alert('no items for this market'); return;}
-    
+    if(!countryItems[marketId]){
+        deletePreviousMaterialsHtml();
+        alert('no items for this market');
+        return;}
+    var items = countryItems[marketId].materials;
     var materials = appendItemsBoxMaterialsHtml(marketId, items, document.getElementById('itemDetails'));
     materials.addEventListener('click', onMaterialsClicked, false);
     
@@ -92,11 +85,16 @@ function onMaterialsClicked(e) {
     }
 }
 
-function appendItemsBoxMaterialsHtml(marketId, items, parent) {
+function deletePreviousMaterialsHtml(){
     var previous = document.getElementById('materialOptions');
     if(previous){
         wQuery(previous).remove();
     }
+    return;
+}
+
+function appendItemsBoxMaterialsHtml(marketId, items, parent) {
+    deletePreviousMaterialsHtml();
     var p = document.createElement('p');
     p.setAttribute('id', 'materialOptions');
     for (let item of items) {
@@ -178,28 +176,13 @@ function clearSizesForMaterial(elem, materialId) {
 }
 
 function setSizesForMaterial(elem, marketId, materialId) {
-    /* if target matches the checkbox( input elem), build and setting the sizes paragraph */
     var material = product.getMaterial(materialId);
-    
-    var materialsForMarket = countryItems[marketId];
+    var materialsForMarket = countryItems[marketId].materials;
     var material = materialsForMarket.find(function(m) { return m.materialId == materialId; })
     if (material) {
         appendSizesHtml(materialId, material.sizes, elem.parentElement);
     }
-    /*
-    } else {
-        var materialId = elem.parentElement.getAttribute('materialId');
-        for (let child of elem.parentElement.children){
-            let sizeId = child.value;
-            if (child.selected) {
-                product.addSize(materialId, sizeId);
-            } else {
-                product.removeSize(materialId, sizeId)
-            }
-        }
-        product.saveItems();
-    }
-    */
+    
 }
 
 function setSelectedMaterialAndSizes() {
@@ -224,18 +207,56 @@ function setLanguagesForProductInfo(languages) {
     var group = document.getElementById("addLanguage");
     var item = group.firstElementChild;
     var html = '';
+    deleteLanguagesFromControlBar()
     for (let language of languages) {
         let langEl = item.cloneNode(true);
-        
         let anchor = wQuery(langEl).find("A").first();
         //let anchor = findElem(langEl, "A");
         if (anchor) {
             anchor.setAttribute('data-languageId', language.languageId);
             anchor.innerHTML = language.languageName;
+            addingLanguagesToControlBar(language.languageName, language.languageId);
         }
         html += langEl.outerHTML;
     }
     group.innerHTML = html;
+}
+
+function deleteLanguagesFromControlBar(){
+    var para = document.getElementById('languages');
+    para.innerHTML = '';
+    return;
+}
+
+/*
+ * Updates the color wheter language is full
+ * @returns {undefined}
+ */
+function updateLanguagesFromControlBar(){
+    var pi = product.getProductInfo();
+    var update = product.checkProductInfoStatus(pi.languageId);
+    var para = document.getElementById('languages');
+    for (let p of para.children){
+        if(parseInt(p.getAttribute('data-language-id')) === pi.languageId){
+            p.style.color= update ? "green" : "red";
+        }
+    }
+    return;
+}
+
+/*
+ * adding to the currently bar info wheter language are complete
+ * Called from setLanguagesForProductInfo
+ */
+function addingLanguagesToControlBar(languageName, languageId) {
+    var para = document.getElementById('languages');
+    var span = document.createElement('SPAN');
+    span.setAttribute('data-language-id', languageId);
+    span.innerText = languageName + '->';
+    if (product.checkProductInfoStatus(languageId)){
+        span.style.color = "green";
+    }
+    para.appendChild(span);
 }
 
 function createProductInfoHtml(){
@@ -300,12 +321,15 @@ function createProductInfoHtml(){
         var el7 = document.getElementById('productInfo');
         el7.querySelector('input').addEventListener('blur', function(e){
             product.updateProductInfoName(e.target.value);
+            updateLanguagesFromControlBar();
+            
         }, false);
         var textAreas = el7.querySelectorAll('textarea');
         for ( var el of textAreas){
             el.addEventListener('blur',function(e){
                 if ( e.target.previousSibling.innerText === 'DESCRIPTION'){
                     product.updateProductInfoDescription(e.target.value);
+                    updateLanguagesFromControlBar();
                 }
                 else if (e.target.previousSibling.innerText === 'TAGS'){
                     product.updateProductInfoTags(e.target.value);
@@ -335,11 +359,69 @@ function getLanguageIdsForMarket(marketId) {
 function onCurrentlyClicked(e) {
     elTarget = e.target;
     if ( elTarget.tagName === 'SPAN') {
-        setMarketLanguages(
-            parseInt(elTarget.getAttribute('data-item')),
-            elTarget.innerText);
+        var marketId = parseInt(elTarget.getAttribute('data-item'));
+        if (countryItems[marketId]){
+            var marketName = countryItems[marketId].name;
+            setMarketLanguages(marketId, marketName);
+        } else {
+            setMarketLanguages(marketId, '');
+        }
+        
     }    
 }
+
+function showRoomPreview() {
+  var temp = document.getElementsByTagName("template")[0];
+  var field = document.getElementsByClassName('desktop');
+  var showroomDiv = temp.content.querySelector('.showroom');
+  for (let imageId of product.imageIds){
+      let img = document.createElement('IMG');
+      img.setAttribute('src', 'getImage.php?id=' + imageId);
+      img.classList.add('slider');
+      showroomDiv.appendChild(img);
+  }
+  var productNameEl = temp.content.querySelector('.product-info h1');
+  var productDescriptionPara = temp.content.querySelector('#productdescription');
+  var editButton = temp.content.querySelector('#editButton');
+  editButton.addEventListener('click', goBackFromShowRoom, false);
+  var productInfo = product.getProductInfo(product.currentLanguageId);
+  productNameEl.textContent = productInfo.name;
+  productDescriptionPara.textContent = productInfo.description;
+  var clon = temp.content.cloneNode(true);
+  field[0].appendChild(clon);
+  field[0].childNodes[1].style.display = 'none';
+  showDivs(slideIndex);
+}
+
+function goBackFromShowRoom() {
+    var field = document.getElementsByClassName('desktop');
+    field[0].childNodes[1].style.display = 'flex';
+    var showRoom = document.querySelector('#showRoom');
+    field[0].removeChild(showRoom);
+}
+
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+    showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+    var x = document.getElementsByClassName("slider");
+    if (!x.length) return;
+    if (n > x.length) {slideIndex = 1} 
+    if (n < 1) {slideIndex = x.length} ;
+    for (let i = 0; i < x.length; i++) {
+        x[i].style.display = "none"; 
+    }
+    
+    x[slideIndex-1].style.display = "flex";
+    if (slideIndex !== 0){
+        x[slideIndex].style.border = "none";
+    }
+}
+
 
 window.onload = () => {
     addEventListeners();
@@ -353,7 +435,7 @@ window.onload = () => {
             product.loadProduct(data);
             
             var marketId = product.getFirstMarketId();
-            setMarketLanguages(marketId, "marketName");
+            setMarketLanguages(marketId, countryItems[marketId].name);
             
             var languageId = product.getFirstLanguageIdInSet(getLanguageIdsForMarket(marketId));
             if (languageId) {
@@ -367,11 +449,6 @@ window.onload = () => {
 }
 
 function addEventListeners() {
-    var els = document.getElementsByClassName('dropDownMenu');
-    for (i = 0; i < els.length; i++) {
-        els[i].addEventListener('mouseover', openDropDown, false);
-    }
-    
     var el = document.getElementById('currently');
     el.addEventListener('click', onCurrentlyClicked, false);
     
@@ -395,8 +472,8 @@ function addEventListeners() {
         },  
         false);
     
-    var el5 = document.getElementById('saveProduct');
-    el5.addEventListener('click', function() { if (product) product.saveProduct(); }, false);
+    var el5 = document.getElementById('productPreview');
+    el5.addEventListener('click', showRoomPreview, false);
     
     var el6 = document.getElementById('addLanguage');
     el6.addEventListener('click',
@@ -404,7 +481,7 @@ function addEventListeners() {
             var languageId = parseInt(e.target.getAttribute('data-languageId'));
             product.currentLanguageId = languageId;
             createProductInfoHtml();
-            onLanguageAdded(e);
+         
         },
         false);
     
@@ -414,5 +491,6 @@ function addEventListeners() {
             var marketId = parseInt(e.target.getAttribute('data-marketId'));
             product.currentMarketId = marketId;
         }, false);
+      
     
 }

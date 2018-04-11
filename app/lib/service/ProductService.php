@@ -137,6 +137,10 @@ class ProductService extends BaseService {
     
     public function addDescriptionToProduct($languageId, $productId, $name, $description) {
         $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
+        if ( empty($name) && empty($description)){
+            $productDescriptionRepository->deleteForIdandLanguageId($productId, $languageId);
+            return;
+        }
         $productDescription = ProductDescription::create($productId, $languageId, $description, $name);
         $productDescriptionRepository->createOrUpdate($productDescription);
     }

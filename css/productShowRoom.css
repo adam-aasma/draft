@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 10, 2018, 2:58:05 AM
+    Author     : adam
+*/
+
+
+#showroom {
+    display: inline-flex;
+    width: 100%;
+}
+.showroom {
+    display: flex ;
+    justify-content: center;
+    align-items: center;
+    width: 58%;
+    background-color: #F7F7F7;
+    height: 96%;
+    position: relative;
+    top: 0;
+    max-height: 55rem;
+  } 
+  
+  .showroom img {
+      min-width: 80%;
+      border: 2px solid black;
+      box-sizing: border-box;
+      display: block;
+      margin: 0 auto;
+      
+  }
+  
+  .product-info {
+      background-color: #F7F7F7;
+      height: 96%;
+      width: 38%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      max-height: 55rem;
+  }
+  
+  
+  .pricebutton h2:before {
+      content: "25€";
+      text-align: left;
+      color: grey;
+      margin-right: 2rem;
+      text-decoration: line-through;
+      
+  }
+  
+  .product-info h1 {
+      width: 80%;
+      font-size: 1.5rem;
+      text-align: left;
+      font-weight: 500;
+      margin-bottom: 2rem;
+     
+  }
+  
+  .product-info p {
+      width: 80%;
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: lighter;
+     
+  }
+  
+  .arrowbutton {
+      position: absolute;
+      bottom: 1rem;
+      left: auto;
+      right: auto;
+  }
+  
+  

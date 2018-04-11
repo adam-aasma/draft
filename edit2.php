@@ -16,6 +16,7 @@ $countryItems = $productService->getCountryItems($user->countries);
 $imageCategories = $productService->getImageCategoriesBy('productImageCategories');
 $imageCategoryId = $imageCategories[0]->id;
 
+
 $productId = 0;
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
@@ -68,8 +69,8 @@ if (isset($_GET['id'])) {
             <h2>languages</h2>
             <p id="languages"></p>
             <h2>items</h2>
-            <button>preview</button>
-            <button id="saveProduct">Save</button>
+            <button id="productPreview">preview</button>
+            
         </fieldset>
     </div>
     <div class="row inline-flex space-between">
@@ -97,8 +98,32 @@ if (isset($_GET['id'])) {
     var countryLanguages = <?= json_encode($countrylanguages) ?>;
     var countryItems = <?= json_encode($countryItems) ?>;
     var productId = <?= $productId ?>; 
+   
 </script>
 <script src="js/general/product.js" type="text/javascript"></script>
 <script src="js/page/editproduct.js" type="text/javascript"></script>
+<template>
+    <div id="showroom">
+        <link href="css/productShowRoom.css" type="text/css" rel="stylesheet">
+        <div class="showroom">
+            <div class="arrowbutton">
+                <button onclick="plusDivs(-1)">&#10094;</button>
+                <button onclick="plusDivs(1)">&#10095;</button>
+            </div>
+        </div>
+        <div class="product-info">
+            <h1><!-- the product name --></h1>
+            <div class="priceButton">
+                <h2><!--product price --></h2>
+                <button>confirm</button>
+                <button id="editButton" onclick="goBackFromShowRoom()">edit</button>
+            </div>
+        <p id="productdescription">
+                <!-- the product description -->
+        </p>
+        </div>
+    </div>
+</template>
+
 <?php
 require_once 'adminpagefooter.php';

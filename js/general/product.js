@@ -28,6 +28,18 @@ function Product(productId) {
         return productInfo;
     };
     
+    this.checkProductInfoStatus = function(languageId) {
+        var productInfo = this.productInfos.find(p => p.languageId === languageId); 
+        if (!productInfo) { return;};
+        if(productInfo.name.length && productInfo.description.length) {
+            return true;
+        } else{
+            return false;
+        }
+        
+       
+    }
+    
     this.getFirstLanguageIdInSet = function(languageIds) {
         if (!languageIds || !languageIds.length) {
             return 0;

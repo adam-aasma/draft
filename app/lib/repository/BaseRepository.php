@@ -119,10 +119,6 @@ abstract class BaseRepository {
         } 
     }
     
-    public function delete($id) {
-        $this->deleteForId('id', $id);
-    }
-    
     public function deleteForId($idName, $idValue) {
         $sql = "DELETE FROM $this->tableName WHERE $idName = ?";
         $stmt = self::$conn->prepare($sql);

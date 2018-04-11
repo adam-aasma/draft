@@ -77,6 +77,6 @@ class ImageService extends BaseService {
     
     public function deleteImage($id) {
         $imageRepo = $this->repositoryFactory->getRepository('imageRepository');    
-        $imageRepo->delete($id);
+        $imageRepo->deleteImageForId($id);
     }
 }

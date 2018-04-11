@@ -20,14 +20,6 @@ function formData() {
         files.push(file);
     },
     this.post = function() {
-        var request = new XMLHttpRequest();
-        request.open("POST", url);
-        request.responseType = "json";
-        request.onreadystatechange = function() {
-            if (request.readyState === 4 && callback) {
-                callback(request.response);
-            }
-        }
         if (url.length && (parts.length || files.length)) {
             var formdata = new FormData();
             for(let part of parts) {
@@ -36,12 +28,46 @@ function formData() {
             for(let file of files) {
                 formdata.append('images[]', file, file.name)
             }
-            request.send(formdata);            
+            ajaxQueue.addToQueue(url, formdata, callback);
         }
     }
     
     return this;
 }
+
+var ajaxQueue = {};
+(function (ajaxQ) {
+    var queue = [];
+    
+    function sendFromQueue() {
+        if (!queue.length) {
+            //console.log('Call of sendFromQueue with empty queue');
+            return;
+        }
+        var queueItem = queue[0];
+        var request = new XMLHttpRequest();
+        request.open("POST", queueItem.url);
+        request.responseType = "json";
+        request.onreadystatechange = function() {
+            if (request.readyState === 4) {
+                if (queueItem.callback) {
+                    queueItem.callback(request.response);
+                }
+                queue.splice(0, 1);
+                sendFromQueue();
+            }
+        }
+        request.send(queueItem.formdata);  
+    }
+    
+    ajaxQ.addToQueue = function(url, formdata, callback) {
+        var sendImmediately = !queue.length;
+        queue.push({'url': url, 'formdata': formdata, 'callback' : callback});
+        if (sendImmediately) {
+            sendFromQueue();
+        }
+    };
+})(ajaxQueue);
 
 function ajaxGet(url, callbackSuccess) {
     var request = new XMLHttpRequest();

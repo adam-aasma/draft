@@ -46,4 +46,18 @@ class ProductDescriptionRepository extends BaseRepository {
 
         return !empty($productlist) ? $productlist : false;
     }
+    
+    public function deleteForIdandLanguageId($productId, $languageId) {
+        $sql = "DELETE FROM product_descriptions WHERE product_id = ? AND language_id = ?";
+        $stmt = self::$conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception("SQL syntax: " . $sql);
+        }
+        $stmt->bind_param('ii', $productId, $languageId);
+        $res = $stmt->execute();
+        if (!$res) {
+            throw new \Exception($stmt->error);
+        }   
+        
+    }
 }

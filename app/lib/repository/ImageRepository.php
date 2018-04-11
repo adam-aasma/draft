@@ -67,6 +67,10 @@ class ImageRepository extends BaseRepository {
         
         return $id;
     }
+    
+    public function deleteImageForId($id) {
+        $this->deleteForId('id', $id);
+    }
 }
     
     

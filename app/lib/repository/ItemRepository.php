@@ -72,40 +72,41 @@ class ItemRepository  extends BaseRepository {
     }
     
     public function getCountryItems($countryIds) {
-        $query = "select p.country_id, m.id as materialId, m.material, s.id as sizesId, s.sizes from printers p
-inner join items i on i.printer_id = p.id
-inner join materials m on m.id = i.material_id
-inner join sizes s on s.id = i.size_id";
+        $query = "select p.country_id, m.id as materialId, m.material, s.id as sizesId, s.sizes, c.country from printers p
+                inner join items i on i.printer_id = p.id
+                inner join materials m on m.id = i.material_id
+                inner join sizes s on s.id = i.size_id
+                inner join countries c on c.id = p.country_id";
         $stmt = $this->createStatementForInClause($query, "country_id", $countryIds, 'i');
         $res = $stmt->execute();
         if (!$res) {
             throw new \Exception($stmt->error);
         }
-        $stmt->bind_result($countryId, $materialId, $material, $sizesId, $sizes);
+        $stmt->bind_result($countryId, $materialId, $material, $sizesId, $sizes, $country);
         $countryItemsKeyed = [];
         while ($stmt->fetch()) {
             if (!array_key_exists($countryId, $countryItemsKeyed)) {
-                $countryItemsKeyed[$countryId] = [];
+                $countryItemsKeyed[$countryId] = ['countryName' => $country, 'materials' => []];
             }
-            if (!array_key_exists($materialId, $countryItemsKeyed[$countryId])) {
-                $countryItemsKeyed[$countryId][$materialId] = ['materialId' => $materialId, 'material' => $material, 'sizes' => []];
+            if (!array_key_exists($materialId, $countryItemsKeyed[$countryId]['materials'])) {
+                $countryItemsKeyed[$countryId]['materials'][$materialId] = ['materialId' => $materialId, 'material' => $material, 'sizes' => []];
             }
-            if (empty($countryItemsKeyed[$countryId][$materialId]['sizes']) || 
-                    !array_key_exists($sizesId, $countryItemsKeyed[$countryId][$materialId]['sizes'])) {
-                $countryItemsKeyed[$countryId][$materialId]['sizes'][$sizesId] = ['sizeId' => $sizesId, 'size' => $sizes];
+            if (!array_key_exists($sizesId, $countryItemsKeyed[$countryId]['materials'][$materialId]['sizes'])) {
+                $countryItemsKeyed[$countryId]['materials'][$materialId]['sizes'][$sizesId] = ['sizeId' => $sizesId, 'size' => $sizes];
             }
         }
         
         // Remove keys
         $countryItems = [];
-        foreach ($countryItemsKeyed as $countryId => $countryItemMaterials) {
-            $countryItems[$countryId] = [];
-            foreach($countryItemMaterials as $materialId => $materialInfo) {
+        foreach ($countryItemsKeyed as $countryId => $countryInfo) {
+            $countryItems[$countryId] = ['name' => $countryInfo['countryName']];
+            $countryItemsMaterials = $countryInfo['materials'];
+            foreach($countryItemsMaterials as $materialId => $materialInfo) {
                 $materialInfo2 = ['materialId' => $materialInfo['materialId'], 'material' => $materialInfo['material']];
                 foreach($materialInfo['sizes'] as $sizeId => $sizeInfo) {
                     $materialInfo2['sizes'][] = $sizeInfo;
                 }
-                $countryItems[$countryId][] = $materialInfo2;
+                $countryItems[$countryId]['materials'][] = $materialInfo2;
             }
         }
         
