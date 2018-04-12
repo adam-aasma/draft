@@ -3,6 +3,31 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+function showRoomProduct(product) {
+    this.imageIds = [];
+    this.productInfo = product.getProductInfo(product.currentLanguageId);
+    this.sizes = '';
+    
+        for (let imageId of product.imageIds){
+            this.imageIds.push(imageId);
+        }
+        this.description = productInfo.description;
+        this.name = productInfo.name;
+        
+        var market = product.getMarket();
+        var sizes = '';
+        if (market.materials.length) {
+        for(let material of market.materials) {
+            for (let size of material.sizeIds) {
+               this.sizes += '<span class="showroomsizes">' +sizesObjArray[size] + '' + materialNamesObjArray[material.materialId] + '</span>';
+            }
+        }
+    }
+    
+    
+    return this;
+}
+    
 
 function accordionMenu(e){
     var elTarget = e.target;
@@ -45,6 +70,7 @@ function showContentProductShowRoom(id){
     
     return el;
 }
-
-var el = document.getElementById('accordionmenu');
-el.addEventListener('click', accordionMenu, false);
+function addShowRoomEventListener(){
+    var el = document.getElementById('accordionmenu');
+    el.addEventListener('click', accordionMenu, false);
+}

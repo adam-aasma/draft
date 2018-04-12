@@ -6,10 +6,12 @@
     <link href="css/productShowRoom2.css" type="text/css" rel="stylesheet">
 
         <div class="showroom">
-            <img src="/img/2kolmnurka.jpg"/>
+            <div id="showroomimages">
+            
+            </div>
             <div class="arrowbutton">
-               <!-- <button onclick="plusDivs(-1)">&#10094;</button>
-                <button onclick="plusDivs(1)">&#10095;</button> -->
+               <button onclick="plusDivs(-1)">&#10094;</button>
+                <button onclick="plusDivs(1)">&#10095;</button>
             </div> 
         </div>
         <div class="product-info">
@@ -39,5 +41,5 @@
 
         </div>
     </div>
-    <script src="js/page/productshowroom.js" type="text/javascript"></script>
+    
 </template>

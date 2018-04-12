@@ -1,0 +1,129 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 12, 2018, 10:09:56 AM
+    Author     : adam
+*/
+
+/*
+/nicer solution?
+/ right now overriding styles defined in adminbase css
+*/
+.desktop {
+    display: block;
+}
+
+#upperwrapper {
+    width: 100%;
+    height: 50%;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 0px;
+}
+
+#uperwrapper:after {
+    content: '';
+    clear: both;
+    display: block;
+    
+}
+
+#lowerwrapper {
+    width: 100%;
+    height: 50%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    
+}
+
+#upperwrapper #pictures {
+    width: 50%;
+    float: left;
+    height: 100%;
+    font-size: 1rem;
+    
+}
+#upperwrapper #pictures .pictureBar{
+    font-size: 0.8rem;
+}
+
+/* contain floating elements */
+ .pictureBar:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#upperwrapper #copy {
+    width: 30%;
+    float: left;
+    height: 100%;
+    font-size: 1rem;
+}
+
+#upperwrapper #copy select,
+#upperwrapper #products select{
+    float: right;
+}
+
+#upperwrapper #copy p {
+    height: 20%;
+}
+#upperwrapper #copy p label {
+    padding: 0;
+}
+
+#upperwrapper #copy p textarea {
+    height: 100%;
+}
+
+#upperwrapper #products {
+    width: 20%;
+    height: 100%;
+    float: left;
+    font-size: 1rem;
+    
+   
+}
+
+#upperwrapper #includedProducts,
+#upperwrapper #allproducts {
+    width: 80%;
+    height: 40%;
+    margin-top: 3%;
+    margin-bottom: 5%;
+}
+
+#lowerwrapper:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#lowerwrapper #preview {
+    width: 60%;
+    height: 100%;
+    float: right;
+}
+
+#lowerwrapper #currently {
+    width: 40%;
+    float: left;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+#lowerwrapper #currently span {
+    display: block;
+}
+
+
+#pictures #imagescategories {
+    width: 25%;
+    min-width: 57px;
+}

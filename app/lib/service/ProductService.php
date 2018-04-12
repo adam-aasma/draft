@@ -145,6 +145,28 @@ class ProductService extends BaseService {
         $productDescriptionRepository->createOrUpdate($productDescription);
     }
     
+    public function sizestojson(){
+        $productSizeRepository = $this->repositoryFactory->getRepository('productSizeRepository');
+        $sizes = $productSizeRepository->getAll();
+        $result = [];
+        foreach($sizes as $size) {
+            $result[$size->id] = $size->sizes;
+        }
+
+        return json_encode($result);
+    }
+    
+    public function materialstojson(){
+        $productMaterialRepository = $this->repositoryFactory->getRepository('productMaterialRepository');
+        $materials = $productMaterialRepository->getAll();
+        $result = [];
+        foreach($materials as $material) {
+            $result[$material->id] = $material->material;
+        }
+
+        return json_encode($result);
+    }
+    
     public function saveProductItemsForProductAndCountry($productId, $countryId, $materialsWithSizes) {
         $productItemRepo = $this->repositoryFactory->getRepository('productItemRepository');
         $productItemRepo->deleteForProductAndCountry($productId, $countryId);

@@ -22,6 +22,14 @@ function createImageSpan(imageId, imageName) {
     
 }
 
+function getMaterialName(marketId,materialId) {
+    
+}
+
+function getSizeName(marketId, materialId, sizeId){
+    
+}
+
 
 function onImageAdded(imageId) {
     product.imageIds.push(imageId);
@@ -373,24 +381,39 @@ function onCurrentlyClicked(e) {
 function showRoomPreview() {
   var temp = document.getElementsByTagName("template")[0];
   var field = document.getElementsByClassName('desktop');
-  var showroomDiv = temp.content.querySelector('.showroom');
-  for (let imageId of product.imageIds){
+  var showroomDiv = temp.content.querySelector('#showroomimages');
+  var showroomproduct = new showRoomProduct(product);
+  for (let imageId of showroomproduct.imageIds){
       let img = document.createElement('IMG');
       img.setAttribute('src', 'getImage.php?id=' + imageId);
       img.classList.add('slider');
-      showroomDiv.appendChild(img);
+      showroomDiv.insertBefore(img, showroomDiv[0]);
   }
-  var productNameEl = temp.content.querySelector('.product-info h1');
-  var productDescriptionPara = temp.content.querySelector('#productdescription');
-  var editButton = temp.content.querySelector('#editButton');
-  editButton.addEventListener('click', goBackFromShowRoom, false);
-  var productInfo = product.getProductInfo(product.currentLanguageId);
-  productNameEl.textContent = productInfo.name;
-  productDescriptionPara.textContent = productInfo.description;
+  setNameAndDescriptionForShowRoom(temp, showroomproduct);
+  setSizesForShowRoom(temp, showroomproduct); 
   var clon = temp.content.cloneNode(true);
   field[0].appendChild(clon);
   field[0].childNodes[1].style.display = 'none';
   showDivs(slideIndex);
+  addShowRoomEventListener();
+}
+
+function setNameAndDescriptionForShowRoom(temp, showRoomProduct) {
+    var productNameEl = temp.content.querySelector('.product-info h1');
+    var productDescriptionPara = temp.content.querySelector('#productdescription');
+    var editButton = temp.content.querySelector('#editButton');
+    editButton.addEventListener('click', goBackFromShowRoom, false);
+    productNameEl.textContent = showRoomProduct.productInfo.name;
+    productDescriptionPara.textContent = showRoomProduct.productInfo.description;
+    productDescriptionPara.classList.add('displayblock');
+    return;
+}
+
+function setSizesForShowRoom(template, showRoomProduct) {
+    var sizesPara = template.content.querySelector('#productsizes');
+    sizesPara.innerHTML = '';
+    sizesPara.innerHTML = showRoomProduct.sizes;
+    return;
 }
 
 function goBackFromShowRoom() {
@@ -425,6 +448,7 @@ function showDivs(n) {
 
 window.onload = () => {
     addEventListeners();
+    
     
     product = new Product(productId);
     product.formatId = wQuery("select[name='format'").val();

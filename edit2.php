@@ -98,32 +98,14 @@ if (isset($_GET['id'])) {
     var countryLanguages = <?= json_encode($countrylanguages) ?>;
     var countryItems = <?= json_encode($countryItems) ?>;
     var productId = <?= $productId ?>; 
+    var sizesObjArray = <?= $productService->sizestojson() ?>;
+    var materialNamesObjArray = <?= $productService->materialstojson() ?>;
    
 </script>
 <script src="js/general/product.js" type="text/javascript"></script>
 <script src="js/page/editproduct.js" type="text/javascript"></script>
-<template>
-    <div id="showroom">
-        <link href="css/productShowRoom.css" type="text/css" rel="stylesheet">
-        <div class="showroom">
-            <div class="arrowbutton">
-                <button onclick="plusDivs(-1)">&#10094;</button>
-                <button onclick="plusDivs(1)">&#10095;</button>
-            </div>
-        </div>
-        <div class="product-info">
-            <h1><!-- the product name --></h1>
-            <div class="priceButton">
-                <h2><!--product price --></h2>
-                <button>confirm</button>
-                <button id="editButton" onclick="goBackFromShowRoom()">edit</button>
-            </div>
-        <p id="productdescription">
-                <!-- the product description -->
-        </p>
-        </div>
-    </div>
-</template>
-
+<script src="js/page/productshowroom.js" type="text/javascript"></script>
 <?php
+require_once 'app/lib/utilities/HtmlTemplates/productshowroom.php'; 
 require_once 'adminpagefooter.php';
+?>

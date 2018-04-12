@@ -16,6 +16,11 @@
    clear: both;
 }
 
+
+
+/*
+    fix the column reverse thingy shoudnt be there.. sloppy solution..
+*/
 #showroom .showroom{
     width: 70%;
     float: left;
@@ -24,10 +29,16 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
+   
 }
 
 #showroom .showroom img{
-    height: 70%;
+    max-width: 80%;
+    border: 2px solid black;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto;
+    
 }
 
 #showroom .showroom .arrowbutton {
@@ -77,6 +88,11 @@
 
 #showroom .product-info #accordionmenu p{
     display: none;
+}
+
+#showroom #productsizes .showroomsizes {
+    display: block !important;
+    border: none !important;
 }
 
 .nobottomborder {

@@ -18,7 +18,6 @@ class ProductSizeRepository extends Baserepository {
         return [['s', &$sizes], ['s', &$name]];
     }
     
-    public function getAllSizes() {
-        return $this->getAll();
-    }
-}
+    
+    
+} 
