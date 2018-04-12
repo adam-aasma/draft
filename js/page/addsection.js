@@ -141,6 +141,57 @@ function setLanguagesForMarket(){
     }
 }
 
+function createImageSpan(imageId, imageName) {
+    var div = document.getElementById('addedpictures');
+    var para = document.createElement('P');
+    para.setAttribute('class', 'row-float');
+    var span = document.createElement('SPAN');
+    span.setAttribute('class','duo');
+    var but = document.createElement('BUTTON');
+    but.setAttribute('data-image-id', imageId);
+    span.innerText = imageName;
+    but.innerText = 'delete';
+    para.appendChild(span);
+    para.appendChild(but);
+    div.appendChild(para);
+    
+    but.addEventListener('click', function() { 
+        section.deleteImage(imageId, function() {
+            wQuery(para).remove();
+        }); 
+    });
+    
+}
+
+function setImageToPreview(imageId, categoryId){
+    var imgEl = document.createElement('IMG');
+    imgEl.setAttribute('src', 'getImage.php?id=' + imageId);
+    var els = document.querySelectorAll('#imagescategories INPUT');
+    for ( let el of els) {
+        if(parseInt(el.value) === parseInt(categoryId)){
+            var categoryEl = el;
+        }
+    }
+    switch(categoryEl.nextSibling.textContent) {
+        case  'sectionsmall' :
+            var div = document.querySelector('#leftsection');
+            var oldImg = div.querySelector('img');
+            oldImg.setAttribute('src', 'getImage.php?id=' + imageId);
+            break;
+        case 'sectionbig' :
+            var div = document.querySelector('#rightsection IMG');
+            div.setAttribute('src', 'getImage.php?id=' + imageId);
+        case 'sectionmobile' :
+            /*not implemented */
+            return;
+    }
+    /*if(div){
+    div.appendChild(imgEl);
+    } */
+    
+    
+}
+
 
 
 window.onload= function() {
@@ -161,5 +212,7 @@ function addEventListeners() {
     var el2 = document.getElementById('markets');
     el2.addEventListener('change', setLanguagesForMarket, false);
     var el3 = document.getElementById('languages');
-    el3.addEventListener('change', getCopy, false)
+    el3.addEventListener('change', getCopy, false);
+    var el4 = document.getElementById("submit");
+    el4.addEventListener('click', function(e) { section.saveImage(e); });
 }

@@ -16,14 +16,21 @@ class ImageService extends BaseService {
     
     //add productImage to db
     
-    public function addProductImage($imageDatas, $imageCategoryId, $productId) {
+    public function addProductImage($imageDatas, $imageCategoryId, $mappingId, $category = 'product') {
         $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
         foreach($imageDatas as $imageData){
          $imageId = $this->addImage($imageData, $imageCategoryId);
-         $productImageRepo->create(ProductImage::create($productId, $imageId));
-         
+         switch( $category){
+             case 'product' :
+                $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
+                $productImageRepo->create(ProductImage::create($mappingId, $imageId));
+                break;
+             case 'section' :
+                 
+                 break;
+         }
         }
-         return $imageId;
+        return $imageId;
        
     } 
     private function addImage($imageArray, $pictureId){

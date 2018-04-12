@@ -22,7 +22,7 @@ $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategorie
     <fieldset id='pictures' class="border">
         <legend>product images</legend>
         <div class="pictureBar">
-            <form method="POST" action="ajaxtest.php" id="picture"></form>
+            <form method="POST" action="ajaxsectioncontroller.php" id="picture"></form>
             <div class="trio left">
                 <input type="file" />
             </div>
@@ -102,3 +102,4 @@ $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategorie
 </script>
 <script src="js/page/addsection.js" type="text/javascript"></script>
 
+<?php require_once 'adminpagefooter.php' ?>

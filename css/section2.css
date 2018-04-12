@@ -25,8 +25,9 @@
     box-sizing: border-box;
     float: left;
     position: relative;
-    overflow: auto;
+    
 }
+
 
 #section #upperwrapper #leftsection #gradient {
     position: absolute;

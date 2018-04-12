@@ -3,6 +3,7 @@ namespace Walltwisters\service;
 
 
 use Walltwisters\utilities\HtmlUtilities;
+use Walltwisters\model\Section;
 
 
 class SectionService extends BaseService {
@@ -10,6 +11,8 @@ class SectionService extends BaseService {
     public function __construct($repositoryFactory) {
         parent::__construct($repositoryFactory);
     }
+    
+    
     
      public function addSection($sectionInfos, $imageIds, $createdByUserId, $countryId, $languageId, $productIds){
         $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
@@ -108,5 +111,20 @@ class SectionService extends BaseService {
         
         
         return $sections;
+    }
+    
+    
+    
+    public function initializeSection($userId){
+        $sectionrepo = $this->repo();
+        $section = $sectionrepo->create(Section::create(null ,null ,null, $userId), true);
+        
+        return $section->id;
+        
+        
+    }
+    
+    private function repo(){
+        return  $this->repositoryFactory->getRepository('sectionRepository');
     }
 }

@@ -5,7 +5,9 @@
  * @returns {Section}
  */
 function Section() {
+    this.sectionId = 0;
     this.sectionCopy = [],
+    this.imageIds = [];
         
     
     
@@ -21,9 +23,36 @@ function Section() {
         }
         
         return this.sectionCopy[languageId];
-        
-        
     }
+    
+    this.saveImage = function(e) {
+        var that = this;
+        e.preventDefault();
+        var div = wQuery(e.target).closest("DIV .pictureBar").first();
+        if (div) {
+            var fileElem = div.querySelector("INPUT[type=file]");
+            var categoryElem = div.querySelector("INPUT[type=radio]:checked")
+            if (fileElem && fileElem.files.length && categoryElem) {
+                var f = new formData();
+                f.url('ajaxsectioncontroller.php');
+                f.addPart('requestType', 'image');
+                f.addPart('sectionId', this.sectionId);
+                f.addPart('image-category-id', categoryElem.value);
+                f.addFile(fileElem.files[0]);
+                f.callback(function(response) { 
+                    console.log(JSON.stringify(response)); 
+                    if (response.imageId) {
+                        that.imageIds = response.imageId;
+                        that.sectionId = response.sectionId;
+                        createImageSpan(response.imageId, response.imageName);
+                        setImageToPreview(response.imageId, response.categoryId);
+                        wQuery("input[type='file']").val('');
+                    }
+                });
+                f.post();
+            }
+        }
+    };
     
    
         

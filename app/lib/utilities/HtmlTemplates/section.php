@@ -4,7 +4,7 @@
     <link href="css/section2.css" type="text/css" rel="stylesheet">
     <h1 data-item="titel">titel</h1>
     <div id="upperwrapper" class=" border">
-        <div id="leftsection" class=" border">
+        <div id="leftsection" class="border">
             <img src="/img/pic.left.jpg" id="leftpic"/>
             <div id="gradient">
                 
