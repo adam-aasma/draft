@@ -11,9 +11,14 @@ if (!isset($_SESSION['user'])) {
     echo json_encode(['message' => 'there is no user']);
     die();
 }
+
 $sectionService = new SectionService(RepositoryFactory::getInstance());
 $user = unserialize($_SESSION['user']);
 $sectionId = null;
+if (isset($_GET['languageid']) && isset($_GET['marketid'])) {
+    $json = true;
+    $response = $sectionService->getAvailableProductsforSection($_GET['marketid'], $_GET['languageid'], $json);
+}
 if (isset($_REQUEST['sectionId']) && $_REQUEST['sectionId'] != 0) {
     $sectionId = $_REQUEST['sectionId'];
 } else {
@@ -34,13 +39,19 @@ if (isset($_POST['requestType'])) {
 
                 $response = ['imageName' => $name, 'mime' => $mime, 'size' => $size, 'imageId' => $imageId, 'categoryId' => $id, 'sectionId' => $sectionId];
                 break;
+            case 'deleteimage' :
+                $imageService = new ImageService(RepositoryFactory::getInstance());
+                $imageService->deleteImage($_REQUEST['imageId']);
+                $response = ['status' => 'ok'];
+                break;
         }
     } catch (Exception $ex) {
         header("HTTP/1.0 500 Internal error");
         echo json_encode(['message' => $ex->getMessage()]);
     }
     
-    echo json_encode($response);
+    
 }
+echo json_encode($response);
 
 ?>

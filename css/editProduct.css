@@ -247,6 +247,7 @@
 }
 #addedpictures p {
     height: 10%;
+    margin-top: 0.5em;
 }
 
 #addedpictures span {

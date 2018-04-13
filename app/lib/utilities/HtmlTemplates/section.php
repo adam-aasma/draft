@@ -5,7 +5,7 @@
     <h1 data-item="titel">titel</h1>
     <div id="upperwrapper" class=" border">
         <div id="leftsection" class="border">
-            <img src="/img/pic.left.jpg" id="leftpic"/>
+            <img src="" id="leftpic"/>
             <div id="gradient">
                 
             </div>
@@ -17,7 +17,7 @@
             
         </div>
         <div id="rightsection" class=" border">
-            <img src="/img/pic.right.png" id="rightpic" />
+            <img src="" id="rightpic" />
             
         </div>
         
@@ -25,7 +25,7 @@
     <div id="lowerwrapper" class="border">
         <div class="productpicture border">
             <div class="upperwrapper border">
-               <img src="/img/2kolmnurka.jpg" class="border" /> 
+               <img src="" class="border" /> 
             </div>
             <div class="lowerwrapper border">
                 <h2>name</h2>
@@ -55,7 +55,7 @@
         </div>
         <div class="productpicture border">
             <div class="upperwrapper border">
-                <img src="/img/2kolmnurka.jpg" class="border" />
+                <img src="" class="border" />
                 
             </div>
             <div class="lowerwrapper border">

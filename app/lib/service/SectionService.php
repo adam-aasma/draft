@@ -53,23 +53,40 @@ class SectionService extends BaseService {
         return $sectionListRows;;
     }
     
-    public function getAvailableProductsforSection($country, $language){
+    public function getAvailableProductsforSection($country, $language, $json = false){
+        $countryTypeCheck = is_a($country, '\Walltwisters\model\Country');
+        if(!$countryTypeCheck) {
+          $country =  \Walltwisters\model\Country::create($country, '');
+        }
+        $languageTypeCheck = is_a($language, '\Walltwisters\model\Language');
+        if(!$languageTypeCheck) {
+          $language =  \Walltwisters\model\Language::create($language, '');
+        }
         $productRepo = $this->repositoryFactory->getRepository('productRepository');
         $localizedProducts = $productRepo->getLocalizedProductsByCountryAndLanguage($country, $language);
-        $productThumbNails = '';
-        foreach ($localizedProducts as $localizedProduct){
-            foreach($localizedProduct->imageBaseInfos as $imageBaseInfo){
-                if( $imageBaseInfo->category === 'product'){
-                    $productThumbNails .= HtmlUtilities::createThumbNail($localizedProduct->id, $localizedProduct->productDescription->name, $imageBaseInfo->id );
-                }
-            }
-            
-            
+        if(!$json){
+            return $this->createLocalizedThumbnails($localizedProducts);
+        
         }
-        
-        
-        return $productThumbNails;
+        return $this->jasonizeLocalizedProductsThumbNails($localizedProducts);
                
+    }
+    
+    private function jasonizeLocalizedProductsThumbNails($localizedProducts){
+        $jsonProducts = [];
+        $jasonProduct = ['productid' => 0 , 'name' => '', 'image_id' => 0];
+        foreach($localizedProducts as $localizedproduct){
+            $jasonProduct['productid'] = $localizedproduct->id;
+            $jasonProduct['name'] = $localizedproduct->productDescription->name;
+            foreach($localizedproduct->imageBaseInfos as $image){
+                if( $image->category === 'product'){
+                $jasonProduct['image_id'] = $image->id ;
+                }
+                
+            }
+            array_push($jsonProducts, $jasonProduct);
+        }
+        return $jsonProducts;
     }
     
    public function getSelectedproductsById($Ids, bool $post = false){
@@ -99,14 +116,14 @@ class SectionService extends BaseService {
     } 
     
     public function getAllSectionNamesBy($country, $language){
-        $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
+        $sectionrepo = $this->repo();
         $sections = $sectionrepo->getAllSectionsByCountryLanguage($country, $language);
         
         return $sections;
     }
     
     public function getCompleteSectionsById($id){
-        $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
+        $sectionrepo = $this->repo();
         $sections = $sectionrepo->getCompleteSectionsById($id);
         
         
@@ -126,5 +143,17 @@ class SectionService extends BaseService {
     
     private function repo(){
         return  $this->repositoryFactory->getRepository('sectionRepository');
+    }
+    
+    private function createLocalizedThumbnails($localizedProduct){
+        $productThumbNails = '';
+            foreach ($localizedProducts as $localizedProduct){
+                foreach($localizedProduct->imageBaseInfos as $imageBaseInfo){
+                    if( $imageBaseInfo->category === 'product'){
+                        $productThumbNails .= HtmlUtilities::createThumbNail($localizedProduct->id, $localizedProduct->productDescription->name, $imageBaseInfo->id );
+                    }
+                }
+            }
+            return $productThumbNails;
     }
 }

@@ -18,6 +18,15 @@ function getSelectedLanguageId(){
     }
 }
 
+function getSelectedMarketId(){
+     var markets = document.querySelectorAll('#markets OPTION');
+      for (let market of markets){
+        if (market.selected){ 
+        return market.value;
+        };
+    }
+}
+
 /*
  * event fired in 2 scenarios, change language in copy
  * or change a single line in copy
@@ -147,8 +156,10 @@ function createImageSpan(imageId, imageName) {
     para.setAttribute('class', 'row-float');
     var span = document.createElement('SPAN');
     span.setAttribute('class','duo');
+    span.setAttribute('class','left');
     var but = document.createElement('BUTTON');
     but.setAttribute('data-image-id', imageId);
+    but.setAttribute('class', 'right');
     span.innerText = imageName;
     but.innerText = 'delete';
     para.appendChild(span);
@@ -158,14 +169,23 @@ function createImageSpan(imageId, imageName) {
     but.addEventListener('click', function() { 
         section.deleteImage(imageId, function() {
             wQuery(para).remove();
-        }); 
+        });
+        deleteImageFromPreview(imageId);
     });
     
 }
 
+function deleteImageFromPreview(imageId){
+    var imgs = document.querySelectorAll('#preview IMG');
+    for ( let img of imgs){
+        var imgAttribute = img.getAttribute('src');
+        if(imgAttribute.indexOf(imageId) >= 0){
+            img.setAttribute('src', '');
+        }
+    }
+}
+
 function setImageToPreview(imageId, categoryId){
-    var imgEl = document.createElement('IMG');
-    imgEl.setAttribute('src', 'getImage.php?id=' + imageId);
     var els = document.querySelectorAll('#imagescategories INPUT');
     for ( let el of els) {
         if(parseInt(el.value) === parseInt(categoryId)){
@@ -185,20 +205,48 @@ function setImageToPreview(imageId, categoryId){
             /*not implemented */
             return;
     }
-    /*if(div){
-    div.appendChild(imgEl);
-    } */
     
+}
+
+function createImageThumbnails(productId, name, imageId){
+    var div  = document.createElement('DIV');
+    div.setAttribute('class', 'imagethumbnails')
+    var imgEl = document.createElement('IMG');
+    imgEl.setAttribute('src', 'getImage.php?id=' + imageId);
+    imgEl.setAttribute('data-product-id', productId);
+    var span = document.createElement('SPAN');
+    span.textContent = name;
+    div.appendChild(imgEl);
+    div.appendChild(span);
+    
+    return div;
+    
+}
+
+function setAllAvailableProducts(imageThumbnail){
+    var div = document.getElementById('allproducts');
+    div.appendChild(imageThumbnail);
     
 }
 
 
 
 window.onload= function() {
-    /*deleteLowerWrapperFromSectionDiv(); */
+    /*
+     * deletes the down part of the section preview bad solution fix later
+     */
+    deleteLowerWrapperFromSectionDiv(); 
+    
     onSectionLoad();
     addEventListeners();
     setLanguagesForMarket();
+    
+    ajaxGet('ajaxsectioncontroller.php?marketid=' + getSelectedMarketId() + '&languageid=' + getSelectedLanguageId(), function(datas){
+        for (let data of datas){
+            setAllAvailableProducts(createImageThumbnails(data.productid, data.name, data.image_id));
+        }
+        
+    })
 }
 
 function addEventListeners() {

@@ -5,9 +5,10 @@ function createImageSpan(imageId, imageName) {
     var para = document.createElement('P');
     para.setAttribute('class', 'row-float');
     var span = document.createElement('SPAN');
-    span.setAttribute('class','duo');
+    span.setAttribute('class','duo left');
     var but = document.createElement('BUTTON');
     but.setAttribute('data-image-id', imageId);
+    but.setAttribute('class', 'right');
     span.innerText = imageName;
     but.innerText = 'delete';
     para.appendChild(span);
@@ -19,14 +20,6 @@ function createImageSpan(imageId, imageName) {
             wQuery(para).remove();
         }); 
     });
-    
-}
-
-function getMaterialName(marketId,materialId) {
-    
-}
-
-function getSizeName(marketId, materialId, sizeId){
     
 }
 

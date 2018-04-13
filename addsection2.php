@@ -29,7 +29,7 @@ $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategorie
             <div id="imagescategories" class="left radios" >
                 <?= FormUtilities::getAllRadioOptions($imagesCategories,'category', 'category', [$imagesCategories[0]->id]);?>
             </div>
-            <div class="left center saveImage">
+            <div class="right center saveImage">
                 <button type="submit" id="submit" value="save" form="picture">Add</button>
             </div>
         </div>

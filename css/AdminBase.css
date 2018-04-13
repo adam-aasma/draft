@@ -158,6 +158,7 @@ label{
 .row-float:after{
     content: '';
     clear: both;
+    display: block;
 }
 
 .row:after{

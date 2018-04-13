@@ -52,6 +52,24 @@ function Section() {
                 f.post();
             }
         }
+    }
+    
+    this.deleteImage = function(imageId, onImageDeleted) {
+        var f = new formData();
+        f.url('ajaxsectioncontroller.php');
+        f.addPart('requestType', 'deleteimage');
+        f.addPart('sectionId', this.sectionId);
+        f.addPart('imageId', imageId);
+        f.callback(function(response) { 
+            console.log(JSON.stringify(response)); 
+            if (response.status === 'ok') {
+                if (onImageDeleted) {
+                    onImageDeleted(imageId);
+                    
+                }
+            }
+        });
+        f.post();
     };
     
    
