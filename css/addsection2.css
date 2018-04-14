@@ -102,11 +102,14 @@ and open the template in the editor.
     overflow: scroll;
 }
 
-#allproducts .imagethumbnails{
-    width: 50%
+#allproducts .imagethumbnails,
+#includedProducts .imagethumbnails{
+    width: 50%;
+    margin: auto;
 }
 
-#allproducts .imagethumbnails img{
+#allproducts .imagethumbnails img,
+#includedProducts .imagethumbnails img{
     max-width: 4rem;
 }
 

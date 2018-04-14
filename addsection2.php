@@ -84,7 +84,7 @@ $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategorie
 <div id="lowerwrapper">
     
     <div id="currently">
-        <span>nr.products: 15</span>
+        <span>nr.products: <i>0</i></span>
         <span>market: estonia</span>
         <span>languages: estonian, russian</span>
         <span>desktop: yes</span>

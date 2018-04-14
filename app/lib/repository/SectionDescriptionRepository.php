@@ -9,7 +9,7 @@ class SectionDescriptionRepository extends BaseRepository {
     }
     
     protected function getColumnNamesForInsert() {
-       return ['title', 'sales_line_header', 'sales_line_paragraph', 'country_id', 'language_id', 'section_id'];
+       return ['title', 'sales_line_header', 'sales_line_paragraph', 'language_id', 'section_id', 'section_description'];
        
     }
     
@@ -17,18 +17,20 @@ class SectionDescriptionRepository extends BaseRepository {
         $titel = $section->title;
         $sales_line_header = $section->saleslineHeader;
         $sales_line_paragraph = $section->saleslineParagraph;
-        $country_id = $section->countryId;
+        $description = $section->description;
         $language_id = $section->languageId;
-        $section_id = $section->id;
+        $section_id = $section->sectionId;
         
         return [
                 ['s', &$titel],
                 ['s', &$sales_line_header],
                 ['s', &$sales_line_paragraph],
-                ['i', &$country_id],
                 ['i', &$language_id], 
-                ['i', &$section_id]
+                ['i', &$section_id],
+                ['s', &$description]
                ];
     }
+    
+    
 
 }

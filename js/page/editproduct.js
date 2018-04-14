@@ -471,7 +471,9 @@ function addEventListeners() {
     
     var el2 = document.getElementById('addLanguage');
     el2.addEventListener('click', selectLanguage, false);
-
+    
+    var el3 = document.getElementById("submit");
+    el3.addEventListener('click', function(e) { product.saveImage(e); });
     
     
     var el4 = document.getElementById("general");

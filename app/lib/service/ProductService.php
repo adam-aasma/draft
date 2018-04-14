@@ -57,60 +57,6 @@ class ProductService extends BaseService {
     
     }
     
-    /**
-     * 
-     * @param array $imageCategoryValues
-     * @param array $imageDatas
-     * @param array $productinfos
-     * @param int $formatId
-     * @param int $sectionId
-     * @param array $materialIds
-     * @param array $sizeMaterialIds
-     * @param integer $userId
-     * @return int
-     */
-    public function addProduct___Old(
-            $imageCategoryValues,
-            $imageDatas,
-            $productinfos,
-            $formatId,
-            $sectionId,
-            $materialIds,
-            $sizeMaterialIds,
-            $userId) {
-        $productRepository = $this->repositoryFactory->getRepository('productRepository');
-        $imageRepository = $this->repositoryFactory->getRepository('imageRepository');
-        $productImageRepository = $this->repositoryFactory->getRepository('productImageRepository');
-        $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
-        $productSectionRepository = $this->repositoryFactory->getRepository('productSectionRepository');
-        
-        $getId = true;
-        $product = $productRepository->create(Walltwisters\model\Product::create(0, null, $userId, $userId, $formatId), $getId);
-        
-        $fileidx = 0;
-        foreach ($imageDatas as $imagefile){
-            $imageCategoryValue = $imageCategoryValues[$fileidx];
-            $imageName = $imagefile['name'][0];
-            $filepath = $imagefile["tmp_name"][0];
-            $mime = $imagefile["type"][0];
-            $size = $imagefile["size"][0];
-            $image = Walltwisters\model\Image::create($filepath, $size, $mime, $imageName, $imageCategoryValue);
-            $imageId = $imageRepository->addImage($image);
-            $productImageRepository->create(Walltwisters\model\ProductImage::create($product->id, $imageId));
-            $fileidx++;
-        }
-      
-        $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
-        foreach ($productdescriptions as $productdescription){
-            $productDescriptionRepository->create($productdescription);
-        }
-        $productSectionRepository->create(Walltwisters\model\ProductSection::create($product->id, $sectionId));
-        
-        $this->saveProductItems($product->id, $materialIds, $sizeMaterialIds);
-        
-        return $product->id;
-    }
-    
     public function initializeProduct($userId, $formatId){
         $productRepository = $this->repositoryFactory->getRepository('productRepository');
         $artistId = null;

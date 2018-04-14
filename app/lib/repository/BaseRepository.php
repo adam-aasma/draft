@@ -63,6 +63,27 @@ abstract class BaseRepository {
         return $okfetch && $count > 0;
     }
     
+    /*
+     * updated thes function to accept array of condition
+     * if problem ariseset a method in the model class
+     */
+    
+    public function deleteForId($aggregate) {
+        list($conditions, $idValues) = $this->getIds($aggregate);
+        $sql = "DELETE FROM $this->tableName WHERE " . join(" AND ", $conditions);
+        $stmt = self::$conn->prepare($sql);
+        if ($stmt === false) {
+            throw new \Exception("SQL syntax: " . $sql);
+        }
+        $this->bindParams($stmt, null, $idValues);
+        $res = $stmt->execute();
+        if (!$res) {
+            throw new \Exception($stmt->error);
+        }  
+         
+        
+    }
+    
     public function update($aggregate) {
         $colNames = $this->getColumnNamesForUpdate();
         $colList = '';
@@ -115,23 +136,14 @@ abstract class BaseRepository {
         if ($this->exists($aggregate)) {
             $this->update($aggregate);
         } else {
-            $this->create($aggregate);
+            $aggregate = $this->create($aggregate);
+            
         } 
+        
+        return $aggregate;
     }
     
-    public function deleteForId($idName, $idValue) {
-        $sql = "DELETE FROM $this->tableName WHERE $idName = ?";
-        $stmt = self::$conn->prepare($sql);
-        if ($stmt === false) {
-            throw new \Exception("SQL syntax: " . $sql);
-        }
-        $stmt->bind_param('i', $idValue);
-        $res = $stmt->execute();
-        if (!$res) {
-            throw new \Exception($stmt->error);
-        }   
-        
-    }
+    
     
     private function bindParams($stmt, $aggregate, $ids = []) {
         $bindTypes = '';

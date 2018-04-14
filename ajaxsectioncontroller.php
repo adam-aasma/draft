@@ -19,7 +19,7 @@ if (isset($_GET['languageid']) && isset($_GET['marketid'])) {
     $json = true;
     $response = $sectionService->getAvailableProductsforSection($_GET['marketid'], $_GET['languageid'], $json);
 }
-if (isset($_REQUEST['sectionId']) && $_REQUEST['sectionId'] != 0) {
+if (isset($_REQUEST['sectionId']) && (int)$_REQUEST['sectionId'] !==  0) {
     $sectionId = $_REQUEST['sectionId'];
 } else {
     $sectionId = $sectionService->initializeSection($user->id);
@@ -44,6 +44,15 @@ if (isset($_POST['requestType'])) {
                 $imageService->deleteImage($_REQUEST['imageId']);
                 $response = ['status' => 'ok'];
                 break;
+            case 'sectioncopy' :
+                $titel = $_REQUEST['titel'];
+                $sectionId = $sectionService->updateSectionCopy( $sectionId,
+                                                            $_REQUEST['languageId'],
+                                                            $_REQUEST['titel'],
+                                                            $_REQUEST['sline'],
+                                                            $_REQUEST['sline2'],
+                                                            $_REQUEST['description']);
+                $response = ['sectionId' => $sectionId];
         }
     } catch (Exception $ex) {
         header("HTTP/1.0 500 Internal error");

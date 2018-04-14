@@ -72,22 +72,6 @@ class SectionService extends BaseService {
                
     }
     
-    private function jasonizeLocalizedProductsThumbNails($localizedProducts){
-        $jsonProducts = [];
-        $jasonProduct = ['productid' => 0 , 'name' => '', 'image_id' => 0];
-        foreach($localizedProducts as $localizedproduct){
-            $jasonProduct['productid'] = $localizedproduct->id;
-            $jasonProduct['name'] = $localizedproduct->productDescription->name;
-            foreach($localizedproduct->imageBaseInfos as $image){
-                if( $image->category === 'product'){
-                $jasonProduct['image_id'] = $image->id ;
-                }
-                
-            }
-            array_push($jsonProducts, $jasonProduct);
-        }
-        return $jsonProducts;
-    }
     
    public function getSelectedproductsById($Ids, bool $post = false){
         $productRepo = $this->repositoryFactory->getRepository('productRepository');
@@ -130,15 +114,24 @@ class SectionService extends BaseService {
         return $sections;
     }
     
-    
-    
     public function initializeSection($userId){
         $sectionrepo = $this->repo();
         $section = $sectionrepo->create(Section::create(null ,null ,null, $userId), true);
         
         return $section->id;
+    }
+    
+    public function updateSectionCopy($sectionId, $languageId, $title, $saleslineHeader, $saleslineParagraph, $description){
+        $sectionDescriptionRepo = $this->repositoryFactory->getRepository('sectionDescriptionRepository');
+        $sectionObj = \Walltwisters\model\SectionDescription::create($title,$saleslineHeader,$saleslineParagraph, $description, $languageId, $sectionId);        
+                                                                                          
+        if(empty($title) && empty($saleslineHeader) && empty($saleslineParagraph) && empty($description)){
+            $sectionDescriptionRepo->deleteForId($sectionObj);
+            return $sectionId;
+        }
         
-        
+        $sectionDescription = $sectionDescriptionRepo->createOrUpdate($sectionObj);
+        return $sectionDescription->sectionId;
     }
     
     private function repo(){
@@ -156,4 +149,22 @@ class SectionService extends BaseService {
             }
             return $productThumbNails;
     }
+    
+    private function jasonizeLocalizedProductsThumbNails($localizedProducts){
+        $jsonProducts = [];
+        $jasonProduct = ['productid' => 0 , 'name' => '', 'image_id' => 0];
+        foreach($localizedProducts as $localizedproduct){
+            $jasonProduct['productid'] = $localizedproduct->id;
+            $jasonProduct['name'] = $localizedproduct->productDescription->name;
+            foreach($localizedproduct->imageBaseInfos as $image){
+                if( $image->category === 'product'){
+                $jasonProduct['image_id'] = $image->id ;
+                }
+                
+            }
+            array_push($jsonProducts, $jasonProduct);
+        }
+        return $jsonProducts;
+    }
+    
 }

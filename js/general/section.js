@@ -8,10 +8,13 @@ function Section() {
     this.sectionId = 0;
     this.sectionCopy = [],
     this.imageIds = [];
+    this.productIds = [];
+    this.currentLanguageId = 0;
         
     
     
     this.getSectionCopy = function(languageId) {
+        this.currentLanguageId = languageId;
         if(this.sectionCopy[languageId]) {
             return this.sectionCopy[languageId];
         }
@@ -23,6 +26,43 @@ function Section() {
         }
         
         return this.sectionCopy[languageId];
+    }
+    
+    this.getSectionProducts = function(){
+        return this.productIds;
+    }
+    
+    this.updateSectionProducts = function(productIds) {
+        this.productIds = [];
+        if (!productIds.length){
+            return;
+        }
+        for (let productid of productIds){
+            this.productIds.push(productid);
+            
+        }
+        
+    }
+    
+    this.saveSectionCopy = function(){
+        var that = this;
+        var f = new formData();
+        var sectionCopy = this.getSectionCopy(this.currentLanguageId);
+        f.url('ajaxsectioncontroller.php');
+        f.addPart('requestType', 'sectioncopy');
+        f.addPart('sectionId', this.sectionId);
+        f.addPart('languageId', this.currentLanguageId);
+        f.addPart('titel', sectionCopy.titel);
+        f.addPart('sline', sectionCopy.sline);
+        f.addPart('sline2', sectionCopy.sline2);
+        f.addPart('description', sectionCopy.description);
+        f.callback(function(response) { 
+            console.log(JSON.stringify(response)); 
+            if (parseInt(response.sectionId) !== parseInt(that.sectionId)) {
+                that.sectionId = response.sectionId;
+            }
+        });
+        f.post();
     }
     
     this.saveImage = function(e) {
@@ -71,6 +111,7 @@ function Section() {
         });
         f.post();
     };
+    
     
    
         

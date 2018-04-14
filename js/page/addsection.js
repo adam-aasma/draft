@@ -35,10 +35,12 @@ function getSelectedMarketId(){
  */
 
 function getCopy(e){
-    var elTarget = e.target;
-    var dataItem = elTarget.getAttribute('data-item');
+    if(!e){
+        elTarget  = document.getElementById('languages');
+    } else {
+        var elTarget = e.target;
+    }
     var sectionCopy = section.getSectionCopy(getSelectedLanguageId());
-    
     if(elTarget.tagName === 'SELECT'){
         var copyDiv = document.getElementById('copy');
         var inputs = copyDiv.querySelectorAll('INPUT');
@@ -59,6 +61,7 @@ function getCopy(e){
             }
         }
     } else {
+        var dataItem = elTarget.getAttribute('data-item');
         var text = {
         line : '',
         text : ''
@@ -85,8 +88,10 @@ function getCopy(e){
                 sectionCopy.description = text.text;
                 break;
         }
+        section.saveSectionCopy();
         return updatePreviewCopy(text);
     }
+    getAllProductsForMarketAndLanguage();
     return updatePreviewLanguage(sectionCopy);
     
     
@@ -103,7 +108,7 @@ function updatePreviewLanguage(sectionCopy) {
     h2.textContent = sectionCopy.sline;
     var h3 = contentDiv.querySelector('H3');
     h3.textContent = sectionCopy.sline2;
-    var titel = contentDiv.querySelector('H1');
+    var titel = document.querySelector('#section H1');
     titel.textContent = sectionCopy.titel;
     
     
@@ -148,6 +153,8 @@ function setLanguagesForMarket(){
             
         }
     }
+    getCopy(null);
+    
 }
 
 function createImageSpan(imageId, imageName) {
@@ -223,12 +230,59 @@ function createImageThumbnails(productId, name, imageId){
     
 }
 
+function setAllProductsToZero(){
+    var div = document.getElementById('allproducts');
+    div.innerHTML = '';
+}
 function setAllAvailableProducts(imageThumbnail){
     var div = document.getElementById('allproducts');
     div.appendChild(imageThumbnail);
     
 }
+function getAllProductsForMarketAndLanguage() {
+    setAllProductsToZero();
+    ajaxGet('ajaxsectioncontroller.php?marketid=' + getSelectedMarketId() + '&languageid=' + getSelectedLanguageId(), function(datas){
+        for (let data of datas){
+            setAllAvailableProducts(createImageThumbnails(data.productid, data.name, data.image_id));
+        }
+    });
+}
 
+function updateNumberOfProducts(productIds) {
+    var number = productIds.length;
+    var span = document.querySelector('#currently SPAN I');
+    span.textContent = number;
+    
+    
+}
+
+function addSectionProducts() {
+    var includedProducts = document.querySelectorAll('#includedProducts .imagethumbnails IMG');
+    var productIds = [];
+    for (let includedProduct of includedProducts){
+        let productId = includedProduct.getAttribute('data-product-id');
+        productIds.push(productId)
+        
+    }
+    section.updateSectionProducts(productIds);
+    updateNumberOfProducts(section.getSectionProducts());
+    
+}
+
+function includeExcludeProduct(e, useCase) {
+    var elTarget = e.target;
+    if(elTarget.tagName === 'IMG'){
+        var imgdiv = elTarget.parentElement.cloneNode(elTarget);
+        elTarget.parentElement.parentElement.removeChild(elTarget.parentElement);
+        var inclDiv = document.getElementById(useCase);
+        inclDiv.appendChild(imgdiv);
+        
+    }
+    addSectionProducts();
+    return;
+    
+    
+}
 
 
 window.onload= function() {
@@ -241,12 +295,9 @@ window.onload= function() {
     addEventListeners();
     setLanguagesForMarket();
     
-    ajaxGet('ajaxsectioncontroller.php?marketid=' + getSelectedMarketId() + '&languageid=' + getSelectedLanguageId(), function(datas){
-        for (let data of datas){
-            setAllAvailableProducts(createImageThumbnails(data.productid, data.name, data.image_id));
-        }
-        
-    })
+    
+    
+    
 }
 
 function addEventListeners() {
@@ -254,13 +305,23 @@ function addEventListeners() {
     var textarea = el.querySelector('TEXTAREA');
     textarea.addEventListener('blur', getCopy, false);
     var inputs = el.querySelectorAll('INPUT');
-    for( let input of inputs){
-    input.addEventListener('blur', getCopy, false);
-    }
+        for( let input of inputs){
+        input.addEventListener('blur', getCopy, false);
+        }
     var el2 = document.getElementById('markets');
     el2.addEventListener('change', setLanguagesForMarket, false);
     var el3 = document.getElementById('languages');
     el3.addEventListener('change', getCopy, false);
     var el4 = document.getElementById("submit");
     el4.addEventListener('click', function(e) { section.saveImage(e); });
+    var el5 = document.getElementById('allproducts');
+    el5.addEventListener('click', function(e){
+            var x = 'includedProducts';
+            includeExcludeProduct(e,x);
+    }, false);
+    var el6 = document.getElementById('includedProducts');
+    el6.addEventListener('click', function(e){
+            var x = 'allproducts';
+            includeExcludeProduct(e,x);
+    }, false);
 }

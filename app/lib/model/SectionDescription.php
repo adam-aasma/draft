@@ -1,8 +1,12 @@
 <?php
 namespace Walltwisters\model;
 
-class SectionDescription extends SectionBaseInfo {
-    private $countryId;
+class SectionDescription {
+    protected $title;
+    protected $saleslineHeader;
+    protected $saleslineParagraph;
+    protected $description;
+    protected $sectionId;
     private $languageId;
     
     
@@ -19,9 +23,14 @@ class SectionDescription extends SectionBaseInfo {
         $obj->title = $title;
         $obj->saleslineHeader = $saleslineHeader;
         $obj->saleslineParagraph = $saleslineParagraph;
-        $obj->countryId = $countryId;
+        $obj->description = $countryId;
         $obj->languageId = $languageId;
-        $obj->id = $sectionId;
+        $obj->sectionId = $sectionId;
         return $obj;
+    }
+    
+    public function getIdArray(){
+        return ["language_id" => $this->languageId, "section_id" => $this->sectionId];
+        
     }
 }
