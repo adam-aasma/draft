@@ -6,6 +6,7 @@ use Walltwisters\utilities\Images;
 use Walltwisters\utilities\FormUtilities;
 
 $keywordContent = '';
+$title = '';
 $css = 'css/addsection2.css';
 require_once 'adminpageheaderlogic.php';
 require_once 'adminpageheader.php';

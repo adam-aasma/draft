@@ -85,7 +85,7 @@ abstract class BaseRepository {
     }
     
     public function update($aggregate) {
-        $colNames = $this->getColumnNamesForUpdate();
+        $colNames = $this->colNamesForUpdate;
         $colList = '';
         foreach($colNames as $colName) {
             if (!empty($colList)) {

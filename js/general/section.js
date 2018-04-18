@@ -8,8 +8,9 @@ function Section() {
     this.sectionId = 0;
     this.sectionCopy = [],
     this.imageIds = [];
-    this.productIds = [];
+    this.marketsProductIds = [];
     this.currentLanguageId = 0;
+    this.currentMarketId = 0;
         
     
     
@@ -29,18 +30,35 @@ function Section() {
     }
     
     this.getSectionProducts = function(){
-        return this.productIds;
+        return this.marketsProductIds[this.currentMarketId];
     }
     
-    this.updateSectionProducts = function(productIds) {
-        this.productIds = [];
-        if (!productIds.length){
-            return;
-        }
+    this.updateSectionProducts = function(productIds, marketId) {
+        this.currentMarketId = marketId;
+        this.marketsProductIds[marketId] = [];
         for (let productid of productIds){
-            this.productIds.push(productid);
-            
+            this.marketsProductIds[marketId].push(productid);
         }
+        this.saveProductsForSection(this.marketsProductIds[marketId], marketId);
+    }
+    
+    this.saveProductsForSection = function(ids, marketId) {
+        var that = this;
+        var f = new formData();
+        f.url('ajaxsectioncontroller.php');
+        f.addPart('requestType', 'productsformarket');
+        f.addPart('sectionId', this.sectionId);
+        f.addPart('marketId', marketId);
+        f.addPart('languageId', this.currentLanguageId);
+        f.addPart('productIds', ids);
+        f.callback(function(response) { 
+           console.log(JSON.stringify(response)); 
+            if (parseInt(response.sectionId) !== parseInt(that.sectionId)) {
+                that.sectionId = response.sectionId;
+            }
+        });
+        f.post();
+        
         
     }
     

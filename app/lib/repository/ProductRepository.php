@@ -10,8 +10,12 @@ use Walltwisters\model\ImageBaseInfo;
 
 class ProductRepository extends BaseRepository {
     
+    protected $colNamesForUpdate;
+    
+    
     public function __construct() {
         parent::__construct("products", "Walltwisters\model\Product");
+        $this->colNamesForUpdate  = $this->getColumnNamesForUpdate();
     }
     
     protected function getColumnNamesForInsert() {
@@ -132,7 +136,7 @@ class ProductRepository extends BaseRepository {
         throw new Exception("Execute failed: (" . $stmt->errno . ") " . $stmt->error);
     }
     
-    public function getLocalizedProductsByCountryAndLanguage($countryobj, $languageobj) {
+    public function getLocalizedProductsByCountryAndLanguageOrIds($countryobj, $languageobj, $ids = []) {
         $sql = "SELECT p.id as product_id
         , pd.description
         , pd.name 
@@ -156,13 +160,26 @@ class ProductRepository extends BaseRepository {
         LEFT JOIN products_images pi ON pi.product_id = p.id
         LEFT JOIN images im ON im.id = pi.image_id
         LEFT JOIN images_categories imc ON imc.id =im.images_category_id
-        WHERE pd.language_id = ? AND co.id = ?
-        ORDER BY p.id, im.id;
         ";
-        $stmt = self::$conn->prepare($sql);     
-        $language_Id = $languageobj->id;
-        $country_Id = $countryobj->id;
-        $stmt->bind_param("ii", $language_Id, $country_Id);                                                              
+        if (!empty($ids)){
+            $qs = array_map(function() { return '?'; }, $ids);
+            $inclause = implode(',', $qs);
+            $bs = array_map(function() { return 'i'; }, $ids);
+            $stmt = self::$conn->prepare($sql . " WHERE p.id IN ($inclause) ORDER BY p.id, im.id" );         
+            $bindTypes = implode('', $bs);
+            $bindp = [];
+            $bindp[] = &$bindTypes;
+            for ($i = 0; $i < count($ids); $i++) {
+                $bindp[] = &$ids[$i];
+            }
+            call_user_func_array(array($stmt, "bind_param"), $bindp);
+            
+        } else {
+            $stmt = self::$conn->prepare($sql . "WHERE pd.language_id = ? AND co.id = ? ORDER BY p.id, im.id");     
+            $language_Id = $languageobj->id;
+            $country_Id = $countryobj->id;
+            $stmt->bind_param("ii", $language_Id, $country_Id);  
+        }
         $res = $stmt->execute();                                                                        
         if ($res) {
             $stmt->bind_result($productId, $description, $name, $sizeId, $size, $materialId, $material, $countryId, $country, $imageId, $imageSize, $imageName, $imageCategoryId, $imageCategory);

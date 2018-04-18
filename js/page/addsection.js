@@ -232,20 +232,43 @@ function createImageThumbnails(productId, name, imageId){
 
 function setAllProductsToZero(){
     var div = document.getElementById('allproducts');
+    var div2 = document.getElementById('includedProducts');
     div.innerHTML = '';
+    div2.innerHTML = '';
 }
 function setAllAvailableProducts(imageThumbnail){
     var div = document.getElementById('allproducts');
     div.appendChild(imageThumbnail);
-    
 }
+function setAllIncludedProducts(imageThumbnail){
+    var div = document.getElementById('includedProducts');
+    div.appendChild(imageThumbnail);
+}
+
 function getAllProductsForMarketAndLanguage() {
     setAllProductsToZero();
-    ajaxGet('ajaxsectioncontroller.php?marketid=' + getSelectedMarketId() + '&languageid=' + getSelectedLanguageId(), function(datas){
-        for (let data of datas){
-            setAllAvailableProducts(createImageThumbnails(data.productid, data.name, data.image_id));
-        }
-    });
+    ajaxGet('ajaxsectioncontroller.php?marketid=' + getSelectedMarketId() + 
+            '&languageid=' + getSelectedLanguageId() +
+            '&getproductrequest=true' +
+             '&sectionId=' + section.sectionId,
+        function(datas){
+            try {
+                if(datas.includedProducts.length){
+                    for (let data of datas.includedProducts){
+                        setAllIncludedProducts(createImageThumbnails(data.productid, data.name, data.image_id));
+                    }
+                }
+                if(datas.allProducts.length) {
+                    for (let data of datas.allProducts){
+                        setAllAvailableProducts(createImageThumbnails(data.productid, data.name, data.image_id));
+                    }
+                }
+            } catch(error) {
+                /*no products for this market or language?
+                 * or an error
+                 */
+            }
+        });
 }
 
 function updateNumberOfProducts(productIds) {
@@ -264,7 +287,7 @@ function addSectionProducts() {
         productIds.push(productId)
         
     }
-    section.updateSectionProducts(productIds);
+    section.updateSectionProducts(productIds, getSelectedMarketId());
     updateNumberOfProducts(section.getSectionProducts());
     
 }

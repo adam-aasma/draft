@@ -2,11 +2,18 @@
 namespace Walltwisters\repository; 
 
 use Walltwisters\model\CompleteSection;
+use Walltwisters\model\Section;
 use Walltwisters\model\ImageBaseInfo;
+use Walltwisters\repository\ImageCategoryRepository;
 
 class SectionRepository extends BaseRepository {
+    protected $colNamesForUpdate;
+    
+    
+    
     public function __construct() {
         parent::__construct("sections", "Walltwisters\model\Section");
+        
     }
     
     protected function getColumnNamesForInsert() {
@@ -28,6 +35,58 @@ class SectionRepository extends BaseRepository {
                ];
     }
     
+    protected function getColumnValuesForBindUpdate($section) {
+        if($section->desktopBigPicId){
+            $imageId = $section->desktopBigPicId;
+        }
+        if($section->desktopSmallPicId){
+            $imageId = $section->desktopSmallPicId;
+        }
+        if($section->mobilePicId){
+            $imageId = $section->mobilePicId;
+        }
+        
+        return [['i', &$imageId]];
+    }
+    
+    public function updateSection($sectionId, $imageId, $imageCategoryId){
+        $sectionObj = $this->setColumnNameForUpdateAndBuildObj($imageCategoryId, $imageId);
+        $sectionObj->id = $sectionId;
+        $this->update($sectionObj);
+    }
+    
+    
+    
+    private function setColumnNameForUpdateAndBuildObj($imageCategoryId, $imageId){
+        $imageCatRepo = new ImageCategoryRepository();
+        $imageCategory = $imageCatRepo->getCategoryNameById($imageCategoryId);
+        $sectionObj = new section();
+        switch ($imageCategory) {
+           case 'sectionsmall' :
+               $colName = 'desktop_small_pic_id';
+               $sectionObj->desktopSmallPicId = $imageId;
+               break;
+           case 'sectionbig' :
+               $colName = 'desktop_big_pic_id';
+               $sectionObj->desktopBigPicId = $imageId;
+               break;
+           case 'sectionmobile' :
+               $colName = 'mobile_pic_id';
+               $sectionObj->mobilePicId = $imageId;
+               break;
+        }
+        $this->setColNamesForUpdate($colName);
+        
+        return $sectionObj;
+        
+    }
+    
+    private function setColNamesForUpdate($colName){
+        $this->colNamesForUpdate = [$colName];
+    }
+ /* 
+  * probably will not be used anymore delete when confident
+  *   
     public function getCompleteSectionBy($country, $language){
         $countryId = $country->id;
         $languageId = $language->id;
@@ -207,4 +266,6 @@ class SectionRepository extends BaseRepository {
 
                  
     }
+  * 
+  */
 }

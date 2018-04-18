@@ -15,15 +15,30 @@ if (!isset($_SESSION['user'])) {
 $sectionService = new SectionService(RepositoryFactory::getInstance());
 $user = unserialize($_SESSION['user']);
 $sectionId = null;
-if (isset($_GET['languageid']) && isset($_GET['marketid'])) {
-    $json = true;
-    $response = $sectionService->getAvailableProductsforSection($_GET['marketid'], $_GET['languageid'], $json);
-}
+
+/*
+ * initalizing or setting section Id
+ */
 if (isset($_REQUEST['sectionId']) && (int)$_REQUEST['sectionId'] !==  0) {
     $sectionId = $_REQUEST['sectionId'];
 } else {
     $sectionId = $sectionService->initializeSection($user->id);
 }
+
+/*
+ * getting all products or products for an existing section
+ */
+
+if (isset($_GET['getproductrequest'])) {
+    $languageId = $_GET['languageid'];
+    $marketId = $_GET['marketid'];
+    $sectionId = $_GET['sectionId'];
+    $response = $sectionService->getProductsForSection($marketId, $languageId, $sectionId);
+}
+
+/*
+ * all save to DB cases
+ */
 if (isset($_POST['requestType'])) {
     try {
         header('Content-Type: ' . 'application/json');
@@ -31,27 +46,38 @@ if (isset($_POST['requestType'])) {
             case 'image':
                 $id = $_POST['image-category-id'];
                 $imageService = new ImageService(RepositoryFactory::getInstance());
-                $imageId = $imageService->addProductImage($_FILES, $id, $sectionId, 'section');
+                $datas = $_FILES;
+                $imageId = $imageService->addImage($datas, $id, $sectionId, 'section');
 
-                $mime = $_FILES['images']["type"][0];
-                $size = $_FILES['images']["size"][0];
-                $name = $_FILES['images']["name"][0];
+                $mime = $datas['images']["type"][0];
+                $size = $datas['images']["size"][0];
+                $name = $datas['images']["name"][0];
 
                 $response = ['imageName' => $name, 'mime' => $mime, 'size' => $size, 'imageId' => $imageId, 'categoryId' => $id, 'sectionId' => $sectionId];
                 break;
             case 'deleteimage' :
                 $imageService = new ImageService(RepositoryFactory::getInstance());
-                $imageService->deleteImage($_REQUEST['imageId']);
+                $imageId = $_REQUEST['imageId'];
+                $imageService->deleteImage($imageId);
                 $response = ['status' => 'ok'];
                 break;
             case 'sectioncopy' :
-                $titel = $_REQUEST['titel'];
-                $sectionId = $sectionService->updateSectionCopy( $sectionId,
-                                                            $_REQUEST['languageId'],
-                                                            $_REQUEST['titel'],
-                                                            $_REQUEST['sline'],
-                                                            $_REQUEST['sline2'],
-                                                            $_REQUEST['description']);
+                $title = $_REQUEST['titel'];
+                $languageId = $_REQUEST['languageId'];
+                $saleslineHeader = $_REQUEST['sline'];
+                $saleslineParagraph = $_REQUEST['sline2'];
+                $description = $_REQUEST['description'];
+                $sectionId = $sectionService->updateSectionCopy($sectionId, $languageId, $title, $saleslineHeader, $saleslineParagraph, $description);
+                $response = ['sectionId' => $sectionId];
+                break;
+            case 'productsformarket' :
+                $marketId = $_REQUEST['marketId'];
+                $languageId = $_REQUEST['languageId'];
+                $productIds = explode(',', $_REQUEST['productIds']);
+                $status = $sectionService->updateProductIdsForMarket($sectionId, 
+                                                                    $marketId,  
+                                                                    $languageId,
+                                                                    $productIds);
                 $response = ['sectionId' => $sectionId];
         }
     } catch (Exception $ex) {

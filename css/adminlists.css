@@ -1,0 +1,129 @@
+.desktop{
+    display: block;
+}
+
+#adminlists {
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 10%;
+    background-color: #343434;
+    display: block;
+    min-width: 60rem;
+}
+
+#adminlists:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#adminlists h2 {
+    color: white;
+}
+
+#adminlists .left {
+    margin: 2% 2rem;
+}
+
+#adminlists .right {
+    margin-right: 2rem;
+}
+
+#adminlistbody {
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 2px solid white;
+    box-sizing: border-box;
+}
+
+#addNew {
+    margin: 2% 2rem;
+    float: left;
+    
+}
+
+#addNew span {
+    background-color: white;
+    padding: 0.3rem 2rem;
+}
+
+/*
+/lifted in stylesfrom old admin table
+/
+*/
+
+.admintables {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+   
+    text-align: center;
+}
+
+.admintables caption {
+    background-color: #f7f7f7;
+    padding-bottom: 1rem;
+}
+
+.tableheader {
+    display: inline-flex;
+    justify-content: flex-end;
+    width: 100%;
+ 
+}
+
+.admintables .tableheader h2{
+    align-self: flex-start;
+}
+
+.admintables th,
+.admintables td {
+    padding: 0;
+    width: 100%;
+}
+
+.admintables td  {
+    border: 1px solid #6d6d6d;
+}
+
+.admintables form{
+    flex-wrap: nowrap;
+    width: 50%;
+    height: 10%;
+}
+
+.admintables thead {
+    background-color: #343434;
+    color: white;
+}
+
+.admintables a {
+    display: block;
+    text-decoration: none;
+    color: #2f273c;
+}
+
+.admintables a:hover,
+.admintables a:focus {
+    background-color: #cde7ca;
+    background-color: rgba(167, 240, 210, 0.3);
+}
+
+.col-id {
+    background-color: #fef0f0;
+    background-color: rgba(255, 0, 0, 0.05);
+    width: 20%;
+}
+.col-description{
+   
+}
+
+.tablerow{
+    height: 4rem !important;
+    overflow: hidden;
+}
+

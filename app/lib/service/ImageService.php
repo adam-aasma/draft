@@ -16,16 +16,18 @@ class ImageService extends BaseService {
     
     //add productImage to db
     
-    public function addProductImage($imageDatas, $imageCategoryId, $mappingId, $category = 'product') {
+    public function addImage($imageDatas, $imageCategoryId, $id, $category = 'product') {
         $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
         foreach($imageDatas as $imageData){
-         $imageId = $this->addImage($imageData, $imageCategoryId);
+         $imageId = $this->prepareAndSave($imageData, $imageCategoryId);
          switch( $category){
              case 'product' :
                 $productImageRepo = $this->repositoryFactory->getRepository('productImageRepository');
-                $productImageRepo->create(ProductImage::create($mappingId, $imageId));
+                $productImageRepo->create(ProductImage::create($id, $imageId));
                 break;
              case 'section' :
+                 $sectionRepo = $this->repositoryFactory->getRepository('sectionRepository');
+                 $sectionId = $sectionRepo->updateSection($id, $imageId, $imageCategoryId);
                  
                  break;
          }
@@ -33,9 +35,9 @@ class ImageService extends BaseService {
         return $imageId;
        
     } 
-    private function addImage($imageArray, $pictureId){
-       $image= $this->getImageData($imageArray);
-       $image->categoryId = $pictureId;
+    private function prepareAndSave($imageData, $imageCategoryId){
+       $image= $this->getImageData($imageData);
+       $image->categoryId = $imageCategoryId;
        $imageRepo = $this->repositoryFactory->getRepository('imageRepository'); 
        $id = $imageRepo->addImage($image);
        
@@ -66,9 +68,9 @@ class ImageService extends BaseService {
        }
        extract($sectionPictures);
        $imageRepo = $this->repositoryFactory->getRepository('imageRepository');
-       $bigPicId = $this->addImage($desktopbig, $bigSectionPicId);
-       $smallPicId = $this->addImage($desktopsmall, $smallSectionPicId);
-       $mobilePicId = $this->addImage($mobile, $mobileSectionPicId);
+       $bigPicId = $this->addImageHelper($desktopbig, $bigSectionPicId);
+       $smallPicId = $this->addImageHelper($desktopsmall, $smallSectionPicId);
+       $mobilePicId = $this->addImageHelper($mobile, $mobileSectionPicId);
        
        return ['bigpicid' => $bigPicId, 'smallpicid' => $smallPicId, 'mobilepicid' =>$mobilePicId];
        

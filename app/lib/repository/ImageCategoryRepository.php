@@ -43,12 +43,13 @@ class ImageCategoryRepository extends BaseRepository {
     }
     
     public function getCategoryNameById($id){
-        $stmt = ("SELECT category FROM images_categories WHERE id = ?  ");
+        $sql = ("SELECT category FROM images_categories WHERE id = ?  ");
         $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("i", $id);
         $res = $stmt->execute();
         if ($res) {
             $stmt->bind_result($categoryName);
+            $stmt->fetch();
             $category = $categoryName;
         }
         

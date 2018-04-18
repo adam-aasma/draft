@@ -3,14 +3,13 @@ namespace Walltwisters\model;
 
 class Country {
     private $id;
-    //private $name;
     private $country;
     
     public static function create($id, $country){
-        $country = new Country();
-        $country->id = $id;
-        $country->country = $country;
-        return $country;
+        $obj = new Country();
+        $obj->id = $id;
+        $obj->country = $country;
+        return $obj;
     }
     public function __set($name, $value){
         $this->$name = $value;

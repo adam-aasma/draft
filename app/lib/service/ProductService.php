@@ -131,7 +131,7 @@ class ProductService extends BaseService {
     
     public function getList($country, $language){
         $repo = $this->repositoryFactory->getRepository('productRepository');
-        $products = $repo->getLocalizedProductsByCountryAndLanguage($country, $language);
+        $products = $repo->getLocalizedProductsByCountryAndLanguageOrIds($country, $language);
         $productListRows = [];
         foreach($products as $product) {
             $productListRow = new ProductListRow();

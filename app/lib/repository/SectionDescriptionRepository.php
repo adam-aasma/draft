@@ -4,8 +4,11 @@ namespace Walltwisters\repository;
 use \Walltwisters\model\SectionDescription;
 
 class SectionDescriptionRepository extends BaseRepository {
+    protected $colNamesForUpdate;
+    
     public function __construct() {
         parent::__construct("section_descriptions", "Walltwisters\model\SectionDescription");
+        $this->colNamesForUpdate  = $this->getColumnNamesForInsert();
     }
     
     protected function getColumnNamesForInsert() {

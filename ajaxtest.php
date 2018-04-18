@@ -28,7 +28,7 @@ if (isset($_POST['requestType'])) {
             case 'image':
                 $id = $_POST['image-category-id'];
                 $imageService = new ImageService(RepositoryFactory::getInstance());
-                $imageId = $imageService->addProductImage($_FILES, $id, $existingProductId);
+                $imageId = $imageService->addImage($_FILES, $id, $existingProductId);
 
                 $mime = $_FILES['images']["type"][0];
                 $size = $_FILES['images']["size"][0];

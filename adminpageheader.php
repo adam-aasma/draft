@@ -4,9 +4,7 @@
         <title><?= $title ?></title>
         <meta name="keywords" content="<?= $keywordContent ?>">
         <link href="css/AdminBase.css" type="text/css" rel="stylesheet">
-        <link href="<?=$css ?>" type="text/css" rel="stylesheet"> -->
-       <!--  <link href="css/admin.css" type="text/css" rel="stylesheet"> 
-        <!--<script>var initFunctionTable = [];</script> -->
+        <link href="<?=$css ?>" type="text/css" rel="stylesheet"> 
     </head>
     <body id="bodyLoad">
         <div id="jsAdmin" class="admin">

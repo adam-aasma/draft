@@ -4,7 +4,8 @@ namespace Walltwisters\service;
 
 use Walltwisters\utilities\HtmlUtilities;
 use Walltwisters\model\Section;
-
+use Walltwisters\model\Country;
+use Walltwisters\model\Language;
 
 class SectionService extends BaseService {
     
@@ -13,8 +14,37 @@ class SectionService extends BaseService {
     }
     
     
+    public function getProductsForSection($countryId, $languageId, $sectionId = 0) {
+        $productIds = [];
+        if($sectionId){
+            $productSectionRepo = $this->repositoryFactory->getRepository('productSectionRepository');
+            $obj = \Walltwisters\model\ProductSection::create(0, $sectionId, $countryId, $languageId);
+            $productIds = $productSectionRepo->getProductsForSectionId($obj);
+            if(!is_array($productIds)){
+                $productIds = [$productIds];
+            }
+        }
+        $country = Country::create($countryId, '');
+        $language = Language::create($languageId, '');
+        
+        $productRepo = $this->repositoryFactory->getRepository('localizedProductRepository');
+        $allLocalizedProducts = $productRepo->getLocalizedProductsByCountryAndLanguage($country, $language);
+        $allProducts = $this->jasonizeLocalizedProductsThumbNails($allLocalizedProducts);
+        if(!empty($productIds)){
+            $localizedProductsInSection = $productRepo->getLocalizedProductsByIds($productIds, $language);
+            $sectionProducts = $this->jasonizeLocalizedProductsThumbNails($localizedProductsInSection);
+            $allProducts = $this->spliceAllProducts($allProducts, $sectionProducts);
+            if(empty($allProducts)){
+                $allProducts = [];
+            }
+            return $response = ['allProducts'=> $allProducts, 'includedProducts' => $sectionProducts];
+        }                                                                                
+        return $response = ['allProducts'=> $allProducts, 'includedProducts' => []];
+    }
     
-     public function addSection($sectionInfos, $imageIds, $createdByUserId, $countryId, $languageId, $productIds){
+
+/*    
+    public function addSection($sectionInfos, $imageIds, $createdByUserId, $countryId, $languageId, $productIds) {
         $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
         $sectionDescriptionRepo = $this->repositoryFactory->getRepository('sectionDescriptionRepository');
         $sectionId = $sectionrepo->create(Walltwisters\model\Section::create($imageIds['bigpicid'], $imageIds['smallpicid'], $imageIds['mobilepicid'], $createdByUserId), true)->id;
@@ -28,8 +58,11 @@ class SectionService extends BaseService {
         }
         return $sectionId;
     }
+ * 
+ */
     
-    public function getSectionListBy($country, $language){
+    /*
+    public function getSectionListBy($country, $language) {
         $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
         $completeSections = $sectionrepo->getCompleteSectionBy($country, $language);
         $sectionListRows = [];
@@ -37,7 +70,7 @@ class SectionService extends BaseService {
             $sectionListRow = \Walltwisters\viewmodel\SectionListRow::create($completeSection->id, $completeSection->titel, $completeSection->salesLineHeader, $completeSection->salesLineParagraph, $completeSection->languageId);
             foreach ($completeSection->imageBaseInfos as $imageBaseInfo){
                 if($imageBaseInfo->category == 'sectionbig' || $imageBaseInfo->category == 'sectionsmall'){
-                $sectionListRow->addDesktopImageId($imageBaseInfo->id);
+                    $sectionListRow->addDesktopImageId($imageBaseInfo->id);
                 }
                 else if($imageBaseInfo->category == 'sectionmobile'){
                     $sectionListRow->addMobileImageId($imageBaseInfo->id);
@@ -52,6 +85,7 @@ class SectionService extends BaseService {
         
         return $sectionListRows;;
     }
+    */
     
     public function getAvailableProductsforSection($country, $language, $json = false){
         $countryTypeCheck = is_a($country, '\Walltwisters\model\Country');
@@ -63,7 +97,7 @@ class SectionService extends BaseService {
           $language =  \Walltwisters\model\Language::create($language, '');
         }
         $productRepo = $this->repositoryFactory->getRepository('productRepository');
-        $localizedProducts = $productRepo->getLocalizedProductsByCountryAndLanguage($country, $language);
+        $localizedProducts = $productRepo->getLocalizedProductsByCountryAndLanguageOrIds($country, $language);
         if(!$json){
             return $this->createLocalizedThumbnails($localizedProducts);
         
@@ -72,8 +106,8 @@ class SectionService extends BaseService {
                
     }
     
-    
-   public function getSelectedproductsById($Ids, bool $post = false){
+ /*   
+    public function getSelectedproductsById($Ids, bool $post = false){
         $productRepo = $this->repositoryFactory->getRepository('productRepository');
         $productThumbNails = '';
         $products = [];
@@ -98,13 +132,20 @@ class SectionService extends BaseService {
         }
         return $productThumbNails;
     } 
+   
+  * 
+  */
     
+    /*
     public function getAllSectionNamesBy($country, $language){
         $sectionrepo = $this->repo();
         $sections = $sectionrepo->getAllSectionsByCountryLanguage($country, $language);
         
         return $sections;
     }
+     * 
+     */
+    
     
     public function getCompleteSectionsById($id){
         $sectionrepo = $this->repo();
@@ -134,10 +175,40 @@ class SectionService extends BaseService {
         return $sectionDescription->sectionId;
     }
     
+    public function updateProductIdsForMarket($sectionId, $countryId,  $languageId, $ids) {
+        $productSectionRepo = $this->repositoryFactory->getRepository('productSectionRepository');
+        $obj = \Walltwisters\model\ProductSection::create(0, $sectionId, $countryId, $languageId);
+        $productSectionRepo->deleteForId($obj);
+        foreach( $ids as $id) {
+            if(!empty($id)){
+                $obj = \Walltwisters\model\ProductSection::create($id, $sectionId, $countryId, $languageId);
+                $productSectionRepo->create($obj);
+            }
+        }
+
+        return $sectionId;
+    }
+    
+    private function spliceAllProducts($allProducts, $sectionProducts) {
+        foreach($sectionProducts as  $product1){
+            foreach($allProducts as $ind => $product2){
+                if( $product1['productid'] === $product2['productid'] &&
+                    $product1['name'] === $product2['name'] &&
+                    $product1['image_id'] === $product2['image_id']
+                ){
+                  unset($allProducts[$ind]);  
+                }
+            }
+        }
+        
+        return array_values($allProducts);
+    }
+    
     private function repo(){
         return  $this->repositoryFactory->getRepository('sectionRepository');
     }
     
+    /*
     private function createLocalizedThumbnails($localizedProduct){
         $productThumbNails = '';
             foreach ($localizedProducts as $localizedProduct){
@@ -149,6 +220,8 @@ class SectionService extends BaseService {
             }
             return $productThumbNails;
     }
+     * 
+     */
     
     private function jasonizeLocalizedProductsThumbNails($localizedProducts){
         $jsonProducts = [];
