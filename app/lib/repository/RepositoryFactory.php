@@ -27,6 +27,8 @@ class RepositoryFactory implements IRepositoryFactory {
     private $sliderDescriptionRepository;
     private $artistDesignerRepository;
     private $localizedProductRepository;
+    private $completeProductRepository;
+    private $completeSectionRepository;
     private static $repositoryFactory;
     
     public static function getInstance() {
@@ -111,6 +113,12 @@ class RepositoryFactory implements IRepositoryFactory {
                     break;
                 case 'localizedProductRepository':
                     $this->localizedProductRepository = new LocalizedProductRepository();
+                    break;
+                case 'completeProductRepository':
+                    $this->completeProductRepository = new CompleteProductRepository();
+                    break;
+                case 'completeSectionRepository':
+                    $this->completeSectionRepository = new CompleteSectionRepository();
                     break;
             }
         }

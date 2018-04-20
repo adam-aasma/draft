@@ -8,11 +8,21 @@ use Walltwisters\viewmodel\ShowRoomProduct;
 use Walltwisters\model\Product;
 use Walltwisters\model\ProductImage;
 use Walltwisters\model\ProductDescription;
+use Walltwisters\viewmodel\ProductListRow2;
 
 class ProductService extends BaseService {
     
     public function __construct($repositoryFactory) {
         parent::__construct($repositoryFactory);
+    }
+    
+    public function getAllProducts(){
+        error_reporting(E_ALL & ~E_NOTICE);
+        $compProductRepo = $this->repositoryFactory->getRepository('completeProductRepository');
+        $products = $compProductRepo->getAllCompleteProducts();
+        $listRow = ProductListRow2::create($products);
+        
+        return $listRow;
     }
    
     /**

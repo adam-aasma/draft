@@ -13,6 +13,13 @@ class SectionService extends BaseService {
         parent::__construct($repositoryFactory);
     }
     
+    public function getAllSections() {
+        $repo = $this->repositoryFactory->getRepository('completeSectionRepository');
+        $sections = $repo->getAllCompleteSections();
+        
+        return $sections;
+    }
+    
     
     public function getProductsForSection($countryId, $languageId, $sectionId = 0) {
         $productIds = [];

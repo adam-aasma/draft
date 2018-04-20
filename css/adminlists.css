@@ -40,6 +40,11 @@
     box-sizing: border-box;
 }
 
+.admintables thead{
+    color: white;
+    background-color: #343434;
+}
+
 #addNew {
     margin: 2% 2rem;
     float: left;
@@ -60,70 +65,58 @@
     border-collapse: collapse;
     table-layout: fixed;
     width: 100%;
-   
     text-align: center;
-}
-
-.admintables caption {
-    background-color: #f7f7f7;
-    padding-bottom: 1rem;
-}
-
-.tableheader {
-    display: inline-flex;
-    justify-content: flex-end;
-    width: 100%;
- 
-}
-
-.admintables .tableheader h2{
-    align-self: flex-start;
-}
-
-.admintables th,
-.admintables td {
-    padding: 0;
-    width: 100%;
+   
 }
 
 .admintables td  {
     border: 1px solid #6d6d6d;
 }
 
-.admintables form{
-    flex-wrap: nowrap;
-    width: 50%;
-    height: 10%;
+.tablerow > td {
+    height: 10px;
 }
 
-.admintables thead {
-    background-color: #343434;
-    color: white;
-}
-
-.admintables a {
-    display: block;
-    text-decoration: none;
-    color: #2f273c;
-}
-
-.admintables a:hover,
-.admintables a:focus {
-    background-color: #cde7ca;
-    background-color: rgba(167, 240, 210, 0.3);
-}
-
-.col-id {
-    background-color: #fef0f0;
-    background-color: rgba(255, 0, 0, 0.05);
-    width: 20%;
-}
-.col-description{
-   
-}
-
-.tablerow{
-    height: 4rem !important;
+.tablerow td > div {
+    height: 4rem;
     overflow: hidden;
 }
 
+.tablerow td h2 {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    font-size: 0.6rem;
+    color: green;
+    
+}
+
+.tablerow td p,
+.tablerow td span{
+    text-transform: lowercase;
+    font-size: 0.6rem;
+    text-align: left;
+}
+
+.thumbnailwrapper{
+    border-top: 0.5px solid green;
+    display: block;
+    border-collapse: collapse;
+    width: 100%;
+    height: 2rem;
+}
+
+.thumbnailwrapper:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.thumbnailwrapper span{
+    float: left;
+}
+
+.thumbnailwrapper .imagethumbnails{
+    height: 100%;
+    float: right;
+}

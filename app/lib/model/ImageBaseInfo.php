@@ -14,7 +14,7 @@ class ImageBaseInfo implements \JsonSerializable {
     public function __set($name, $value) {
         $this->$name = $value;
     }
-    // $category is what kind of pic... interior, product, slider etc...
+   
     public static function createBaseInfo($id, $imageName, $categoryId, $category = null) {
         $obj = new ImageBaseInfo();
         $obj->id = $id;
@@ -25,6 +25,6 @@ class ImageBaseInfo implements \JsonSerializable {
     }
     
     public function jsonSerialize() {
-        return ['id' => $this->id, 'name' => $this->imageName, 'categoryId' => $this->categoryId];
+        return ['id' => $this->id, 'name' => $this->imageName, 'categoryId' => $this->categoryId, 'category' => $this->category];
     }
 }
