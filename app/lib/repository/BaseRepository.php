@@ -79,7 +79,8 @@ abstract class BaseRepository {
         $res = $stmt->execute();
         if (!$res) {
             throw new \Exception($stmt->error);
-        }  
+        }
+        return $stmt->affected_rows;
          
         
     }

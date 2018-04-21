@@ -8,7 +8,7 @@ use Walltwisters\model\Country;
 require_once 'checkauth.php';
 $user = unserialize($_SESSION['user']);
 $menu = array("dashboard" => "#",
-            "products" =>"/listproducts.php",
+            "products" =>"/lists.php",
             "printer" => "addprinter.php",
             "view customer" => "#",
             "view orders" => "#",

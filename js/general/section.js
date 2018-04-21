@@ -112,6 +112,20 @@ function Section() {
         }
     }
     
+    this.deleteSection = function(){
+        var f = new formData();
+        f.url('ajaxsectioncontroller.php');
+        f.addPart('requestType', 'deleteSection');
+        f.addPart('sectionId', this.sectionId);
+        f.callback(function(response) { 
+            console.log(JSON.stringify(response)); 
+            if (response.status === 'ok') {
+                
+            }
+        });
+        f.post();
+    }
+    
     this.deleteImage = function(imageId, onImageDeleted) {
         var f = new formData();
         f.url('ajaxsectioncontroller.php');
@@ -131,6 +145,22 @@ function Section() {
     };
     
     
+    this.loadSection = function(sectionId) {
+        this.sectionId = sectionId;
+        var f = new formData();
+        f.url('ajaxsectioncontroller.php');
+        f.addPart('requestType', 'loadSection');
+        f.addPart('sectionId', this.sectionId);
+        f.callback(function(response) { 
+            console.log(JSON.stringify(response)); 
+            if (response.status === 'ok') {
+                
+            }
+        });
+        f.post();
+    }
+    
+    
    
         
     
@@ -142,6 +172,8 @@ function Section() {
     
 }
 /*
+ * this faunctions are relevant only for the section page and preview
+ * so better move them to a sectionPage.js
  * in case leftpic and right pic unequal height this function
  *  sets the wrapper to the same height
  *   and overflow is hidden in CSS

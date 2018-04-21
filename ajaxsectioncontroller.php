@@ -29,7 +29,7 @@ if (isset($_REQUEST['sectionId']) && (int)$_REQUEST['sectionId'] !==  0) {
  * getting all products or products for an existing section
  */
 
-if (isset($_GET['getproductrequest'])) {
+if (isset($_GET['getproductrequest']) && $_POST['requestType'] !== 'loadSection') {
     $languageId = $_GET['languageid'];
     $marketId = $_GET['marketid'];
     $sectionId = $_GET['sectionId'];
@@ -37,7 +37,7 @@ if (isset($_GET['getproductrequest'])) {
 }
 
 /*
- * all save to DB cases
+ * all save to DB cases & load a section for edit
  */
 if (isset($_POST['requestType'])) {
     try {
@@ -79,6 +79,20 @@ if (isset($_POST['requestType'])) {
                                                                     $languageId,
                                                                     $productIds);
                 $response = ['sectionId' => $sectionId];
+                break;
+            case 'deleteSection' :
+                $sectionId = $_REQUEST['sectionId'];
+                $res = $sectionService->deleteSection($sectionId);
+                if($res > 0){
+                    $response = ['status' => 'ok'];
+                }
+                break;
+            case 'loadSection' :
+                $sectionId = $_REQUEST['sectionId'];
+                $section = $sectionService->getCompleteSectionForId($sectionId);
+                
+                $response = $section;
+                break;
         }
     } catch (Exception $ex) {
         header("HTTP/1.0 500 Internal error");

@@ -15,6 +15,11 @@ $imageService = new ImageService(RepositoryFactory::getInstance());
 $countries = $user->countries;
 $countrylanguages = $sectionService->getCountryLanguages2($user->countries);
 $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategories');
+if(isset($_GET['id'])){
+    $sectionId = $_GET['id'];
+    $loadSection = true;
+}
+    
 
     
 
@@ -100,7 +105,11 @@ $imagesCategories = $sectionService->getImageCategoriesBy('sectionImageCategorie
 </div>
 <script>
     var languagesForCountry = <?= json_encode($countrylanguages)  ?>
+    
 </script>
+<?php if($loadSection) : ?>
+    <script> var sectionId = <?=$sectionId; ?></script>
+<?php endif; ?>
 <script src="js/page/addsection.js" type="text/javascript"></script>
 
 <?php require_once 'adminpagefooter.php' ?>

@@ -11,7 +11,7 @@ namespace Walltwisters\model;
 
 class CompleteSection implements \JsonSerializable{
     private $id;
-    private $copies; //copies is an array of sectionDescriptionBaseInfos objects
+    private $copies; //copies is an array of sectionDescription objects
     private $imageBaseInfos;
     private $products;
     

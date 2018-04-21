@@ -6,13 +6,13 @@
 <link href="css/adminlists.css" type="text/css" rel="stylesheet">
     <div class="left">
         <select id="listCategory">
-            <option>products</option>
-            <option>sections</option>
-            <option>slides</option>
+            <option data-category="products">products</option>
+            <option data-category="sections">sections</option>
+            <option data-category="slides">slides</option>
         </select>
     </div>
     <div id="addNew">
-        <span>new</span>
+        <span><a>new</a></span>
     </div>
     <div class="right">
         <h2>filters</h2>
@@ -29,24 +29,26 @@
     
 </div>
 <script src="js/page/adminlists.js" type="text/javascript"></script>
+<script src="js/general/section.js" type="text/javascript"></script>
 <template id="sectionTableBody">
     <table class="admintables">
         <colgroup>
             <col class="col-idx">
-            <col class="col-namex">
-            <col class="col-descriptionx">
-            <col class="col-picturesx">
-            <col class="col-itemdetailsx">
-            <col class="col-statisticsx">
-            <col class="col-sectionx">
+            <col class="col-pics">
+            <col class="col-titel">
+            <col class="col-salesline">
+            <col class="col-description">
+            <col class="col-products">
+            <col class="col-marlang">
+            <col class="col-create">
         </colgroup>
         <thead>
             <tr>
                 <th scope="col">id</th>
+                <th scope="col">pictures</th>
                 <th scope="col">title</th>
                 <th scope="col">salesline</th>
                 <th scope="col">description</th>
-                <th scope="col">pictures</th>
                 <th scope="col">products</th>
                 <th scope="col">mar/lang</th>
                 <th scopt="col">create</th>
@@ -56,42 +58,47 @@
 
         </tbody>
     </table>
+    
 </template>
 
 <template id="sectionListRow">
-    <tr  class="tablerow">
+    <tr class="tablerow">
         <td class="id"><a></a></td>
+        <td class="section-pictures"><div></div></td> 
         <td class="section-title"><div></div></td>
         <td class="section-salesline"><div></div></td>
-        <td class="section-description"><div><h2></h2></div></td>
-        <td class="section-pictures"></td> 
-        <td class="section-products"></td>
+        <td class="section-description"><div></div></td>
+        <td class="section-products"><div></div></td>
         <td class="section-marlang"></td>
-        <td>
+        <td class="section-edit">
             <div>
-                <p>anything else?</p>
+                <button>delete</button>
             </div>
         </td>
     </tr>
 </template>
 
 <template id="sectionCopy">
-    <div>
+    <div class="sectioncopy-section">
         <h2></h2>
         <span></span>
     </div>
 </template>
 
 <template id="sectionPictures">
-    <div>
-        <h2></h2>
-        <span></span>
-        <img class="imagethumbnails" alt="missing"/>
+    <div class="sectionPictures-section">
+        <div class="picture-info">
+            <h2></h2>
+            <span></span>
+        </div>
+        <div class="thumbnailwrapper">
+            
+        </div>
     </div>
 </template>
 
 <template id="sectionProducts">
-    <div>
+    <div class="sectionProducts-section">
         <h2></h2>
         <span>nr of products:<i></i></span>
     </div>

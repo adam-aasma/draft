@@ -309,6 +309,10 @@ function includeExcludeProduct(e, useCase) {
 
 
 window.onload= function() {
+    
+    if(sectionId){
+        section.loadSection(sectionId);
+    }
     /*
      * deletes the down part of the section preview bad solution fix later
      */

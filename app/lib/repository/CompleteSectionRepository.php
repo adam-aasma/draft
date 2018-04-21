@@ -10,7 +10,7 @@ namespace Walltwisters\repository;
 
 use Walltwisters\model\CompleteSection;
 use Walltwisters\model\ImageBaseInfo;
-use Walltwisters\model\SectionDescription;
+use Walltwisters\model\SectionDescriptionExtended;
 
 class CompleteSectionRepository extends BaseRepository {
     private $sql = "SELECT s.id,
@@ -81,6 +81,18 @@ class CompleteSectionRepository extends BaseRepository {
         return $this->buildObjs($sectionRows);
     }
     
+    public function getAllCompleteSectionsById($sectionId){
+        $sql = $this->sql . 'WHERE s.id = ?';
+        $stmt = self::$conn->prepare($sql);
+        $stmt->bind_param("i", $sectionId);                                                              
+        $res = $stmt->execute(); 
+        if ($res) {
+            $sectionRows = $this->fetchRows($stmt);
+        }
+        
+        return $this->buildObjs($sectionRows);
+    }
+    
     private function buildObjs($sectionArrays){
         $sections = [];
         foreach($sectionArrays as $sectionId => $sectionArray){
@@ -93,12 +105,12 @@ class CompleteSectionRepository extends BaseRepository {
                 if(!is_array($value)){
                     continue;
                 }
-                $section->pushArrays(SectionDescription::create($value['title']
+                $section->pushArrays(SectionDescriptionExtended::createExtended($value['title']
                                                                         , $value['salesLineHeader']
                                                                         , $value['salesLineParagraph']
                                                                         , $value['sectionDescription']
                                                                         , $value['languageId']
-                                                                        , $sectionId), 'copies') ;
+                                                                        , $value['language']), 'copies') ;
                 foreach($value as $products){
                     if(!is_array($products)){
                         continue;
