@@ -8,6 +8,8 @@ function Section() {
     this.sectionId = 0;
     this.sectionCopy = [],
     this.imageIds = [];
+    this.images = [];
+    this.products = [];
     this.marketsProductIds = [];
     this.currentLanguageId = 0;
     this.currentMarketId = 0;
@@ -83,7 +85,7 @@ function Section() {
         f.post();
     }
     
-    this.saveImage = function(e) {
+    this.saveImage = function(e, callback) {
         var that = this;
         e.preventDefault();
         var div = wQuery(e.target).closest("DIV .pictureBar").first();
@@ -102,9 +104,13 @@ function Section() {
                     if (response.imageId) {
                         that.imageIds = response.imageId;
                         that.sectionId = response.sectionId;
-                        createImageSpan(response.imageId, response.imageName);
-                        setImageToPreview(response.imageId, response.categoryId);
-                        wQuery("input[type='file']").val('');
+                        that.images.push({
+                            imageId: response.imageId,
+                            imageName: response.imagename,
+                            categoryId: response.categoryId,
+                            category: ''
+                        });
+                        callback(response);
                     }
                 });
                 f.post();
@@ -145,7 +151,8 @@ function Section() {
     };
     
     
-    this.loadSection = function(sectionId) {
+    this.loadSection = function(sectionId, callback) {
+        var section = this;
         this.sectionId = sectionId;
         var f = new formData();
         f.url('ajaxsectioncontroller.php');
@@ -153,8 +160,31 @@ function Section() {
         f.addPart('sectionId', this.sectionId);
         f.callback(function(response) { 
             console.log(JSON.stringify(response)); 
-            if (response.status === 'ok') {
-                
+            section.sectionId = response.sectionId;
+            for(let copy of response.copies) {
+                section.sectionCopy[copy.languageId] = {
+                    titel : copy.title,
+                    sline : copy.saleslineheader,
+                    sline2 : copy.saleslineParagraph,
+                    description : copy.description
+                };
+            }
+            for (let imageBaseinfo of response.imageBaseinfos) {
+                section.images.push({
+                    imageId: imageBaseinfo.id,
+                    imageName: imageBaseinfo.name,
+                    categoryId: imageBaseinfo.categoryId,
+                    category: imageBaseinfo.category
+                });
+            }
+            section.products = response.products;
+            if (section.products.length) {
+                section.currentLanguageId = section.products[0].languageId;
+                section.currentMarketId = section.products[0].countryId;
+            }
+            if (callback) {
+                callback();
+                return;
             }
         });
         f.post();
@@ -182,10 +212,13 @@ function Section() {
 function adjustHeightForImg () {
     
     var leftimg = document.getElementById('leftpic');
-    var rightimg = document.getElementById('rightpic');
+    var rightimg = document.getElementById('rightPic');
+    if(!leftimg || !rightimg || !leftimg.clientHeight || !rightimg.clientHeight){
+        return;
+    }
     var wrapper = document.getElementById('upperwrapper');
     wrapper.style.cssText = '';
-   
+    
     var leftheight = leftimg.clientHeight;
     var rightheight = rightimg.clientHeight;
     console.log(leftheight, rightheight);

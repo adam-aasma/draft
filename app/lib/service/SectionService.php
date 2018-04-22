@@ -61,7 +61,7 @@ class SectionService extends BaseService {
     
     public function getCompleteSectionForId($sectionId){
         $repo = $this->repositoryFactory->getRepository('completeSectionRepository');
-        $sections = $repo->getAllCompleteSectionsForId($sectionId);
+        $sections = $repo->getCompleteSectionById($sectionId);
         
         return $sections;
     }

@@ -69,7 +69,11 @@ class ImageRepository extends BaseRepository {
     }
     
     public function deleteImageForId($id) {
-        $this->deleteForId('id', $id);
+        $image = new image();
+        $image->id = $id;
+        $affectedRow = $this->deleteForId($image);
+        
+        return $affectedRow;
     }
 }
     

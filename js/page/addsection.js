@@ -27,6 +27,47 @@ function getSelectedMarketId(){
     }
 }
 
+function setSelectedLanguageAndMarket(languageId, marketId){
+    var lanOptions = document.querySelectorAll('#languages OPTION');
+    for (let option of lanOptions) {
+        if(parseInt(option.getAttribute('data-language-id')) === languageId){
+            option.selected = true;
+        }
+    }
+    var marOptions = document.querySelectorAll('#markets OPTION');
+    for (let option of marOptions) {
+        if(parseInt(option.getAttribute('value')) === marketId){
+            option.selected = true;
+        }
+    }
+    
+    return;
+}
+
+function setCopy(sectionCopy = null){
+    if(!sectionCopy){
+        sectionCopy = section.getSectionCopy(getSelectedLanguageId());
+    }
+    var copyDiv = document.getElementById('copy');
+    var inputs = copyDiv.querySelectorAll('INPUT');
+    var textarea = copyDiv.querySelector('TEXTAREA');
+    textarea.value = sectionCopy.description;
+    for( let input of inputs){
+        dataItem = input.getAttribute('data-item');
+        switch(dataItem) {
+            case 'titel':
+                input.value = sectionCopy.titel;
+                break;
+            case 'salesline' :
+                input.value = sectionCopy.sline;
+                break;
+            case 'salesline2' :
+                input.value = sectionCopy.sline2;
+                break;
+        }
+    }
+}
+
 /*
  * event fired in 2 scenarios, change language in copy
  * or change a single line in copy
@@ -40,28 +81,40 @@ function getCopy(e){
     } else {
         var elTarget = e.target;
     }
-    var sectionCopy = section.getSectionCopy(getSelectedLanguageId());
+    
     if(elTarget.tagName === 'SELECT'){
-        var copyDiv = document.getElementById('copy');
-        var inputs = copyDiv.querySelectorAll('INPUT');
-        var textarea = copyDiv.querySelector('TEXTAREA');
-        textarea.value = sectionCopy.description;
-        for( let input of inputs){
-            dataItem = input.getAttribute('data-item');
-            switch(dataItem) {
-                case 'titel':
-                    input.value = sectionCopy.titel;
-                    break;
-                case 'salesline' :
-                    input.value = sectionCopy.sline;
-                    break;
-                case 'salesline2' :
-                    input.value = sectionCopy.sline2;
-                    break;
-            }
-        }
+        setCopy(sectionCopy);
     } else {
-        var dataItem = elTarget.getAttribute('data-item');
+        saveCopyAndUpdatePreviewCopy(elTarget);
+    }
+    getAllProductsForMarketAndLanguage();
+    return updatePreviewLanguage(sectionCopy);
+    
+    
+}
+
+/* called upon from getCopy
+ *  fired in event of changing language in copy
+ * @param {type} sectionCopy
+ * @returns {delete or set new content for preview }
+ */
+function updatePreviewLanguage(sectionCopy) {
+    if(!sectionCopy){
+        sectionCopy = section.getSectionCopy(getSelectedLanguageId());
+    }
+    var contentDiv = document.getElementById('content');
+    var h2 = contentDiv.querySelector('H2');
+    h2.textContent = sectionCopy.sline;
+    var h3 = contentDiv.querySelector('H3');
+    h3.textContent = sectionCopy.sline2;
+    var titel = document.querySelector('#section H1');
+    titel.textContent = sectionCopy.titel;
+    
+    
+}
+
+function saveCopyAndUpdatePreviewCopy(elTarget) {
+    var dataItem = elTarget.getAttribute('data-item');
         var text = {
         line : '',
         text : ''
@@ -90,28 +143,6 @@ function getCopy(e){
         }
         section.saveSectionCopy();
         return updatePreviewCopy(text);
-    }
-    getAllProductsForMarketAndLanguage();
-    return updatePreviewLanguage(sectionCopy);
-    
-    
-}
-
-/* called upon from getCopy
- *  fired in event of changing language in copy
- * @param {type} sectionCopy
- * @returns {delete or set new content for preview }
- */
-function updatePreviewLanguage(sectionCopy) {
-    var contentDiv = document.getElementById('content');
-    var h2 = contentDiv.querySelector('H2');
-    h2.textContent = sectionCopy.sline;
-    var h3 = contentDiv.querySelector('H3');
-    h3.textContent = sectionCopy.sline2;
-    var titel = document.querySelector('#section H1');
-    titel.textContent = sectionCopy.titel;
-    
-    
 }
 /* called upon from getCopy
  * fired in event of changing an input line in copy field
@@ -153,8 +184,6 @@ function setLanguagesForMarket(){
             
         }
     }
-    getCopy(null);
-    
 }
 
 function createImageSpan(imageId, imageName) {
@@ -201,19 +230,24 @@ function setImageToPreview(imageId, categoryId){
     }
     switch(categoryEl.nextSibling.textContent) {
         case  'sectionsmall' :
-            var div = document.querySelector('#leftsection');
-            var oldImg = div.querySelector('img');
-            oldImg.setAttribute('src', 'getImage.php?id=' + imageId);
+            var figure = document.querySelector('#leftsection');
+            var temp = document.getElementById('gradientPic');
             break;
         case 'sectionbig' :
-            var div = document.querySelector('#rightsection IMG');
-            div.setAttribute('src', 'getImage.php?id=' + imageId);
+            var figure = document.querySelector('#rightsection');
+            var temp = document.getElementById('bigPic');
+            break;
         case 'sectionmobile' :
             /*not implemented */
-            return;
+            break;
     }
+    var clone = temp.content.cloneNode(true);
+    var img = clone.querySelector('IMG');
+    img.setAttribute('src', 'getImage.php?id=' + imageId);
+    figure.innerHTML = '';
+    figure.appendChild(clone);
     
-}
+ }
 
 function createImageThumbnails(productId, name, imageId){
     var div  = document.createElement('DIV');
@@ -307,20 +341,45 @@ function includeExcludeProduct(e, useCase) {
     
 }
 
+function prepareSectionPreview(){
+    var temp = document.getElementById('sectionUpper');
+    var clone = temp.content.cloneNode(true);
+    var div = document.getElementById('section');
+    div.appendChild(clone);
+}
+
+
 
 window.onload= function() {
-    
-    if(sectionId){
-        section.loadSection(sectionId);
-    }
-    /*
-     * deletes the down part of the section preview bad solution fix later
-     */
-    deleteLowerWrapperFromSectionDiv(); 
-    
-    onSectionLoad();
     addEventListeners();
     setLanguagesForMarket();
+    prepareSectionPreview();
+    if(sectionId){
+        section.loadSection(sectionId, function() {
+            setSelectedLanguageAndMarket(section.currentLanguageId, section.currentMarketId);
+            setCopy(section.getSectionCopy(section.currentLanguageId));
+            updatePreviewLanguage(section.getSectionCopy(section.currentLanguageId));
+            for(let image of section.images){
+                if(!image.imageId){
+                    continue;
+                }
+                createImageSpan(image.imageId, image.imageName);
+                setImageToPreview(image.imageId, image.categoryId);
+            }
+            setTimeout(function() {
+                adjustHeightForImg();
+                getAllProductsForMarketAndLanguage();
+                }, 3000);
+            return;
+            }
+        );
+    } else {
+        setCopy();
+    }
+    adjustHeightForImg();
+   
+    
+    
     
     
     
@@ -336,11 +395,16 @@ function addEventListeners() {
         input.addEventListener('blur', getCopy, false);
         }
     var el2 = document.getElementById('markets');
-    el2.addEventListener('change', setLanguagesForMarket, false);
+    el2.addEventListener('change', function() { setLanguagesForMarket(); getAllProductsForMarketAndLanguage();}, false);
     var el3 = document.getElementById('languages');
-    el3.addEventListener('change', getCopy, false);
+    el3.addEventListener('change', function() {setCopy(null); updatePreviewLanguage(null); getAllProductsForMarketAndLanguage() }, false);
     var el4 = document.getElementById("submit");
-    el4.addEventListener('click', function(e) { section.saveImage(e); });
+    el4.addEventListener('click', function(e, callback) { section.saveImage(e, function(response){
+                            createImageSpan(response.imageId, response.imageName);
+                            setImageToPreview(response.imageId, response.categoryId);
+                            wQuery("input[type='file']").val('');
+                            });
+                        });
     var el5 = document.getElementById('allproducts');
     el5.addEventListener('click', function(e){
             var x = 'includedProducts';

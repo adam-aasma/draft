@@ -1,0 +1,104 @@
+.desktop{
+    display: block;
+}
+
+.upperwrapper,
+.lowerwrapper{
+    height: 50%;
+    width: 100%;
+}
+
+.lowerwrapper:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.lowerwrapper fieldset{
+    width: 33%;
+    float:left;
+    height: 90%;
+    border: 1px solid black;
+}
+
+.lowerwrapper fieldset div {
+    height: 20%;
+}
+
+.upperwrapper{
+    text-align: center;
+}
+
+#slider figure {
+    width: 50%;
+    position: relative;
+    
+}
+
+#slider figure img {
+   width: 100%;
+   
+    
+}
+
+#picture label{
+    float: left;
+}
+#picture input{
+    float: right;
+    width: 50%;
+    font-size: 0.8em;
+}
+
+#copy select{
+    float: right;
+    display: block;
+    
+}
+
+
+#market,
+#language{
+    border-bottom: 1px solid black;
+    height: 10%;
+    margin-bottom: 1rem;
+}
+
+.gradient {
+        background-image: linear-gradient(to bottom, rgba(0,0,0,.7) 20%,rgba(0,0,0,.8));
+        width: 40%;
+        bottom: 0;
+        right: 0;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+.gradient h2, .gradient p, .gradient h3, .gradient a {
+    color: white;
+    text-align: left;
+    margin-left: 2rem;
+    font-weight: lighter;
+    
+    }
+    
+.gradient h2 {
+    font-size: 1.2rem;
+    margin-top: 20%;
+    margin-bottom: 5%;
+    }
+
+.gradient p {
+    margin-bottom: 2.5%;
+    font-size: 0.8rem;
+    }
+
+.gradient h3 {
+    font-size: 1rem;
+   
+    }
+

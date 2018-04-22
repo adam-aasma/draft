@@ -317,6 +317,7 @@ function setUrlForAddNew(category){
             url = 'addsection2.php';
             break;
         case 'slides' :
+            url = 'addslide2.php';
             break;
     }
     var addNew = document.querySelector('#addNew SPAN A');

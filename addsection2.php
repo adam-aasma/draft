@@ -26,7 +26,7 @@ if(isset($_GET['id'])){
 ?>
 <div id="upperwrapper">
     <fieldset id='pictures' class="border">
-        <legend>product images</legend>
+        <legend>section images</legend>
         <div class="pictureBar">
             <form method="POST" action="ajaxsectioncontroller.php" id="picture"></form>
             <div class="trio left">

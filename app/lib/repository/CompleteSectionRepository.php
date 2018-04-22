@@ -28,6 +28,41 @@ class CompleteSectionRepository extends BaseRepository {
                     ic3.category as mobilepic_category,
                     sd.language_id,
                     l.language,
+                    sd.title,
+                    sd.sales_line_header,
+                    sd.sales_line_paragraph,
+                    sd.section_description,
+                    ps.country_id as countryId,
+                    c.country,
+                    ps.product_id
+                    FROM sections s
+                    LEFT JOIN section_descriptions sd ON sd.section_id = s.id
+                    LEFT JOIN languages l ON l.id = sd.language_id
+                    LEFT JOIN products_sections ps ON ps.section_id = s.id AND ps.language_id = sd.language_id
+                    LEFT JOIN countries c ON c.id = ps.country_id
+                    LEFT JOIN images i1 ON i1.id = s.desktop_big_pic_id
+                    LEFT JOIN images i2 ON i2.id = s.desktop_small_pic_id
+                    LEFT JOIN images i3 ON i3.id = s.mobile_pic_id
+                    LEFT JOIN images_categories ic1 ON ic1.id = i1.images_category_id
+                    LEFT JOIN images_categories ic2 ON ic2.id = i2.images_category_id
+                    LEFT JOIN images_categories ic3 ON ic3.id = i3.images_category_id
+                   
+    ";
+    private $specialSql = "SELECT s.id,
+                    s.desktop_big_pic_id,
+                    i1.images_category_id as bigpic_category_id,
+                    i1.image_name as bigpic_name,
+                    ic1.category as bigpic_category,
+                    s.desktop_small_pic_id,
+                    i2.images_category_id as smallpic_category_id,
+                    i2.image_name as smallpic_name,
+                    ic2.category as smallpic_category,
+                    s.mobile_pic_id,
+                    i3.images_category_id as mobilepic_category_id,
+                    i3.image_name as mobilepic_name,
+                    ic3.category as mobilepic_category,
+                    sd.language_id,
+                    l.language,
                     IF(ps.country_id IS NULL, -1, ps.country_id) as country_id,
                     IF (c.country IS NULL, '', c.country) as country,
                     sd.title,
@@ -67,12 +102,12 @@ class CompleteSectionRepository extends BaseRepository {
                     sd.sales_line_header,
                     sd.sales_line_paragraph,
                     sd.section_description
-";
+    ";
 
 
     
     public function getAllCompleteSections(){
-        $sql = $this->sql;
+        $sql = $this->specialSql;
         $stmt = self::$conn->prepare($sql);
         $res = $stmt->execute();                                                                        
         if ($res) {
@@ -81,16 +116,59 @@ class CompleteSectionRepository extends BaseRepository {
         return $this->buildObjs($sectionRows);
     }
     
-    public function getAllCompleteSectionsById($sectionId){
+    public function getCompleteSectionById($sectionId){
         $sql = $this->sql . 'WHERE s.id = ?';
         $stmt = self::$conn->prepare($sql);
         $stmt->bind_param("i", $sectionId);                                                              
         $res = $stmt->execute(); 
         if ($res) {
-            $sectionRows = $this->fetchRows($stmt);
+            return $this->fetchStmtSectionById($stmt);
+        }
+    }
+    
+    private function fetchStmtSectionById($stmt){
+        $stmt->bind_result($sectionId,
+                    $bigPicId, 
+                    $bigPicCategoryId, 
+                    $bigPicName, 
+                    $bigPicCategory, 
+                    $smallPicId, 
+                    $smallPicCategoryId, 
+                    $smallPicName, 
+                    $smallPicCategory, 
+                    $mobilePicId,
+                    $mobilePicCategoryId,
+                    $mobilePicName,
+                    $mobilePicCategory,
+                    $languageId, 
+                    $language,
+                    $title,
+                    $slineHeader,
+                    $slineParagraph,
+                    $description,
+                    $countryId,
+                    $country,
+                    $productId);
+        $section = new CompleteSection();
+        $section->id = null;
+        while ($stmt->fetch()) {
+            if(!$section->id){
+                $section->id = $sectionId;
+                $section->pushArrays(ImageBaseInfo::createBaseInfo($bigPicId, $bigPicName, $bigPicCategoryId, $bigPicCategory), 'imageBaseInfos');
+                $section->pushArrays(ImageBaseInfo::createBaseInfo($smallPicId, $smallPicName, $smallPicCategoryId, $smallPicCategory),'imageBaseInfos');
+                $section->pushArrays(ImageBaseInfo::createBaseInfo($mobilePicId, $mobilePicName, $mobilePicCategoryId, $mobilePicCategory), 'imageBaseInfos');
+            }
+            if(!array_key_exists($languageId, $section->copies)){
+                $section->pushArraysWithKey('copies',$languageId,SectionDescriptionExtended::createExtended($title, $slineHeader, $slineParagraph, $description, $languageId, $language));
+            }
+            
+            $section->addProduct($productId, $languageId,$countryId);
+            
         }
         
-        return $this->buildObjs($sectionRows);
+        $section->copies = array_values($section->copies);
+        
+        return $section;
     }
     
     private function buildObjs($sectionArrays){
@@ -115,7 +193,7 @@ class CompleteSectionRepository extends BaseRepository {
                     if(!is_array($products)){
                         continue;
                     }
-                    $section->pushArrays($products, 'products');
+                    $section->pushArrays($products, 'productSections');
                 }
 
             }

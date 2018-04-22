@@ -1,7 +1,7 @@
 <?php
 namespace Walltwisters\model; 
 
-class ProductSection {
+class ProductSection implements \JsonSerializable {
     private $productId;
     private $sectionId;
     private $countryId;
@@ -27,6 +27,14 @@ class ProductSection {
     public function getIdArray(){
         return ["country_id" => $this->countryId, "section_id" => $this->sectionId, "language_id" => $this->languageId];
         
+    }
+    
+    public function jsonSerialize(){
+        return ['productId' => $this->productId,
+                'sectionId' => $this->sectionId ,
+                'countryId' => $this->countryId, 
+                'languageId' => $this->languageId
+                ];
     }
     
     

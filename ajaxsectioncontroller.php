@@ -29,7 +29,7 @@ if (isset($_REQUEST['sectionId']) && (int)$_REQUEST['sectionId'] !==  0) {
  * getting all products or products for an existing section
  */
 
-if (isset($_GET['getproductrequest']) && $_POST['requestType'] !== 'loadSection') {
+if (isset($_GET['getproductrequest']) && (!isset($_POST['requestType']) || $_POST['requestType'] !== 'loadSection')) {
     $languageId = $_GET['languageid'];
     $marketId = $_GET['marketid'];
     $sectionId = $_GET['sectionId'];
@@ -58,8 +58,10 @@ if (isset($_POST['requestType'])) {
             case 'deleteimage' :
                 $imageService = new ImageService(RepositoryFactory::getInstance());
                 $imageId = $_REQUEST['imageId'];
-                $imageService->deleteImage($imageId);
+                $res = $imageService->deleteImage($imageId);
+                if($res > 0){
                 $response = ['status' => 'ok'];
+                }
                 break;
             case 'sectioncopy' :
                 $title = $_REQUEST['titel'];
