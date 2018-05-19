@@ -1,10 +1,10 @@
 <?php
 
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
 class SliderRepository extends BaseRepository {
     public function __construct() {
-        parent::__construct("sliders", "Walltwisters\model\Slider");
+        parent::__construct("sliders", "Walltwisters\lib\model\Slider");
     }
    
     protected function getColumnNamesForInsert() {

@@ -1,11 +1,12 @@
 <?php
-namespace Walltwisters\service;
+namespace Walltwisters\lib\service;
 
 
-use Walltwisters\utilities\HtmlUtilities;
-use Walltwisters\model\Section;
-use Walltwisters\model\Country;
-use Walltwisters\model\Language;
+use Walltwisters\lib\model\Section;
+use Walltwisters\lib\model\Country;
+use Walltwisters\lib\model\Language;
+use Walltwisters\lib\model\SectionDescription;
+use Walltwisters\lib\model\ProductSection;
 
 class SectionService extends BaseService {
     
@@ -25,7 +26,7 @@ class SectionService extends BaseService {
         $productIds = [];
         if($sectionId){
             $productSectionRepo = $this->repositoryFactory->getRepository('productSectionRepository');
-            $obj = \Walltwisters\model\ProductSection::create(0, $sectionId, $countryId, $languageId);
+            $obj = ProductSection::create(0, $sectionId, $countryId, $languageId);
             $productIds = $productSectionRepo->getProductsForSectionId($obj);
             if(!is_array($productIds)){
                 $productIds = [$productIds];
@@ -68,13 +69,13 @@ class SectionService extends BaseService {
 
     
     public function getAvailableProductsforSection($country, $language, $json = false){
-        $countryTypeCheck = is_a($country, '\Walltwisters\model\Country');
+        $countryTypeCheck = is_a($country, 'Walltwisters\lib\model\Country');
         if(!$countryTypeCheck) {
-          $country =  \Walltwisters\model\Country::create($country, '');
+          $country =  Walltwisters\lib\model\Country::create($country, '');
         }
-        $languageTypeCheck = is_a($language, '\Walltwisters\model\Language');
+        $languageTypeCheck = is_a($language, 'Walltwisters\lib\model\Language');
         if(!$languageTypeCheck) {
-          $language =  \Walltwisters\model\Language::create($language, '');
+          $language =  Walltwisters\lib\model\Language::create($language, '');
         }
         $productRepo = $this->repositoryFactory->getRepository('productRepository');
         $localizedProducts = $productRepo->getLocalizedProductsByCountryAndLanguageOrIds($country, $language);
@@ -103,7 +104,7 @@ class SectionService extends BaseService {
     
     public function updateSectionCopy($sectionId, $languageId, $title, $saleslineHeader, $saleslineParagraph, $description){
         $sectionDescriptionRepo = $this->repositoryFactory->getRepository('sectionDescriptionRepository');
-        $sectionObj = \Walltwisters\model\SectionDescription::create($title,$saleslineHeader,$saleslineParagraph, $description, $languageId, $sectionId);        
+        $sectionObj =SectionDescription::create($title, $saleslineHeader, $saleslineParagraph, $description, $languageId, $sectionId);        
                                                                                           
         if(empty($title) && empty($saleslineHeader) && empty($saleslineParagraph) && empty($description)){
             $sectionDescriptionRepo->deleteForId($sectionObj);
@@ -116,11 +117,11 @@ class SectionService extends BaseService {
     
     public function updateProductIdsForMarket($sectionId, $countryId,  $languageId, $ids) {
         $productSectionRepo = $this->repositoryFactory->getRepository('productSectionRepository');
-        $obj = \Walltwisters\model\ProductSection::create(0, $sectionId, $countryId, $languageId);
+        $obj = ProductSection::create(0, $sectionId, $countryId, $languageId);
         $productSectionRepo->deleteForId($obj);
         foreach( $ids as $id) {
             if(!empty($id)){
-                $obj = \Walltwisters\model\ProductSection::create($id, $sectionId, $countryId, $languageId);
+                $obj = ProductSection::create($id, $sectionId, $countryId, $languageId);
                 $productSectionRepo->create($obj);
             }
         }

@@ -1,10 +1,10 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
 class ProductFormatRepository extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("formats", "Walltwisters\model\ProductFormat");
+        parent::__construct("formats", "Walltwisters\lib\model\ProductFormat");
     }
     
     protected function getColumnNamesForInsert() {

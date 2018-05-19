@@ -1,13 +1,13 @@
 <?php
 
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use Walltwisters\interfacesrepo\ILanguageRepository;
+use Walltwisters\lib\interfacesrepo\ILanguageRepository;
 
 class LanguageRepository extends BaseRepository implements ILanguageRepository {
 
     public function __construct() {
-        parent::__construct("languages", "Walltwisters\model\Language");
+        parent::__construct("languages", "Walltwisters\lib\model\Language");
     }
 
     protected function getColumnNamesForInsert() {
@@ -31,7 +31,7 @@ class LanguageRepository extends BaseRepository implements ILanguageRepository {
         if ($res) {
             $stmt->bind_result($id, $language);
             while ($stmt->fetch()) {
-                $languages[] = \Walltwisters\model\Language::create($id, $language);
+                $languages[] = Walltwisters\lib\model\Language::create($id, $language);
             }
         }
         if (empty($languages)) {

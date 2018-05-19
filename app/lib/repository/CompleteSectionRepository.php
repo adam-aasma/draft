@@ -6,11 +6,11 @@
  * and open the template in the editor.
  */
 
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use Walltwisters\model\CompleteSection;
-use Walltwisters\model\ImageBaseInfo;
-use Walltwisters\model\SectionDescriptionExtended;
+use Walltwisters\lib\model\CompleteSection;
+use Walltwisters\lib\model\ImageBaseInfo;
+use Walltwisters\lib\model\SectionDescriptionExtended;
 
 class CompleteSectionRepository extends BaseRepository {
     private $sql = "SELECT s.id,

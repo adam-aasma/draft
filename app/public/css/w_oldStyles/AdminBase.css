@@ -1,0 +1,53 @@
+
+
+@import url("base/normalization.css") screen;
+@import url("base/layoutstyles.css") screen;
+@import url("base/elementstyles.css") screen;
+@import url("general/adminbasestyles.css") screen;
+
+.hover a:hover {
+    color: #FF7000;
+}
+
+
+
+/*
+.dropdownMenu {
+  position: relative;
+}
+
+.dropdownMenu a {
+    padding: 0.5em 2em 0.5em 2em;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+
+.dropDownHidden{
+    display: none;
+    position: relative;
+  }
+
+.dropDownHidden a{
+    display: block;
+    border: 1px solid black;
+}
+
+.show{
+    display: block;
+}
+
+.noShow{
+    display: none;
+}
+
+.thumbnail{
+    
+    
+}
+
+.thumbnail img{
+    
+}
+
+*/

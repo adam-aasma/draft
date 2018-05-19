@@ -1,11 +1,16 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\User;
-use Walltwisters\model\Country;
-use Walltwisters\model\Privileges;
+use Walltwisters\lib\model\User;
+use Walltwisters\lib\model\Country;
+use Walltwisters\lib\model\Privileges;
 
 class UserRepository extends BaseRepository { 
+    
+    public function __construct($tableName = null, $objectName = null) {
+        parent::__construct($tableName, $objectName);
+    }
+    
     protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
     }
@@ -94,7 +99,7 @@ class UserRepository extends BaseRepository {
             throw new Exception(self::$conn->error);
         }
         $countries = [];
-        while ( $row = $result->fetch_object('Walltwisters\model\Country')){
+        while ( $row = $result->fetch_object('Walltwisters\lib\model\Country')){
             $countries[] = $row;
         }
         if (empty($countries)) {

@@ -1,9 +1,9 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
 class ProductSectionRepository extends BaseRepository {
     public function __construct() {
-        parent::__construct("products_sections", "Walltwisters\model\ProductSection");
+        parent::__construct("products_sections", "Walltwisters\lib\model\ProductSection");
     }
     
     protected function getColumnNamesForInsert() {

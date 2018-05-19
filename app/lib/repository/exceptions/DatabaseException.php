@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\repository\exceptions; 
+namespace Walltwisters\lib\repository\exceptions; 
 
 class DatabaseException extends \Exception {
     //put your code here

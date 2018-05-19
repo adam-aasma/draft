@@ -1,12 +1,12 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\interfacesrepo\ICountryRepository;
+use Walltwisters\lib\interfacesrepo\ICountryRepository;
 
 class CountryRepository extends BaseRepository implements ICountryRepository {
     
     public function __construct() {
-        parent::__construct("countries", "Walltwisters\model\Country");
+        parent::__construct("countries", "Walltwisters\lib\model\Country");
     }
     
     protected function getColumnNamesForInsert() {

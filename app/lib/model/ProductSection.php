@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\model; 
+namespace Walltwisters\lib\model; 
 
 class ProductSection implements \JsonSerializable {
     private $productId;

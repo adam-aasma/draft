@@ -1,10 +1,10 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\CompleteSection;
-use Walltwisters\model\Section;
-use Walltwisters\model\ImageBaseInfo;
-use Walltwisters\repository\ImageCategoryRepository;
+use Walltwisters\lib\model\CompleteSection;
+use Walltwisters\lib\model\Section;
+use Walltwisters\lib\model\ImageBaseInfo;
+use Walltwisters\lib\repository\ImageCategoryRepository;
 
 class SectionRepository extends BaseRepository {
     protected $colNamesForUpdate;
@@ -12,7 +12,7 @@ class SectionRepository extends BaseRepository {
     
     
     public function __construct() {
-        parent::__construct("sections", "Walltwisters\model\Section");
+        parent::__construct("sections", "Walltwisters\lib\model\Section");
         
     }
     
@@ -84,6 +84,10 @@ class SectionRepository extends BaseRepository {
     private function setColNamesForUpdate($colName){
         $this->colNamesForUpdate = [$colName];
     }
+    
+    protected function getColumnNamesForUpdate() {
+        return $this->colNamesForUpdate;
+    }
  /* 
   * probably will not be used anymore delete when confident
   *   
@@ -128,7 +132,7 @@ class SectionRepository extends BaseRepository {
                    
                 }
                 if(!array_key_exists($imageId, $imagesHandled)){
-                    $completeSection->addImageBaseInfo(\Walltwisters\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
+                    $completeSection->addImageBaseInfo(\walltwisters\lib\\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory));
                     $imagesHandled[$imageId] = true;
                 }
                 if(!array_key_exists($productId, $productIdsHandled)){
@@ -166,8 +170,8 @@ class SectionRepository extends BaseRepository {
             $stmt->bind_result($title, $saleslineHeader, $saleslineParagraph, $countryid, $country, $languageid, $language, $sectionId);
             $sections = [];
             while ($stmt->fetch()){
-                $localization = \Walltwisters\model\Localization::create(\Walltwisters\model\Country::create($countryid, $country), \Walltwisters\model\Language::create($languageid, $language));
-                $sections[] = \Walltwisters\model\SectionBaseInfo::createBaseInfo($title, $saleslineHeader, $saleslineParagraph, $localization, $sectionId);
+                $localization = \walltwisters\lib\\model\Localization::create(\walltwisters\lib\\model\Country::create($countryid, $country), \walltwisters\lib\\model\Language::create($languageid, $language));
+                $sections[] = \walltwisters\lib\\model\SectionBaseInfo::createBaseInfo($title, $saleslineHeader, $saleslineParagraph, $localization, $sectionId);
             }
             
             return $sections;
@@ -231,7 +235,7 @@ class SectionRepository extends BaseRepository {
             $completeSection = null;
             while ($stmt->fetch()){
                 if(empty($completeSection) || $completeSection->id != $sectionId){
-                    $completeSection = new \Walltwisters\model\CompleteSection2();
+                    $completeSection = new \walltwisters\lib\\model\CompleteSection2();
                     $completeSection->id = $sectionId;
                     $imagesHandled = [];
                     $productIdsHandled = [];
@@ -239,13 +243,13 @@ class SectionRepository extends BaseRepository {
                 }
                 
                 if(!array_key_exists($imageId, $imagesHandled)){
-                    $completeSection->addToArray(\Walltwisters\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory), 'imageBaseInfos');
+                    $completeSection->addToArray(\walltwisters\lib\\model\ImageBaseInfo::createBaseInfo($imageId, $imageName, $imageCategoryId, $imageCategory), 'imageBaseInfos');
                     $imagesHandled[$imageId] = true;
                 }
                 
                 if(!array_key_exists($sectionDescriptionId, $sectionDescriptionHandled)){
-                    $localization = \Walltwisters\model\Localization::create(\Walltwisters\model\Country::create($countryId, $country), \Walltwisters\model\Language::create($languageId, $language));
-                    $sectionBaseInfo = \Walltwisters\model\SectionBaseInfo::createBaseInfo($title, $saleslineHeader, $saleslineParagraph, $localization, $sectionId);
+                    $localization = \walltwisters\lib\\model\Localization::create(\walltwisters\lib\\model\Country::create($countryId, $country), \walltwisters\lib\\model\Language::create($languageId, $language));
+                    $sectionBaseInfo = \walltwisters\lib\\model\SectionBaseInfo::createBaseInfo($title, $saleslineHeader, $saleslineParagraph, $localization, $sectionId);
                     $completeSection->addToArray($sectionBaseInfo, 'sectionBaseInfos');
                     $imagesHandled[$imageId] = true;
                     $sectionDescriptionHandled[$sectionDescriptionId] = true;

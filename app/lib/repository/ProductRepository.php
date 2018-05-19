@@ -1,21 +1,17 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\CompleteProduct;
-use Walltwisters\viewmodel\ShowRoomProduct;
-use Walltwisters\model\ItemExtended;
-use Walltwisters\model\ProductDescription;
-use Walltwisters\model\ProductItem;
-use Walltwisters\model\ImageBaseInfo;
+use Walltwisters\lib\model\CompleteProduct;
+use Walltwisters\lib\viewmodel\ShowRoomProduct;
+use Walltwisters\lib\model\ProductItemExtended;
+use Walltwisters\lib\model\ProductDescription;
+use Walltwisters\lib\model\ProductItem;
+use Walltwisters\lib\model\ImageBaseInfo;
 
 class ProductRepository extends BaseRepository {
     
-    protected $colNamesForUpdate;
-    
-    
     public function __construct() {
-        parent::__construct("products", "Walltwisters\model\Product");
-        $this->colNamesForUpdate  = $this->getColumnNamesForUpdate();
+        parent::__construct("products", "Walltwisters\lib\model\Product");
     }
     
     protected function getColumnNamesForInsert() {
@@ -117,7 +113,7 @@ class ProductRepository extends BaseRepository {
                     }
                     if (!isset($addedProductMaterialSize[$materialId]) ||
                              !isset($addedProductMaterialSize[$materialId][$sizeId])) {
-                         $product->addItem(ItemExtended::createExtended( $productId, $countryId, $country, $sizeId, $size, $materialId, $material));
+                         $product->addItem(ProductItemExtended::createExtended( $productId, $countryId, $country, $sizeId, $size, $materialId, $material));
 
                          $addedProductMaterialSize[$materialId][$sizeId] = true;
                      }
@@ -189,7 +185,7 @@ class ProductRepository extends BaseRepository {
             $addedProductMaterialSize = [];
             while ($okfetch) {  
                 if (empty($currentLocalizedProduct) || $productId != $currentLocalizedProduct->id) {
-                    $currentLocalizedProduct = new \Walltwisters\model\LocalizedProduct();
+                    $currentLocalizedProduct = new \Walltwisters\lib\model\LocalizedProduct();
                     $currentLocalizedProduct->id = $productId;
                     $currentLocalizedProduct->productDescription = ProductDescription::create($productId, $languageobj->id, $description, $name);
                     $localizedProducts[] = $currentLocalizedProduct;
@@ -199,7 +195,7 @@ class ProductRepository extends BaseRepository {
                 if (!isset($addedProductMaterialSize[$productId]) || 
                         !isset($addedProductMaterialSize[$productId][$materialId]) ||
                         !isset($addedProductMaterialSize[$productId][$materialId][$sizeId])) {
-                    $currentLocalizedProduct->addItem(ItemExtended::createExtended( $productId, $countryId, $country,  $sizeId, $size, $materialId, $material));
+                    $currentLocalizedProduct->addItem(ProductItemExtended::createExtended( $productId, $countryId, $country,  $sizeId, $size, $materialId, $material));
                  
                     $addedProductMaterialSize[$productId][$materialId][$sizeId] = true;
                 }
@@ -273,7 +269,7 @@ class ProductRepository extends BaseRepository {
 
         while ($row = $result->fetch_assoc()){
             if (empty($showRoomProduct)) {
-                $showRoomProduct = new \Walltwisters\viewmodel\ShowRoomProduct();
+                $showRoomProduct = new Walltwisters\lib\viewmodel\ShowRoomProduct();
                 $showRoomProduct->name = $row['name'];
             }
             if (!empty($row['description_id']) && $row['description_id'] != $lastDescriptionId) {

@@ -1,13 +1,13 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\Image;
+use Walltwisters\lib\model\Image;
 
 class ImageRepository extends BaseRepository {
     
     
     function __construct() {
-        parent::__construct("images", "Walltwisters\model\Image");
+        parent::__construct("images", "Walltwisters\lib\model\Image");
     }
     protected function getColumnNamesForInsert() {
         throw new Exception("Not implemented");
@@ -18,7 +18,8 @@ class ImageRepository extends BaseRepository {
     }
     
     public function addImage(Image $image) {
-        $data = file_get_contents($image->filepath);
+        $resource = \GuzzleHttp\Psr7\StreamWrapper::getResource($image->stream);
+        $data = stream_get_contents($resource);
         $stmt = self::$conn->prepare("INSERT INTO images(data,mimetype,size,images_category_id, image_name) VALUES(?, ?, ?, ?, ?)");
         $null = NULL;
         try {

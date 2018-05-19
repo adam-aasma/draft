@@ -1,0 +1,105 @@
+.center {
+    margin:0 auto;
+    text-align: center;
+}
+
+.flex{
+    display: flex;
+}
+
+.block{
+    display: block;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.ali-right{
+    text-align: right;
+}
+
+.abs{
+    position: absolute;
+}
+
+.inline {
+    display: inline;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.inline-flex {
+    display: inline-flex;
+    width: 100%;
+}
+
+.end{
+    justify-content: flex-end;
+}
+
+.space-around{
+    justify-content: space-around;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+.vert-start{
+    align-items: flex-start;
+}
+
+.vert-center{
+    align-items: center;
+}
+
+.row {
+    width: 100%;
+    
+}
+
+.row-float:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.row:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.solo{
+    width: 100%;
+}
+.duo {
+    width: 50%;
+}
+
+.trio {
+    width: 33.33%;
+}
+
+.quartet{
+    width: 25%;
+}
+
+.quintet {
+    width: 20%;
+}
+
+.rel {
+    position: relative;
+}
+
+.abs-right{
+    position: absolute;
+    right: 0px;
+}

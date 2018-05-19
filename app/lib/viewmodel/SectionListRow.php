@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\viewmodel;
+namespace Walltwisters\lib\viewmodel;
 
 class SectionListRow {
     private $id;

@@ -1,10 +1,10 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
 class ItemPriceRepository extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("item_price", "Walltwisters\model\ItemPrice");
+        parent::__construct("item_price", "Walltwisters\lib\model\ItemPrice");
     }
    
     protected function getColumnNamesForInsert() {

@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\interfacesrepo\IRepositoryFactory;
+use Walltwisters\lib\interfacesrepo\IRepositoryFactory;
 
 class RepositoryFactory implements IRepositoryFactory {            
     private $productRepository;
@@ -9,13 +9,13 @@ class RepositoryFactory implements IRepositoryFactory {
     private $countryRepository;
     private $privilegeRepository;
     private $productFormatRepository;
-    private $productPrintTechniqueRepository;
+    private $itemPrintTechniqueRepository;
     private $sectionRepository;
     private $productDescriptionRepository;
     private $productImageRepository;
     private $productSectionRepository;
-    private $productMaterialRepository;
-    private $productSizeRepository;
+    private $itemMaterialRepository;
+    private $itemSizeRepository;
     private $itemRepository;
     private $imageRepository;
     private $printerRepository;
@@ -60,8 +60,8 @@ class RepositoryFactory implements IRepositoryFactory {
                 case 'productFormatRepository':
                     $this->productFormatRepository = new ProductFormatRepository();
                     break;
-                case 'productPrintTechniqueRepository':
-                    $this->productPrintTechniqueRepository = new ProductPrintTechniqueRepository();
+                case 'itemPrintTechniqueRepository':
+                    $this->itemPrintTechniqueRepository = new ItemPrintTechniqueRepository();
                     break;
                 case 'sectionRepository':
                     $this->sectionRepository = new SectionRepository();
@@ -75,11 +75,11 @@ class RepositoryFactory implements IRepositoryFactory {
                 case 'productSectionRepository':
                     $this->productSectionRepository = new ProductSectionRepository();
                     break;
-                case 'productMaterialRepository':
-                    $this->productMaterialRepository = new ProductMaterialRepository();
+                case 'itemMaterialRepository':
+                    $this->itemMaterialRepository = new ItemMaterialRepository();
                     break;
-                case 'productSizeRepository':
-                    $this->productSizeRepository = new ProductSizeRepository();
+                case 'itemSizeRepository':
+                    $this->itemSizeRepository = new ItemSizeRepository();
                     break;
                 case 'itemRepository':
                     $this->itemRepository = new ItemRepository();

@@ -1,14 +1,12 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use \Walltwisters\model\SectionDescription;
+use Walltwisters\lib\model\SectionDescription;
 
 class SectionDescriptionRepository extends BaseRepository {
-    protected $colNamesForUpdate;
     
     public function __construct() {
-        parent::__construct("section_descriptions", "Walltwisters\model\SectionDescription");
-        $this->colNamesForUpdate  = $this->getColumnNamesForInsert();
+        parent::__construct("section_descriptions", "Walltwisters\lib\model\SectionDescription");
     }
     
     protected function getColumnNamesForInsert() {

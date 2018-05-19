@@ -1,0 +1,187 @@
+
+.desktop{
+    display: block;
+}
+
+#underStore1 {
+    width: 57%;
+    
+    
+}
+
+#underStore2 {
+    width: 38%;
+}
+
+#underStore1,
+#underStore2 {
+    position: relative;
+    margin-top: 2.5rem;
+}
+
+#underStore1 > div,
+#underStore2 > div{
+    position: absolute;
+    top: -1.6rem;
+}
+
+#underStore1 > div ~ div {
+    position: static;
+}
+
+#underStore1 div span,
+#underStore2 div span{
+    padding: 0.5em 2em 0.5em 2em;
+    border: 1px solid black;
+    border-radius: 5px 5px 0px 0px;
+    border-bottom: none;
+    box-sizing: border-box;
+}
+
+
+#productInfo  > div ~ div {
+    margin-top: 2rem;
+}
+
+#productInfo textarea{
+    width: 95%;
+    height: 60%;
+}
+
+#itemDetails{
+    overflow: scroll;
+}
+
+#itemDetails article {
+    width: 32%;
+    height: 50%;
+    float: left;
+    overflow: scroll;
+}
+
+.selectedLanguage,
+.selectedMarket {
+    position: relative;
+    bottom: -0.1rem !important;
+    z-index: 10;
+    background-color: white;
+    
+}
+
+#addPictures .pictureBar {
+    height: 20%;
+}
+
+#addPictures .wrapper,
+#general .wrapper,
+#productInfo .wrapper{
+    margin: 1em 0;
+}
+
+
+#addPictures,
+#itemDetails,
+#currently,
+#productInfo,
+#general{
+    height: 45%;
+    width: 38%;
+  }
+
+#currently{
+    width: 19%;
+}
+
+#itemDetails{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+#productInfo{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#addPictures span {
+    
+}
+
+#currently {
+    overflow: scroll;
+    font-size: 0.8rem;
+}
+#currently legend {
+    font-size: 1rem;
+}
+
+#currently > article {
+     
+     border-bottom: 1px solid black;
+}
+
+#currently > article:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#currently #sumLanguagesWrapper div,
+#currently #sumLanguagesWrapper span,
+#currently #sumItemWrapper div{
+     font-size: 0.9em;
+     margin-bottom: 0px;
+     padding-top: 0.5em;
+}
+
+#currently #sumLanguagesWrapper span,
+#currently #sumItemWrapper span{
+   border-top : 3px solid black;
+   font-weight: bold;
+}
+
+#currently figure:after{
+    content :'';
+    clear: both;
+    display: table-cell;
+}
+
+#currently img{
+    height: 4rem;
+    float: left;
+}
+
+#currently figcaption{
+    font-size: 0.6rem;
+    float: right;
+}
+
+#currently #thumbnails {
+    overflow: scroll;
+    max-width: 90%;
+    max-height: 33%;
+    border: 1px solid black;
+}
+
+
+#currently #thumbnails .thumbnail img {
+    max-height: 4em;
+    float: left;
+    margin: 0.2;
+    
+}
+/*
+#materialOptions p label,
+#materialOptions p input {
+    font-size: 0.8em;
+    
+}
+*/
+#addPictures span {
+    font-size: 0.8em;
+}
+
+#addPictures > div:first-of-type {
+    border-bottom: 1px solid black;
+}
+

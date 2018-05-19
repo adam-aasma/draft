@@ -2,13 +2,13 @@
 
 
 
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use Walltwisters\model\CompleteProduct;
-use Walltwisters\model\ItemExtended;
-use Walltwisters\model\ProductDescription;
-use Walltwisters\model\ProductItem;
-use Walltwisters\model\ImageBaseInfo;
+use Walltwisters\lib\model\CompleteProduct;
+use Walltwisters\lib\model\ProductItemExtended;
+use Walltwisters\lib\model\ProductDescription;
+use Walltwisters\lib\model\ProductItem;
+use Walltwisters\lib\model\ImageBaseInfo;
 
 
 class CompleteProductRepository extends BaseRepository {
@@ -98,7 +98,7 @@ class CompleteProductRepository extends BaseRepository {
                     }
                     if (!isset($addedProductMaterialSize[$materialId]) ||
                              !isset($addedProductMaterialSize[$materialId][$sizeId])) {
-                         $products[$productId]->addItem(ItemExtended::createExtended( $productId, $countryId, $country, $sizeId, $size, $materialId, $material));
+                         $products[$productId]->addItem(ProductItemExtended::createExtended( $productId, $countryId, $country, $sizeId, $size, $materialId, $material));
 
                          $addedProductMaterialSize[$materialId][$sizeId] = true;
                      }

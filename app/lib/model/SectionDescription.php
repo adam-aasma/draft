@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\model;
+namespace Walltwisters\lib\model;
 
 class SectionDescription implements \JsonSerializable {
     protected $title;

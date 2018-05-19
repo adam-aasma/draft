@@ -1,9 +1,9 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
 class ImageCategoryRepository extends BaseRepository {
     public function __construct() {
-        parent::__construct("images_categories", "Walltwisters\model\ImageCategory");
+        parent::__construct("images_categories", "\Walltwisters\lib\model\ImageCategory");
     }
    
     protected function getColumnNamesForInsert() {
@@ -21,7 +21,7 @@ class ImageCategoryRepository extends BaseRepository {
         if ($res) {
             $stmt->bind_result($id, $category, $description);
             while ($stmt->fetch()) {
-                $imageCategories[] = \Walltwisters\model\ImageCategory::create($id, $category, $description);
+                $imageCategories[] = \Walltwisters\lib\model\ImageCategory::create($id, $category, $description);
             }
         } 
         return $imageCategories;

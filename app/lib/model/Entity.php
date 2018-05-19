@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\model; 
+namespace Walltwisters\lib\model; 
 
 
 abstract class Entity {

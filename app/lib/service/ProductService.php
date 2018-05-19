@@ -1,14 +1,13 @@
 <?php
-namespace Walltwisters\service;
+namespace Walltwisters\lib\service;
 
-use Walltwisters\utilities\Images;
-use Walltwisters\model\ProductItem;
-use Walltwisters\viewmodel\ProductListRow;
-use Walltwisters\viewmodel\ShowRoomProduct;
-use Walltwisters\model\Product;
-use Walltwisters\model\ProductImage;
-use Walltwisters\model\ProductDescription;
-use Walltwisters\viewmodel\ProductListRow2;
+use Walltwisters\lib\model\ProductItem;
+use Walltwisters\lib\viewmodel\ProductListRow;
+use Walltwisters\lib\viewmodel\ShowRoomProduct;
+use Walltwisters\lib\model\Product;
+use Walltwisters\lib\model\ProductImage;
+use Walltwisters\lib\model\ProductDescription;
+use Walltwisters\lib\viewmodel\ProductListRow2;
 
 class ProductService extends BaseService {
     
@@ -53,7 +52,7 @@ class ProductService extends BaseService {
         $productDescriptionRepository = $this->repositoryFactory->getRepository('productDescriptionRepository');
         $productSectionRepository = $this->repositoryFactory->getRepository('productSectionRepository');
         
-        $product = $productRepository->update(Walltwisters\model\Product::create($productId, null, null, $userId, $formatId));
+        $product = $productRepository->update(Walltwisters\lib\model\Product::create($productId, null, null, $userId, $formatId));
 
         $productDescriptionRepository->deleteForId('product_id', $product->id);
         $productdescriptions = $this->getDescriptionsToSave($productinfos, $product->id);
@@ -61,7 +60,7 @@ class ProductService extends BaseService {
             $productDescriptionRepository->create($productdescription);
         }
         $productSectionRepository->deleteForId('product_id', $product->id);
-        $productSectionRepository->create(Walltwisters\model\ProductSection::create($product->id, $sectionId));
+        $productSectionRepository->create(Walltwisters\lib\model\ProductSection::create($product->id, $sectionId));
         
         $this->saveProductItems($product->id, $materialIds, $sizeMaterialIds, true);
     
@@ -102,8 +101,8 @@ class ProductService extends BaseService {
     }
     
     public function sizestojson(){
-        $productSizeRepository = $this->repositoryFactory->getRepository('productSizeRepository');
-        $sizes = $productSizeRepository->getAll();
+        $itemSizeRepository = $this->repositoryFactory->getRepository('itemSizeRepository');
+        $sizes = $itemSizeRepository->getAll();
         $result = [];
         foreach($sizes as $size) {
             $result[$size->id] = $size->sizes;
@@ -113,8 +112,8 @@ class ProductService extends BaseService {
     }
     
     public function materialstojson(){
-        $productMaterialRepository = $this->repositoryFactory->getRepository('productMaterialRepository');
-        $materials = $productMaterialRepository->getAll();
+        $itemMaterialRepository = $this->repositoryFactory->getRepository('itemMaterialRepository');
+        $materials = $itemMaterialRepository->getAll();
         $result = [];
         foreach($materials as $material) {
             $result[$material->id] = $material->material;
@@ -126,9 +125,11 @@ class ProductService extends BaseService {
     public function saveProductItemsForProductAndCountry($productId, $countryId, $materialsWithSizes) {
         $productItemRepo = $this->repositoryFactory->getRepository('productItemRepository');
         $productItemRepo->deleteForProductAndCountry($productId, $countryId);
-        foreach($materialsWithSizes as $materialId => $sizeIds) {
-            foreach($sizeIds as $sizeId) {
-                $productItemRepo->create(ProductItem::create($productId, $countryId, $materialId, $sizeId));
+        if (!empty($materialsWithSizes)) {
+            foreach($materialsWithSizes as $materialId => $sizeIds) {
+                foreach($sizeIds as $sizeId) {
+                    $productItemRepo->create(ProductItem::create($productId, $countryId, $materialId, $sizeId));
+                }
             }
         }
     } 
@@ -172,7 +173,7 @@ class ProductService extends BaseService {
         $showRoomProduct = new ShowRoomProduct();
         foreach ($completeProduct->productDescriptions as $productDescriptions){
             foreach ( $productDescriptions as $productDescription){
-                $productInfo =  \Walltwisters\viewmodel\ProductInfoView::create($productDescription->countryName, $productDescription->languageName, $productDescription->name, $productDescription->descriptionText);
+                $productInfo = Walltwisters\lib\viewmodel\ProductInfoView::create($productDescription->countryName, $productDescription->languageName, $productDescription->name, $productDescription->descriptionText);
                 $showRoomProduct->addInfo($productInfo);
             }
         }
@@ -186,12 +187,12 @@ class ProductService extends BaseService {
     }
     
     public function addSection($titel, $salesLine, $imageIds, $createdByUserId, $languageId, $productIds){
-        $section = Walltwisters\model\Section::create($titel, $salesLine, $imageIds['bigpicid'], $imageIds['smallpicid'], $imageIds['mobilepicid'], $languageId, $createdByUserId);
+        $section = Walltwisters\lib\model\Section::create($titel, $salesLine, $imageIds['bigpicid'], $imageIds['smallpicid'], $imageIds['mobilepicid'], $languageId, $createdByUserId);
         $sectionrepo = $this->repositoryFactory->getRepository('sectionRepository');
         $sectionId = $sectionrepo->create($section, true)->id;
         $productsectionrepo = $this->repositoryFactory->getRepository('productSectionRepository');
         foreach ($productIds as $productId){
-            $productsectionrepo->create(\Walltwisters\model\ProductSection::create($productId, $sectionId));
+            $productsectionrepo->create(Walltwisters\lib\model\ProductSection::create($productId, $sectionId));
         }
         
         return $sectionId;
@@ -203,7 +204,7 @@ class ProductService extends BaseService {
             $artistRepo->updateArtistDesigner($artist, $artistId);
             return $artistId;
         }
-        $artistDesigner = \Walltwisters\model\artistDesigner::create(null, $artist);
+        $artistDesigner = Walltwisters\lib\model\artistDesigner::create(null, $artist);
         $artistRepo = $this->repositoryFactory->getRepository('artistDesignerRepository');
         $artistId = $artistRepo->create($artistDesigner, true)->id;
         

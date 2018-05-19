@@ -1,12 +1,12 @@
 <?php
 
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
 
 class ArtistDesignerRepository  extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("artist_designer", "Walltwisters\model\artistDesigner");
+        parent::__construct("artist_designer", "Walltwisters\lib\model\artistDesigner");
     }
     
     protected function getColumnNamesForInsert() {

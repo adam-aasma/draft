@@ -1,19 +1,19 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\Printer;
+use Walltwisters\lib\model\Printer;
 
 class PrinterRepository extends BaseRepository{
-   
+    
     public function __construct() {
-        parent::__construct("printers", "Walltwisters\model\Printer");
+        parent::__construct("printers", "Walltwisters\lib\model\Printer");
     }
    
     protected function getColumnNamesForInsert() {
         return ['company_name', 'email', 'telephone', 'contact_name', 'country_id', 'added_by_user'];
     }
     
-    protected function getColumnValuesForBind(Printer $printer) {
+    protected function getColumnValuesForBind($printer) {
         $company_name = $printer->companyName;
         $email = $printer->email;
         $telephone = $printer->phoneNumber;

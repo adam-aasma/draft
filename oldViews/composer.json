@@ -1,0 +1,19 @@
+{
+    "name": "vendor/php-project1",
+    "description": "Description of project PhpProject2.",
+    "authors": [
+        {
+            "name": "adam",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.0",
+        "monolog/monolog": "1.23.0",
+        "guzzlehttp/psr7": "1.4.2",
+        "slim/php-view": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {"Walltwisters\\": "app"}
+    }
+}

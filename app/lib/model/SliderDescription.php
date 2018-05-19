@@ -1,6 +1,6 @@
 <?php
 
-namespace Walltwisters\model;
+namespace Walltwisters\lib\model;
 
 
 class SliderDescription {

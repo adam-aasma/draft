@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace Walltwisters\model;
+namespace Walltwisters\lib\model;
 
 
 class SectionDescriptionExtended extends SectionDescription  implements \JsonSerializable  {

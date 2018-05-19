@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\utilities;
+namespace Walltwisters\lib\utilities;
 
-use Walltwisters\model\Image;
+use Walltwisters\lib\model\Image;
 
 class Images {
     public static function getImageData($imagefiles){
@@ -10,7 +10,7 @@ class Images {
             $filepath = $imagefile["tmp_name"];
             $mime = $imagefile["type"];
             $size = $imagefile["size"];
-            $image = Image::create($filepath, $size, $mime);
+            $image = Image::create(null, $filepath, $size, $mime);
             $images[] = $image;
         }
         return $images;

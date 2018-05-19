@@ -1,0 +1,194 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 12, 2018, 10:09:56 AM
+    Author     : adam
+*/
+
+/*
+/nicer solution?
+/ right now overriding styles defined in adminbase css
+*/
+.desktop {
+    display: block;
+}
+
+
+
+#upperwrapper {
+    width: 100%;
+    height: 50%;
+    box-sizing: border-box;
+    display: inline-block;
+    font-size: 0px;
+}
+
+#uperwrapper:after {
+    content: '';
+    clear: both;
+    display: block;
+    
+}
+
+#lowerwrapper {
+    width: 100%;
+    height: 50%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    display: inline-block;
+    overflow: hidden;
+    
+}
+
+#upperwrapper #addPictures {
+    width: 50%;
+    float: left;
+    height: 100%;
+    font-size: 1rem;
+    
+}
+#upperwrapper #addPictures .pictureBar{
+    font-size: 0.8rem;
+}
+
+/* contain floating elements */
+ .pictureBar:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#upperwrapper #copy {
+    width: 30%;
+    float: left;
+    height: 100%;
+    font-size: 1rem;
+}
+
+#upperwrapper #copy select,
+#upperwrapper #products select{
+    float: right;
+}
+
+#upperwrapper #copy p {
+    height: 20%;
+}
+#upperwrapper #copy p label {
+    padding: 0;
+}
+
+#upperwrapper #copy p textarea {
+    height: 100%;
+}
+
+#upperwrapper #products {
+    width: 20%;
+    height: 100%;
+    float: left;
+    font-size: 1rem;
+    
+   
+}
+
+#upperwrapper #includedProducts,
+#upperwrapper #allproducts {
+    width: 80%;
+    height: 40%;
+    margin-top: 3%;
+    margin-bottom: 5%;
+    overflow: scroll;
+}
+
+#allproducts figure{
+    width: auto;
+    max-height: 4rem;
+    border-bottom: 1px solid black;
+}
+#includedProducts figure{
+    width: auto;
+    max-height: 4rem;
+    border-bottom: 1px solid black;
+}
+
+#allproducts figure:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+#includedProducts figure:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#allproducts figure img,
+#allproducts figure figcaption
+{
+    width: 50%;
+    float: left;
+    font-size: 0.8rem;
+}
+
+#includedProducts figure img,
+#includedProducts figure figcaption
+{
+    width: 50%;
+    float: left;
+    font-size: 0.8rem;
+}
+
+#allproducts figure figcaption span{
+    font-size: 0.6rem;
+}
+
+
+
+
+#lowerwrapper:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#lowerwrapper #preview {
+    width: 60%;
+    height: 90%;
+    margin: 0 10%;
+}
+
+#lowerwrapper #currently {
+    width: 20%;
+    float: right;
+    padding: 2em;
+    box-sizing: border-box;
+}
+
+#currently {
+    border-left: 1px solid black;
+    height: 100%;
+}
+
+#lowerwrapper #currently span {
+    display: block;
+}
+
+#allproducts figure{
+    width: auto;
+}
+
+/*
+#pictures #imagescategories {
+    width: 25%;
+    min-width: 57px;
+}
+*/
+#addedpictures {
+    border-top: 1px solid black;
+    font-size: 0.8em;
+    font-style: italic;
+    width: 100%;
+}
+

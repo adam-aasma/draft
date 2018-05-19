@@ -1,0 +1,46 @@
+
+.desktop {
+    height: 100%;
+    display: block;
+    
+    
+}
+
+form{
+    width: 80%;
+}
+fieldset {
+    border: 1px solid black;
+    width: 60%;
+    display: block;
+    margin: auto;
+}
+
+fieldset div {
+    width: 80%;
+    padding: 0.5rem 0;
+}
+label {
+    float: left;
+}
+
+input {
+    float: right;
+}
+
+tr {
+    padding: 0.5rem 0;
+}
+
+fieldset div:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#selectCountry {
+    width: 100%;
+}
+#selectCountry select {
+    float: right;
+}

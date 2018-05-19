@@ -1,13 +1,13 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\ProductImage;
+use Walltwisters\lib\model\ProductImage;
 
 
 class ProductImageRepository extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("products_images", "Walltwisters\model\ProductImage");
+        parent::__construct("products_images", "Walltwisters\lib\model\ProductImage");
     }
     
     protected function getColumnNamesForInsert() {

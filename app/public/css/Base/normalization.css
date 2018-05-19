@@ -1,0 +1,40 @@
+
+body, h1, h2, h3, h4, p, li, a, ul, figure {
+    margin: 0px;
+    text-decoration: none;
+    box-sizing: border-box;
+    padding: 0;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    list-style-type: none;
+}
+
+/*
+/ initialize fieldset
+/
+*/
+
+fieldset {
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-before: 0;
+    -webkit-padding-start: 0;
+    -webkit-padding-end: 0;
+    -webkit-padding-after: 0;
+}
+
+fieldset {
+    border: 0;
+    padding: 0.01px 0 0 0;
+    margin: 0;
+    min-width: 0;
+    display: table-cell;
+}
+
+@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
+}

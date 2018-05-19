@@ -1,14 +1,14 @@
 <?php
-namespace Walltwisters\model; 
+namespace Walltwisters\lib\model; 
 
 class Image extends ImageBaseInfo {
-    protected $filepath;
+    protected $stream;
     protected $size;
     protected $mime;
     
-    public static function create($filepath, $size, $mime, $name, $categoryId = null) {
+    public static function create($stream, $size, $mime, $name, $categoryId = null) {
         $obj = new Image();
-        $obj->filepath = $filepath;
+        $obj->stream = $stream;
         $obj->size = $size;
         $obj->mime = $mime;
         $obj->imageName = $name;

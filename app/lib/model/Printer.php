@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\model; 
+namespace Walltwisters\lib\model; 
 
 class Printer {
     private $id;
@@ -18,7 +18,7 @@ class Printer {
         $this->$name = $value;
     }
     
-    public static function create($companyName, $email, $phoneNumber, $contactPerson, $countryId, $addedByUser){
+    public static function create($companyName, $email, $phoneNumber, $contactPerson, $countryId, $addedByUser, $id = null){
         $obj = new Printer();
         $obj->companyName = $companyName;
         $obj->email = $email;
@@ -26,6 +26,7 @@ class Printer {
         $obj->contactPerson = $contactPerson;
         $obj->countryId = $countryId;
         $obj->addedByUser = $addedByUser;
+        $obj->id = $id;
         return $obj;
     }
 }

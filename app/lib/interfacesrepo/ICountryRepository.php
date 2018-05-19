@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\interfacesrepo;
+namespace Walltwisters\lib\interfacesrepo;
 
 interface ICountryRepository {
   

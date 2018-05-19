@@ -1,0 +1,66 @@
+body{
+    text-transform: lowercase;
+}
+
+fieldset {
+    padding: 1em 2em 1em 2em;
+    box-sizing: border-box;
+}
+
+select {
+    font-size: 1em;
+    min-width: 10em;
+    min-height: 2em;
+    background-color: white;
+}
+
+input {
+    font-size: 1em;
+    min-width: 10em;
+    
+}
+
+button {
+    border: 1px solid black;
+    background-color: white;
+    padding: 0.5em 2em 0.5em 2em;
+}
+
+
+h2 {
+    font-size: 0.8rem;
+    
+}
+
+legend {
+    font-size: 1rem;
+}
+
+
+label{
+    padding: 0 2em;
+}
+
+input[type ="file"],
+div > label
+{
+    font-size: 0.8em;
+}
+
+div > div{
+    margin-bottom: 1rem;
+}
+
+div:first-letter,
+span:first-letter,
+p:first-letter,
+h1:first-letter,
+h2:first-letter,
+label:first-letter,
+legend:first-letter,
+option:first-letter{
+    text-transform: uppercase;
+}
+
+
+

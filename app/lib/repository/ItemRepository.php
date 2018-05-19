@@ -1,13 +1,13 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use Walltwisters\model\ProductSize;
-use Walltwisters\model\ItemExtended;
+use Walltwisters\lib\model\ItemSize;
+
 
 class ItemRepository  extends BaseRepository {
     
     public function __construct() {
-        parent::__construct("items", "Walltwisters\model\Item");
+        parent::__construct("items", "Walltwisters\lib\model\Item");
     }
     
     protected function getColumnNamesForInsert() {
@@ -38,7 +38,7 @@ class ItemRepository  extends BaseRepository {
         if ($res) {
             $stmt->bind_result($sizeId, $sizesName, $sDescription);
             while ($stmt->fetch()) {
-                $sizes[] = ProductSize::create($sizesName, $sDescription, $sizeId);
+                $sizes[] = ItemSize::create($sizesName, $sDescription, $sizeId);
             }
         }
         

@@ -1,9 +1,9 @@
 <?php
-namespace Walltwisters\service;
+namespace Walltwisters\lib\service;
 
 
-use Walltwisters\model\Image;
-use Walltwisters\model\ProductImage;
+use Walltwisters\lib\model\Image;
+use Walltwisters\lib\model\ProductImage;
 
 
 
@@ -28,7 +28,6 @@ class ImageService extends BaseService {
              case 'section' :
                  $sectionRepo = $this->repositoryFactory->getRepository('sectionRepository');
                  $sectionId = $sectionRepo->updateSection($id, $imageId, $imageCategoryId);
-                 
                  break;
          }
         }
@@ -43,12 +42,12 @@ class ImageService extends BaseService {
        
        return $id;
     }
-    private function getImageData($imagefile){
-        $filepath = $imagefile["tmp_name"][0];
-        $mime = $imagefile["type"][0];
-        $size = $imagefile["size"][0];
-        $name = $imagefile["name"][0];
-        $image = Image::create($filepath, $size, $mime, $name);
+    private function getImageData($imageFile){
+        $stream = $imageFile[0]->getStream();
+        $mime = $imageFile[0]->getClientMediaType();
+        $size = $imageFile[0]->getSize();
+        $name = $imageFile[0]->getClientFilename();
+        $image = Image::create($stream, $size, $mime, $name);
         return $image;
     }
     
@@ -85,7 +84,8 @@ class ImageService extends BaseService {
     }
     
     public function deleteImage($id) {
-        $imageRepo = $this->repositoryFactory->getRepository('imageRepository');    
-        return $imageRepo->deleteImageForId($id);
+        $imageRepo = $this->repositoryFactory->getRepository('imageRepository');
+        $affectedRows = $imageRepo->deleteImageForId($id);
+        return $affectedRows > 0;
     }
 }

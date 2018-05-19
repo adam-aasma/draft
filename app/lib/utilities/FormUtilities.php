@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\utilities;
+namespace Walltwisters\lib\utilities;
 
 class FormUtilities {
     

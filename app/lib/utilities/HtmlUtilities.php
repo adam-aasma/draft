@@ -1,7 +1,19 @@
 <?php
-namespace Walltwisters\utilities;
+namespace Walltwisters\lib\utilities;
 
 class HtmlUtilities {
+    
+    private $instance;
+    
+    public function __construct(){
+        $this->instance = [
+            'begin' => '',
+            'attribute' => [],
+            'end' => ''
+        ];
+    }
+    
+   
    
     public static function createThumbNail($productId, $name, $imageId, $attName='dontpost'){
         $thumbNail = "<div class='thumbnail'>
@@ -33,5 +45,39 @@ class HtmlUtilities {
         }
         
         return $html;
+    }
+    
+    public function setElement($element){
+        $this->instance['begin'] = '<' . $element . ' ';
+        $this->instance['end'] = '</' . $element . '>';
+    }
+    
+    public function setattributes($attributes){
+        foreach($attributes as $attribute => $value){
+            $this->instance['attribute'][$attribute] = $value;
+        }
+    }
+    
+    public function setContent($content) {
+        $this->instance['content'] = $content;
+    }
+   
+    public function getElement(){
+        $html = 
+            $this->instance['begin'] .
+            $this->createStringOfAttributes() .
+            $this->instance['content'] .
+            $this->instance['end'];
+        return $html;
+    }
+    
+    private function createStringOfAttributes(){
+        $html = '';
+        foreach($this->instance['attribute'] as $attribute => $value){
+            $html .= $attribute . "='" . $value . "' ";
+        }
+        $html .= " >";
+        return $html;
+        
     }
 }

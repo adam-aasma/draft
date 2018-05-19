@@ -1,7 +1,7 @@
 <?php
-use \Walltwisters\repository\RepositoryFactory;
-use Walltwisters\service\SliderService;
-use Walltwisters\utilities\FormUtilities;
+use \walltwisters\lib\repository\RepositoryFactory;
+use Walltwisters\lib\service\SliderService;
+use Walltwisters\lib\utilities\FormUtilities;
 $keywordContent = '';
 $title = '';
 $css = 'css/addsection2.css';

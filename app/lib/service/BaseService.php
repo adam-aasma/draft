@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\service;
+namespace Walltwisters\lib\service;
 
 class BaseService {
     protected $repositoryFactory;
@@ -9,11 +9,11 @@ class BaseService {
     }
     
     public function getAllMaterials() {
-        return $this->repositoryFactory->getRepository('productMaterialRepository')->getAll();
+        return $this->repositoryFactory->getRepository('ItemMaterialRepository')->getAll();
     }
     
     public function getAllSizes() {
-        return $this->repositoryFactory->getRepository('productSizeRepository')->getAll();
+        return $this->repositoryFactory->getRepository('ItemSizeRepository')->getAll();
     }
     
     public function getAllFormats() {
@@ -21,7 +21,7 @@ class BaseService {
     }
     
     public function getAllPrintTechniques() {
-        return $this->repositoryFactory->getRepository('productPrintTechniqueRepository')->getAll();
+        return $this->repositoryFactory->getRepository('ItemPrintTechniqueRepository')->getAll();
     }
     
     public function getAllSections() {

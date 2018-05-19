@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\repository; 
+namespace Walltwisters\lib\repository; 
 
-use Walltwisters\model\Customer;
+use Walltwisters\lib\model\Customer;
 
 class OrderRepository extends BaseRepository { 
     protected function getColumnNamesForInsert() {

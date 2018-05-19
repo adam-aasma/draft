@@ -1,7 +1,7 @@
 <?php
-namespace Walltwisters\repository;
+namespace Walltwisters\lib\repository;
 
-use Walltwisters\repository\exceptions\DatabaseException;
+use Walltwisters\lib\repository\exceptions\DatabaseException;
 
 abstract class BaseRepository {
     protected static $conn;
@@ -10,10 +10,11 @@ abstract class BaseRepository {
     
     function __construct($tableName = null, $objectName = null) {
         if(!isset($conn)){
-            $servername = "127.0.0.1";
-            $username = "root";
-            $password = "Oskar.#4837";
-            $dbname = "WT_Test"; 
+            $mysqlSettings = $GLOBALS['config']['settings']['mysql'];
+            $servername = $mysqlSettings['servername'];
+            $username = $mysqlSettings['username'];
+            $password = $mysqlSettings['password'];
+            $dbname = $mysqlSettings['dbname'];
             self::$conn = new \mysqli($servername, $username, $password, $dbname);
             if (self::$conn->connect_error) {
                 throw new DatabaseException(self::$conn->connect_error);
@@ -44,6 +45,29 @@ abstract class BaseRepository {
             $collection[] = $row;
         }
         return $collection;                                       
+    }
+    
+    public function ifRowExistsReturnElseCreate($aggregate) {
+       list($conditions, $idValues) = $this->getIds($aggregate);
+       $sql = "SELECT * FROM $this->tableName WHERE " . join(" AND ", $conditions);
+       $stmt = self::$conn->prepare($sql);
+       if ($stmt === false) {
+            throw new \Exception("SQL syntax: " . $sql);
+        }
+        $this->bindParams($stmt, null, $idValues);
+        $res = $stmt->execute();
+        if ($res) {
+            $collection =  $this->createObjArray($stmt);
+        }
+        
+        if (!empty($collection)){
+            return $collection;
+        } else {
+            return $this->create($aggregate, true);
+        }
+        
+        
+        
     }
     
     public function exists($aggregate) {
@@ -86,7 +110,7 @@ abstract class BaseRepository {
     }
     
     public function update($aggregate) {
-        $colNames = $this->colNamesForUpdate;
+        $colNames = $this->getColumnNamesForUpdate();
         $colList = '';
         foreach($colNames as $colName) {
             if (!empty($colList)) {
@@ -133,33 +157,30 @@ abstract class BaseRepository {
         return $aggregate;
     }
     
-    public function createOrUpdate($aggregate) {
+    public function createOrUpdate($aggregate, bool $getId = false) {
         if ($this->exists($aggregate)) {
-            $this->update($aggregate);
+            return $this->update($aggregate);
         } else {
-            $aggregate = $this->create($aggregate);
-            
+            return $this->create($aggregate, $getId);
         } 
-        
-        return $aggregate;
     }
     
     
     
-    private function bindParams($stmt, $aggregate, $ids = []) {
+    private function bindParams($stmt, $aggregate, $values = []) {
         $bindTypes = '';
         $bindValues = [];
         if (!empty($aggregate)) {
-            $bindTypesAndValues = empty($ids) ? 
+            $bindTypesAndValues = empty($values) ? 
                 $this->getColumnValuesForBind($aggregate) :
                 $this->getColumnValuesForBindUpdate($aggregate);
             $bindTypes = join('', array_map(function($bv) { return $bv[0]; }, $bindTypesAndValues));
             $bindValues = array_map(function($bv) {return $bv[1];}, $bindTypesAndValues);
         }
-        if (!empty($ids)) {
-            foreach($ids as $id) {
-                $bindTypes .= 'i';
-                $bindValues[] = $id;
+        if (!empty($values)) {
+            foreach($values as $value) {
+                $bindTypes .= is_numeric($value) ? 'i' : 's';
+                $bindValues[] = $value;
             }
         }
         $bindp = [];

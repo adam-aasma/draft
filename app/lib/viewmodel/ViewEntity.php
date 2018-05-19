@@ -1,5 +1,5 @@
 <?php
-namespace Walltwisters\viewmodel;
+namespace Walltwisters\lib\viewmodel;
 
 abstract class viewEntity {
     
