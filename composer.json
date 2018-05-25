@@ -1,0 +1,18 @@
+{
+    "name": "Walltwisters",
+    "description": "This is the Walltwisters project",
+    "authors": [
+        {
+            "name": "adam",
+            "email": "adam.aasma@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.0",
+        "monolog/monolog": "1.23.0",
+        "guzzlehttp/psr7": "1.4.2"
+    },
+    "autoload": {
+        "psr-4": {"Walltwisters\\": "app"}
+    }
+}
